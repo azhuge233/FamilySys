@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - FamilySys</title>
+	<title>@ViewData["Title"] - 家庭事务分配与统计管理系统</title>
 
     <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+	    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment exclude="Development">
@@ -26,15 +26,18 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">FamilySys</a>
+				<a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">家庭事务分配与统计管理系统</a>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
-            </div>
+	        <div class="navbar-collapse collapse">
+		        <ul class="nav navbar-nav">
+			        <li><a asp-area="" asp-controller="Home" asp-action="Index">主页</a></li>
+		        </ul>
+		        <ul class="nav navbar-right navbar-nav" style="background-color: azure">
+			        <li>
+				        <a id="chg-mode" style="background-color: #d2691e; color: #e0ffff;">日间</a>
+			        </li>
+		        </ul>
+	        </div>
         </div>
     </nav>
 
