@@ -2,7 +2,7 @@
 
 namespace FamilySys.Migrations
 {
-    public partial class InitializeDb : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -10,12 +10,13 @@ namespace FamilySys.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    ID = table.Column<string>(nullable: false),
-                    Username = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true),
-                    Sex = table.Column<string>(nullable: true),
-                    Phone = table.Column<string>(nullable: true),
-                    Mail = table.Column<string>(nullable: true)
+                    ID = table.Column<string>(maxLength: 10, nullable: false),
+                    Username = table.Column<string>(maxLength: 20, nullable: true),
+                    Password = table.Column<string>(maxLength: 20, nullable: true),
+                    Sex = table.Column<string>(maxLength: 3, nullable: true),
+                    Phone = table.Column<string>(maxLength: 15, nullable: true),
+                    Mail = table.Column<string>(maxLength: 50, nullable: true),
+                    IsAdmin = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

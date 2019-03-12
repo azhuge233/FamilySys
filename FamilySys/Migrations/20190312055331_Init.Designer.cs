@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FamilySys.Migrations
 {
     [DbContext(typeof(FamilySysDbContext))]
-    [Migration("20190310092316_InitializeDb")]
-    partial class InitializeDb
+    [Migration("20190312055331_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,17 +23,25 @@ namespace FamilySys.Migrations
             modelBuilder.Entity("FamilySys.Models.DbModels.User", b =>
                 {
                     b.Property<string>("ID")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(10);
 
-                    b.Property<string>("Mail");
+                    b.Property<int>("IsAdmin");
 
-                    b.Property<string>("Password");
+                    b.Property<string>("Mail")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("Phone");
+                    b.Property<string>("Password")
+                        .HasMaxLength(20);
 
-                    b.Property<string>("Sex");
+                    b.Property<string>("Phone")
+                        .HasMaxLength(15);
 
-                    b.Property<string>("Username");
+                    b.Property<string>("Sex")
+                        .HasMaxLength(3);
+
+                    b.Property<string>("Username")
+                        .HasMaxLength(20);
 
                     b.HasKey("ID");
 
