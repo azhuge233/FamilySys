@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FamilySys.Models.ViewModels;
+using Microsoft.AspNetCore.Identity.UI.Pages.Internal.Account.Manage;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FamilySys.Controllers
@@ -12,5 +14,11 @@ namespace FamilySys.Controllers
         {
             return View();
         }
-	}
+
+        [HttpPost]
+        public IActionResult Login()
+        {
+	        return View();
+        }
+    }
 }
