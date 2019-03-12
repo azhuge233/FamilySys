@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace FamilySys.Models.ViewModels {
-	public class UserViewModel {
+	public class UserSignUpViewModel {
 		[Key]
 		[MaxLength(10)]
 		public string ID { get; set; }

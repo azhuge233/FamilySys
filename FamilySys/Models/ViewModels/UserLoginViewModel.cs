@@ -13,7 +13,7 @@ namespace FamilySys.Models.ViewModels {
 		public string Username { get; set; }
 
 		[Required(ErrorMessage = "请填写密码")]
-		[StringLength(20, MinimumLength = 8, ErrorMessage = "长度在8-20位之间")]
+		[StringLength(20, ErrorMessage = "长度不能大于20位")]
 		[DisplayName("密码")]
 		[DataType(DataType.Password)]
 		public string Password { get; set; }

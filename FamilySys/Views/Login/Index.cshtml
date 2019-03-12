@@ -11,11 +11,11 @@
 	{
 		<table class="table" style="margin: auto; width: 400px;">
 			<tr>
-				<td>
+				<td style="width: 60px">
 					@Html.LabelFor(Model => Model.Username)
 				</td>
 				<td>
-					@Html.TextBoxFor(Model => Model.Username, new {@class = "form-control", @placeholder="用户名"})
+					@Html.TextBoxFor(Model => Model.Username, new {@class = "form-control", @placeholder = "用户名"})
 				</td>
 				<td>
 					@Html.ValidationMessageFor(Model => Model.Username)
@@ -26,22 +26,18 @@
 					@Html.LabelFor(Model => Model.Password)
 				</td>
 				<td>
-					@Html.TextBoxFor(Model => Model.Password, new {@class = "form-control", @placeholder="密码"})
+					@Html.TextBoxFor(Model => Model.Password, new {@class = "form-control", @placeholder = "密码", @type="password"})
 				</td>
 				<td>
 					@Html.ValidationMessageFor(Model => Model.Password)
 				</td>
 			</tr>
-			<tr>
-				<td></td>
-				<td>
-					@Html.DisplayFor(Model => Model.ErrMessage)
-				</td>
-				<td></td>
-			</tr>
 		</table>
+		<div class = "field-validation-error">
+			@Html.DisplayFor(Model => Model.ErrMessage)
+		</div>
+		<br/>
 		<div>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type="submit" name="LoginBtn" class="btn btn-primary" />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type="reset" name="LoginReset" class="btn btn-danger" />
