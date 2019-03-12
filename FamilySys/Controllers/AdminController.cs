@@ -6,11 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FamilySys.Controllers
 {
-    public class LoginController : Controller
+    public class AdminController : Controller
     {
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult Error() {
+	        return View();
         }
 	}
 }

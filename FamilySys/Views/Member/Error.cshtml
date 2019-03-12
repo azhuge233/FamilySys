@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Http
+
+@{
+	ViewData["Title"] = "操作失败";
+	Layout = "~/Views/Shared/_MemberLayout.cshtml";
+	Context.Response.WriteAsync("<meta http-equiv='refresh' content='3; url=/Member' />");
+}
+
+<h2>操作失败</h2>
+
+<body>
+<form id="form1" runat="server">
+	<div id='div1'>
+	</div>
+</form>
+</body>
+
+<script type="text/javascript">
+	var t = 4;
+	function showTime(){
+		t -= 1;
+		document.getElementById('div1').innerHTML= t + " 秒后跳转至主页";
+		setTimeout("showTime()",1000);
+	}
+	showTime();
+</script>
