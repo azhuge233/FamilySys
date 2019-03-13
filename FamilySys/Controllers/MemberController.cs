@@ -32,5 +32,11 @@ namespace FamilySys.Controllers
 				return RedirectToAction("nonMemberAlarm", "Home");
 			}
 		}
+
+        public IActionResult Logout()
+        {
+			HttpContext.Session.Clear();
+			return RedirectToAction("Index", "Home");
+        }
     }
 }
