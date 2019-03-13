@@ -9,7 +9,7 @@
 <div style="text-align: center">
 	@using (Html.BeginForm("Login", "Login", FormMethod.Post))
 	{
-		<table class="table" style="margin: auto; width: 400px;">
+		<table id="mainTable" class="table" style="margin: auto; width: 400px;">
 			<tr>
 				<td style="width: 60px">
 					@Html.LabelFor(Model => Model.Username)
@@ -43,4 +43,9 @@
 			<input type="reset" name="LoginReset" class="btn btn-danger" />
 		</div>
 	}
+	<br/>
+	<div>
+		<label>没有账号？</label>
+		<a asp-area="" asp-controller="Login" asp-action="Signup">去注册</a>
+	</div>
 </div>

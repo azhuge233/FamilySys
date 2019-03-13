@@ -19,34 +19,34 @@ function setCookie(name, value) {
 }
 
 function changeColor(btn, body, mode) {
-    if (mode == "night") {
-        btn.style.setProperty('background-color', '#000');
-        btn.style.setProperty('color', '#fff');
-        btn.innerHTML = "夜间";
+	if (mode == "night") {
+		btn.style.setProperty('background-color', '#000');
+		btn.style.setProperty('color', '#fff');
+		btn.innerHTML = "夜间";
 
-        body.style.setProperty('background-color', '#333');
-        body.style.setProperty('color', '#F5F5F5');
-    } else {
-        btn.style.setProperty('background-color', '#d2691e');
-        btn.style.setProperty('color', '#e0ffff');
-        btn.innerHTML = "日间";
+		body.style.setProperty('background-color', '#333');
+		body.style.setProperty('color', '#F5F5F5');
+	} else {
+		btn.style.setProperty('background-color', '#d2691e');
+		btn.style.setProperty('color', '#e0ffff');
+		btn.innerHTML = "日间";
 
-        body.style.setProperty('background-color', '#fff');
-        body.style.setProperty('color', '#333');
-    }
+		body.style.setProperty('background-color', '#fff');
+		body.style.setProperty('color', '#333');
+	}
 }
 
 function changeMode(thisID) {
-    var btn = document.getElementById(thisID);
-    var body = document.body;
-    if (btn.innerHTML == "日间") {
-        changeColor(btn, body, "night");
-        setCookie('mode', 'night');
-    } else {
-        changeColor(btn, body, "day");
-        setCookie('mode', 'sun');
-    }
+		var btn = document.getElementById(thisID);
+		var body = document.body;
+		if (btn.innerHTML == "日间") {
+			changeColor(btn, body, "night");
+			setCookie('mode', 'night');
+		} else {
+			changeColor(btn, body, "day");
+			setCookie('mode', 'sun');
+		}
 }
-
+	
 window.onload = function() {
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FamilySys.Models;
+using FamilySys.Modules;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -28,9 +29,14 @@ namespace FamilySys {
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
+			//数据库上下文注入
 			services.AddDbContext<FamilySysDbContext>(options =>
 				options.UseSqlServer(Configuration.GetConnectionString("FamilySysCon")));
 
+			//个人模块注入
+			services.AddScoped<Encryption>();
+
+			//Session注入
 			services.AddDistributedMemoryCache();
 
 			services.AddSession(options =>
@@ -55,7 +61,7 @@ namespace FamilySys {
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
-			app.UseSession();
+			app.UseSession(); //启用Session
 
 			app.UseMvc(routes => {
 				routes.MapRoute(

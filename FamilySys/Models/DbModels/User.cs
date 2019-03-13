@@ -15,7 +15,7 @@ namespace FamilySys.Models.DbModels {
 		public string Username { get; set; }
 
 		[Required]
-		[MaxLength(20)]
+		[MaxLength(32)]
 		public string Password { get; set; }
 
 		[Required]

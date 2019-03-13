@@ -1,0 +1,83 @@
+﻿@using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http
+@model FamilySys.Models.ViewModels.UserSignUpViewModel;
+@{
+    ViewData["Title"] = "注册";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 align="center">注册</h2>
+
+<div style="text-align: center">
+	@using (Html.BeginForm("Signup", "Login", HttpMethod.Post)) {
+		<table id="mainTable" class="table" style="margin: auto;width: 400px">
+			<tr>
+				<td>
+					@Html.LabelFor(Model => Model.ID, new { @style = "width:60px;" })
+				</td>
+				<td>
+					@Html.TextBoxFor(Model => Model.ID, new { @class = "form-control", @readonly = "true", @style = "width: 110px" })
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.LabelFor(Model => Model.Username, new {@style="width:90"})
+				</td>
+				<td>
+					@Html.TextBoxFor(Model => Model.Username, new { @class = "form-control", @placeholder = "用户名", @style = "width: 200px" })
+				</td>
+				<td>
+					@Html.ValidationMessageFor(Model => Model.Username)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.LabelFor(Model => Model.Password)
+				</td>
+				<td>
+					@Html.TextBoxFor(Model => Model.Password, new { @class = "form-control", @type = "password", @placeholder = "密码", @style = "width: 200px" })
+				</td>
+				<td>
+					@Html.ValidationMessageFor(Model => Model.Password)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.LabelFor(Model => Model.Sex)
+				</td>
+				<td>
+					@Html.DropDownListFor(Model => Model.Sex, @Model.SexList, "选择性别", new { @class = "form-control", @style = "width: auto" })
+				</td>
+				<td>
+					@Html.ValidationMessageFor(Model => Model.Sex)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.LabelFor(Model => Model.Phone)
+				</td>
+				<td>
+					@Html.TextBoxFor(Model => Model.Phone, new { @class="form-control", @placeholder="电话", @style = "width: 200px" })
+				</td>
+				<td>
+					@Html.ValidationMessageFor(Model => Model.Phone)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.LabelFor(Model => Model.Mail)
+				</td>
+				<td>
+					@Html.TextBoxFor(Model => Model.Mail, new { @class="form-control", @placeholder="邮箱", @style = "width: 200px" })
+				</td>
+				<td>
+					@Html.ValidationMessageFor(Model => Model.Mail)
+				</td>
+			</tr>
+		</table>
+		<div style="text-align: center">
+			<input type="submit" name="SignupBtn" class="btn btn-primary" />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="reset" name="Signupreset" class="btn btn-danger" />
+		</div>
+	}
+</div>
