@@ -26,65 +26,94 @@ namespace FamilySys.Controllers
 		    encryption = _encryption;
 	    }
 
+		//校验用户名重名
 	    public JsonResult UsernameValidationJsonResult(string username)
 	    {
 		    bool isExists = db.Users.Any(x => x.Username == username);
 		    return Json(!isExists);
 	    }
 
-	    public IActionResult Index()
-        {
-            return View();
+	    //视图部分
+		public IActionResult Index()
+		{
+			if (HttpContext.Session.GetInt32("isAdmin") == 1)
+			{
+				return RedirectToAction("Index", "Admin");
+			}
+			else if(HttpContext.Session.GetInt32("isAdmin") == 0) {
+				return RedirectToAction("Index", "Member");
+			}
+			else
+			{
+				return View();
+			}
         }
 
         [HttpPost]
         public IActionResult Login(UserLoginViewModel form)
         {
-	        var username = form.Username;
-	        var password = form.Password;
-			//if条件测试用，发布时删除
-			if (username != "admin" && username != "小明" && username != "小红")
-	        {
-		        password = encryption.Encrypt(password);
-			}
-
-	        try
-	        {
-		        if (db.Users.Any(x => x.Username == username && x.Password == password))
-		        {
-			        var user = db.Users.Single(x => x.Username == username && x.Password == password);
-					HttpContext.Session.SetString("ID", user.ID);
-					HttpContext.Session.SetInt32("isAdmin", user.IsAdmin);
-					if (user.IsAdmin == 1)
-					{
-						return RedirectToAction("Index", "Admin");
-					} else
-					{
-						return RedirectToAction("Index", "Member");
-					}
-		        }
-		        else
-		        {
-			        form.ErrMessage = "用户名或密码错误";
-			        return View("Index", form);
-		        }
+	        if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+		        return RedirectToAction("Index", "Admin");
+	        } else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+		        return RedirectToAction("Index", "Member");
 	        }
-	        catch
+	        else
 	        {
-		        return RedirectToAction("Error", "Home");
+		        var username = form.Username;
+		        var password = form.Password;
+		        //if条件测试用，发布时删除
+		        if (username != "admin" && username != "小明" && username != "小红")
+		        {
+			        password = encryption.Encrypt(password);
+		        }
+
+		        try
+		        {
+			        if (db.Users.Any(x => x.Username == username && x.Password == password))
+			        {
+				        var user = db.Users.Single(x => x.Username == username && x.Password == password);
+				        HttpContext.Session.SetString("ID", user.ID);
+				        HttpContext.Session.SetInt32("isAdmin", user.IsAdmin);
+				        if (user.IsAdmin == 1)
+				        {
+					        return RedirectToAction("Index", "Admin");
+				        }
+				        else
+				        {
+					        return RedirectToAction("Index", "Member");
+				        }
+			        }
+			        else
+			        {
+				        form.ErrMessage = "用户名或密码错误";
+				        return View("Index", form);
+			        }
+		        }
+		        catch
+		        {
+			        return RedirectToAction("Error", "Home");
+		        }
 	        }
         }
 
         public IActionResult Signup()
         {
-			var formWithID = new UserSignUpViewModel();
-			Random rd = new Random();
-			do
-			{
-				formWithID.ID = rd.Next(00000, 99999).ToString() + rd.Next(00000, 99999).ToString();
-			} while (db.Users.Any(x => x.ID == formWithID.ID));
+	        if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+		        return RedirectToAction("Index", "Admin");
+	        } else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+		        return RedirectToAction("Index", "Member");
+	        }
+	        else
+	        {
+		        var formWithID = new UserSignUpViewModel();
+		        Random rd = new Random();
+		        do
+		        {
+			        formWithID.ID = rd.Next(00000, 99999).ToString() + rd.Next(00000, 99999).ToString();
+		        } while (db.Users.Any(x => x.ID == formWithID.ID));
 
-			return View(formWithID);
+		        return View(formWithID);
+	        }
         }
 
         [HttpPost]

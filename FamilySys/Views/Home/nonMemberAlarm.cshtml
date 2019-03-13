@@ -1,0 +1,30 @@
+﻿@using Microsoft.AspNetCore.Http
+
+@{
+	ViewData["Title"] = "无法访问";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	Context.Response.WriteAsync("<meta http-equiv='refresh' content='3; url=/Login' />");
+}
+
+<h2>无法访问</h2>
+
+<body>
+<form id="form1" runat="server">
+	<div>
+		<label>您尚未登陆</label>
+	</div>
+	<br/>
+	<div id='div1'>
+	</div>
+</form>
+</body>
+
+<script type="text/javascript">
+	var t = 4;
+	function showTime(){
+		t -= 1;
+		document.getElementById('div1').innerHTML= t + " 秒后跳转至登录页";
+		setTimeout("showTime()",1000);
+	}
+	showTime();
+</script>
