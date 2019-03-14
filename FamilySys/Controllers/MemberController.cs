@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FamilySys.Models;
 using FamilySys.Models.ViewModels;
+using FamilySys.Models.ViewModels.MemberViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,10 +55,33 @@ namespace FamilySys.Controllers {
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				CommonWork();
 
-				return View();
+				var me = db.Users.Single(x => x.ID == HttpContext.Session.GetString("ID"));
+
+				var form = new Member_MyInfo_ChgPwd_ViewModel() {
+					ChgPwdViewModel = new MemberChangePwdViewModel(),
+					MyInfoViewModel = new MemberMyInfoViewModel() {
+						ID = me.ID,
+						Username = me.Username,
+						Sex = me.Sex,
+						Phone = me.Phone,
+						Mail = me.Mail
+					}
+				};
+
+				return View(form);
 			} else {
-				return RedirectToAction("Index", "Home");
+				return RedirectToAction("nonMemberAlarm", "Home");
 			}
+		}
+
+		[HttpPost]
+		public IActionResult ChgInfo() {
+			return View("MyInfo");
+		}
+
+		[HttpPost]
+		public IActionResult ChgPwd() {
+			return RedirectToAction("Logout");
 		}
 
 		public IActionResult Members() {
@@ -73,7 +97,7 @@ namespace FamilySys.Controllers {
 					return RedirectToAction("Error");
 				}
 			} else {
-				return RedirectToAction("Index", "Home");
+				return RedirectToAction("nonMemberAlarm", "Home");
 			}
 		}
 	}

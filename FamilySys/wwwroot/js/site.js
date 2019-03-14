@@ -50,3 +50,19 @@ function changeMode(thisID) {
 	
 window.onload = function() {
 }
+
+function ChgTextBoxStats(usernameID, sexID, phoneID, mailID, btnID, thisbtnID) {
+	var thisBtn = document.getElementById(thisbtnID);
+	var btn = document.getElementById(btnID);
+	var usernameTxb = document.getElementById(usernameID);
+	var sexTxb = document.getElementById(sexID);
+	var phoneTxb = document.getElementById(phoneID);
+	var mailTxb = document.getElementById(mailID);
+
+	thisBtn.type = "hidden";
+	btn.type = "submit";
+	usernameTxb.disabled = false;
+	sexTxb.disabled = false;
+	phoneTxb.disabled = false;
+	mailTxb.disabled = false;
+}
