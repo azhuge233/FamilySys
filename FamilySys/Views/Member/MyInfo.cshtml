@@ -11,7 +11,7 @@
 	@Html.BeginForm("ChgInfo", "Member", HttpMethod.Post) {
 	<div class="col-md-6" align="center">
 		<h2>查看/修改基本信息</h2>
-		<table class="table" id="mainTable" style="margin: auto; text-align: center">
+		<table class="table" id="mainTable" style="margin: auto; text-align: center;width: 320px">
 			<tr>
 				<td>
 					@Html.LabelFor(Model => Model.MyInfoViewModel.ID, new {@style = "width:60px;"})

@@ -75,12 +75,13 @@ namespace FamilySys.Controllers {
 		}
 
 		[HttpPost]
-		public IActionResult ChgInfo() {
-			return View("MyInfo");
+		public IActionResult ChgInfo(Member_MyInfo_ChgPwd_ViewModel form) {
+			return RedirectToAction("MyInfo");
+			//return View("MyInfo");
 		}
 
 		[HttpPost]
-		public IActionResult ChgPwd() {
+		public IActionResult ChgPwd(Member_MyInfo_ChgPwd_ViewModel form) {
 			return RedirectToAction("Logout");
 		}
 
