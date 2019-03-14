@@ -62,7 +62,7 @@ namespace FamilySys.Controllers
 		        var username = form.Username;
 		        var password = form.Password;
 		        //if条件测试用，发布时删除
-		        if (username != "admin" && username != "小明" && username != "小红")
+		        if (username != "admin")
 		        {
 			        password = encryption.Encrypt(password);
 		        }

@@ -3,3 +3,87 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
+	<ol class="carousel-indicators">
+		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+		<li data-target="#myCarousel" data-slide-to="1"></li>
+		<li data-target="#myCarousel" data-slide-to="2"></li>
+	</ol>
+
+	<div class="carousel-inner" role="listbox">
+
+		<div class="item active">
+			<img src="~/images/banner1.svg" alt="FamilySys" class="img-responsive" />
+			<div class="carousel-caption" role="option">
+				<p>
+					易用、高效的家庭事务管理解决方案
+				</p>
+			</div>
+		</div>
+		<div class="item">
+			<img src="~/images/banner1.svg" alt="ASP.NET" class="img-responsive" />
+			<div class="carousel-caption" role="option">
+				<p>
+					在任意平台运行
+				</p>
+			</div>
+		</div>
+		<div class="item">
+			<img src="~/images/bootstrap.png" alt="Bootstrap" class="img-responsive" />
+			<div class="carousel-caption" role="option">
+				<p>
+					简洁、直观、强悍的前端开发框架
+				</p>
+			</div>
+		</div>
+
+	</div>
+	
+	<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+		<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+		<span class="sr-only">Previous</span>
+	</a>
+	<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+		<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+		<span class="sr-only">Next</span>
+	</a>
+</div>
+
+<div class="row">
+	<div class="col-md-4">
+		<h2>功能 - 访客</h2>
+		<ul>
+			<li>
+				家庭成员 - 查看家庭成员信息
+			</li>
+			<li>
+				家庭事务 - 查看家庭事务信息
+			</li>
+			<br />
+			<li>
+				<a asp-action="Index" asp-controller="Login">登录</a> 以使用更多功能
+			</li>
+		</ul>
+	</div>
+
+	<div class="col-md-4">
+		<h2>部署及使用</h2>
+		<ul>
+			<li>
+				<p>在控制台执行指令</p>
+				<pre>dotnet run FamilySys</pre>
+			</li>
+			<li><p>初始管理员账户admin，密码同账户名</p></li>
+		</ul>
+	</div>
+
+	<div class="col-md-4">
+		<h2>技术</h2>
+		<ul>
+			<li>使用.Net Core，实现跨平台（Windows，OSX，Linux）部署</li>
+			<br />
+			<li>使用主题 <a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a></li>
+		</ul>
+	</div>
+</div>
+

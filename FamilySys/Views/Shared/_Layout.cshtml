@@ -4,6 +4,17 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>@ViewData["Title"] - 家庭事务分配与统计管理系统</title>
+	
+	<style>
+		.field-validation-error {
+			color: red;
+			font-size: smaller;
+		}
+		.field-validation-valid {
+			color: red;
+			font-size: smaller;
+		}
+	</style>
 
 	<environment include="Development">
 		<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -16,16 +27,7 @@
 		<link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
 	</environment>
 </head>
-<style>
-	.field-validation-error {
-		color: red;
-		font-size: smaller;
-	}
-	.field-validation-valid {
-		color: red;
-		font-size: smaller;
-	}
-</style>
+
 	@if (Context.Request.Cookies["mode"] == "night") {
 <body style="background-color: #333; color: #F5F5F5;">
 	<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -64,7 +66,9 @@
 		@RenderBody()
 		<hr />
 		<footer>
-			<p>&copy; @DateTime.Now.Year - 家庭事务分配与统计管理系统</p>
+			<p>&copy; @DateTime.Now.Year - 家庭事务分配与统计管理系统 by
+				<a href="https://azhuge233.com" target="_blank">azhuge233</a>
+			</p>
 		</footer>
 	</div>
 
@@ -131,7 +135,9 @@
 		@RenderBody()
 		<hr />
 		<footer>
-			<p>&copy; @DateTime.Now.Year - 家庭事务分配与统计管理系统</p>
+			<p>&copy; @DateTime.Now.Year - 家庭事务分配与统计管理系统 by 
+				<a href="https://azhuge233.com" target="_blank">azhuge233</a>
+			</p>
 		</footer>
 	</div>
 
