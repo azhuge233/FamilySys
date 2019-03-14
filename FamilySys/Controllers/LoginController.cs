@@ -119,22 +119,26 @@ namespace FamilySys.Controllers
         [HttpPost]
         public IActionResult Signup(UserSignUpViewModel form)
         {
-	        var freshman = new User();
-	        freshman.ID = form.ID;
-	        freshman.IsAdmin = 0;
-	        freshman.Username = form.Username;
-	        freshman.Password = encryption.Encrypt(form.Password);
-	        freshman.Sex = form.Sex;
-	        freshman.Phone = form.Phone;
-	        freshman.Mail = form.Mail;
+	        var freshman = new User()
+	        {
+		        ID = form.ID,
+		        IsAdmin = 0,
+		        Username = form.Username,
+		        Password = encryption.Encrypt(form.Password),
+		        Sex = form.Sex,
+		        Phone = form.Phone,
+		        Mail = form.Mail
+	        };
 
 	        try
 	        {
 		        db.Users.Add(freshman);
 		        db.SaveChanges();
 
-				var loginform = new UserLoginViewModel();
-				loginform.Username = freshman.Username;
+				var loginform = new UserLoginViewModel()
+				{
+					Username = freshman.Username
+				};
 		        return View("Index", loginform);
 	        }
 	        catch (Exception)

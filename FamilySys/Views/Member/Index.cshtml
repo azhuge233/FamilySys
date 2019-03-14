@@ -1,4 +1,4 @@
-﻿
+﻿@model FamilySys.Models.ViewModels.MemberIndexViewModel
 @{
 	ViewData["Title"] = "家庭成员";
 	Layout = "~/Views/Shared/_MemberLayout.cshtml";
@@ -16,7 +16,7 @@
 			<img src="~/images/banner1.svg" alt="Member" class="img-responsive" />
 			<div class="carousel-caption" role="option">
 				<p>
-					你好，
+					你好，@Model.Username
 				</p>
 			</div>
 		</div>
