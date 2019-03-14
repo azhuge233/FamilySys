@@ -6,25 +6,32 @@
 
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
 	<ol class="carousel-indicators">
-		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+		<li data-target="#myCarousel" data-slide-to="0" class="active">
+		</li>
 		<li data-target="#myCarousel" data-slide-to="1"></li>
 	</ol>
 
 	<div class="carousel-inner" role="listbox">
 
 		<div class="item active">
-			<img src="~/images/banner1.svg" alt="Member" class="img-responsive" />
+			<img src="~/images/Hello.png" alt="Hello" class="img-responsive" />
 			<div class="carousel-caption" role="option">
 				<p>
-					你好，@Model.Username
+					你好，@ViewBag.Username
+				</p>
+				<p style="font-size: small; height: 9px">
+					Photo by <a style="color: aliceblue" href="https://unsplash.com/photos/WHUDOzd5IYU?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Adam Solomon</a> on <a style="color: aliceblue" href="/search/photos/hello?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a>
 				</p>
 			</div>
 		</div>
 		<div class="item">
-			<img src="~/images/banner1.svg" alt="FamilySys" class="img-responsive" />
+			<img src="~/images/FamilySys.png" alt="FamilySys" class="img-responsive" />
 			<div class="carousel-caption" role="option">
 				<p>
 					易用、高效的家庭事务管理解决方案
+				</p>
+				<p style="font-size: small; height: 9px">
+					Photo by <a style="color: aliceblue" href="https://unsplash.com/photos/cMOpU7Xg4Hc?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Fancycrave</a> on <a style="color: aliceblue" href="/?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a>
 				</p>
 			</div>
 		</div>
