@@ -51,18 +51,38 @@ function changeMode(thisID) {
 window.onload = function() {
 };
 
-function ChgTextBoxStats(usernameID, sexID, phoneID, mailID, btnID, thisbtnID) {
+function EnableTextBoxStats(usernameID, sexID, phoneID, mailID, cfmbtnID, rstbtnID, thisbtnID) {
 	var thisBtn = document.getElementById(thisbtnID);
-	var btn = document.getElementById(btnID);
+	var Cfmbtn = document.getElementById(cfmbtnID);
+	var Rstbtn = document.getElementById(rstbtnID);
 	var usernameTxb = document.getElementById(usernameID);
 	var sexTxb = document.getElementById(sexID);
 	var phoneTxb = document.getElementById(phoneID);
 	var mailTxb = document.getElementById(mailID);
 
 	thisBtn.type = "hidden";
-	btn.type = "submit";
+	Cfmbtn.type = "submit";
+	Rstbtn.type = "button";
 	usernameTxb.disabled = false;
 	sexTxb.disabled = false;
 	phoneTxb.disabled = false;
 	mailTxb.disabled = false;
+}
+
+function DisableTextBoxStats(usernameID, sexID, phoneID, mailID, subbtnID, cfmbtnID, thisbtnID) {
+	var thisBtn = document.getElementById(thisbtnID);
+	var Cfmbtn = document.getElementById(cfmbtnID);
+	var Subbtn = document.getElementById(subbtnID);
+	var usernameTxb = document.getElementById(usernameID);
+	var sexTxb = document.getElementById(sexID);
+	var phoneTxb = document.getElementById(phoneID);
+	var mailTxb = document.getElementById(mailID);
+
+	thisBtn.type = "hidden";
+	Cfmbtn.type = "button";
+	Subbtn.type = "hidden";
+	usernameTxb.disabled = true;
+	sexTxb.disabled = true;
+	phoneTxb.disabled = true;
+	mailTxb.disabled = true;
 }

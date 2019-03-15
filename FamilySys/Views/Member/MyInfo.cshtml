@@ -5,75 +5,121 @@
     ViewData["Title"] = "MyInfo";
     Layout = "~/Views/Shared/_MemberLayout.cshtml";
 }
-
+@Html.Raw(TempData["msg"])
 <div class="row">
 	<h1 align="center">我的信息</h1>
-	@Html.BeginForm("ChgInfo", "Member", HttpMethod.Post) {
+	@using (Html.BeginForm("ChgInfo", "Member", HttpMethod.Post)) {
 	<div class="col-md-6" align="center">
 		<h2>查看/修改基本信息</h2>
-		<table class="table" id="mainTable" style="margin: auto; text-align: center;width: 320px">
+		<table class="table" id="mainTable" style="margin: auto; text-align: center;width: auto">
 			<tr>
 				<td>
-					@Html.LabelFor(Model => Model.MyInfoViewModel.ID, new {@style = "width:60px;"})
+					@Html.LabelFor(Model => Model.ID, new { @style = "width:60px;" })
 				</td>
 				<td>
-					@Html.TextBoxFor(Model => Model.MyInfoViewModel.ID, new {@class = "form-control", @readonly = "true", @style = "width: 110px"})
+					@Html.TextBoxFor(Model => Model.ID, new { @class = "form-control", @readonly = "true", @style = "width: 110px" })
 				</td>
 			</tr>
 			<tr>
 				<td>
-					@Html.LabelFor(Model => Model.MyInfoViewModel.Username, new {@style = "width:90"})
+					@Html.LabelFor(Model => Model.Username, new { @style = "width:90" })
 				</td>
 				<td>
-					@Html.TextBoxFor(Model => Model.MyInfoViewModel.Username, new { @disabled="true", @class = "form-control", @placeholder = "用户名", @style = "width: 200px"})
+					@Html.TextBoxFor(Model => Model.Username, new { @disabled = "true", @class = "form-control", @placeholder = "用户名", @style = "width: 200px" })
 				</td>
 				<td>
-					@Html.ValidationMessageFor(Model => Model.MyInfoViewModel.Username)
-				</td>
-			</tr>
-			<tr>
-				<td>
-					@Html.LabelFor(Model => Model.MyInfoViewModel.Sex)
-				</td>
-				<td>
-					@Html.DropDownListFor(Model => Model.MyInfoViewModel.Sex, @Model.MyInfoViewModel.SexList, "选择性别", new { @disabled = "true", @class = "form-control", @style = "width: auto"})
-				</td>
-				<td>
-					@Html.ValidationMessageFor(Model => Model.MyInfoViewModel.Sex)
+					@Html.ValidationMessageFor(Model => Model.Username)
 				</td>
 			</tr>
 			<tr>
 				<td>
-					@Html.LabelFor(Model => Model.MyInfoViewModel.Phone)
+					@Html.LabelFor(Model => Model.Sex)
 				</td>
 				<td>
-					@Html.TextBoxFor(Model => Model.MyInfoViewModel.Phone, new { @disabled = "true", @class = "form-control", @placeholder = "电话", @style = "width: 200px"})
+					@Html.DropDownListFor(Model => Model.Sex, @Model.SexList, "选择性别", new { @disabled = "true", @class = "form-control", @style = "width: auto" })
 				</td>
 				<td>
-					@Html.ValidationMessageFor(Model => Model.MyInfoViewModel.Phone)
+					@Html.ValidationMessageFor(Model => Model.Sex)
 				</td>
 			</tr>
 			<tr>
 				<td>
-					@Html.LabelFor(Model => Model.MyInfoViewModel.Mail)
+					@Html.LabelFor(Model => Model.Phone)
 				</td>
 				<td>
-					@Html.TextBoxFor(Model => Model.MyInfoViewModel.Mail, new { @disabled = "true", @class = "form-control", @placeholder = "邮箱", @style = "width: 200px"})
+					@Html.TextBoxFor(Model => Model.Phone, new { @disabled = "true", @class = "form-control", @placeholder = "电话", @style = "width: 200px" })
 				</td>
 				<td>
-					@Html.ValidationMessageFor(Model => Model.MyInfoViewModel.Mail)
+					@Html.ValidationMessageFor(Model => Model.Phone)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.LabelFor(Model => Model.Mail)
+				</td>
+				<td>
+					@Html.TextBoxFor(Model => Model.Mail, new { @disabled = "true", @class = "form-control", @placeholder = "邮箱", @style = "width: 200px" })
+				</td>
+				<td>
+					@Html.ValidationMessageFor(Model => Model.Mail)
 				</td>
 			</tr>
 		</table>
+		<br/>
 		<div align="center">
+			<input type="button" id="confirmBtn" value="更改" onclick="EnableTextBoxStats('Username', 'Sex', 'Phone', 'Mail', 'ChgInfoBtn', 'RstInfoBtn', 'confirmBtn')" class="btn btn-primary" />
 			<input type="hidden" id="ChgInfoBtn" name="ChgInfoBtn" class="btn btn-success" />
-			<input type="button" id="confirmBtn" value="更改" onclick="ChgTextBoxStats('MyInfoViewModel_Username', 'MyInfoViewModel_Sex', 'MyInfoViewModel_Phone', 'MyInfoViewModel_Mail', 'ChgInfoBtn', 'confirmBtn')" class="btn btn-primary"/>
+			&emsp;
+			<input type="hidden" id="RstInfoBtn" name="RstInfoBtn" value="取消" onclick="DisableTextBoxStats('Username', 'Sex', 'Phone', 'Mail', 'ChgInfoBtn', 'confirmBtn', 'RstInfoBtn')" class="btn btn-danger" />
 		</div>
 	</div>
 	}
-	@Html.BeginForm("ChgPwd", "Member", HttpMethod.Post) {
+	@using (Html.BeginForm("ChgPwd", "Member", HttpMethod.Post)) {
 	<div class="col-md-6" align="center">
 		<h2>更改密码</h2>
+		<table class="table" style="margin: auto; text-align: center; width: auto">
+			<tr>
+				<td>
+					@Html.LabelFor(Model => Model.Password)
+				</td>
+				<td>
+					@Html.TextBoxFor(Model => Model.Password, new { @type = "Password", @class = "form-control", @style = "width:200px", @placeholder = "原密码" })
+				</td>
+				<td>
+					@Html.ValidationMessageFor(Model => Model.Password)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.LabelFor(Model => Model.NewPassword)
+				</td>
+				<td>
+					@Html.TextBoxFor(Model => Model.NewPassword, new { @type = "Password", @class = "form-control", @style = "width:200px", @placeholder = "新密码" })
+				</td>
+				<td>
+					@Html.ValidationMessageFor(Model => Model.NewPassword)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.LabelFor(Model => Model.RetypePassword)
+				</td>
+				<td>
+					@Html.TextBoxFor(Model => Model.RetypePassword, new { @type = "Password", @class = "form-control", @style = "width:200px", @placeholder = "重新输入新密码" })
+				</td>
+				<td>
+					@Html.ValidationMessageFor(Model => Model.RetypePassword)
+				</td>
+			</tr>
+		</table>
+		<div class="field-validation-error">
+			<p>@ViewBag.ErrMsg</p>
+		</div>
+		<br />
+		<div align="center">
+			@Html.HiddenFor(Model => Model.ID)
+			<input type="submit" id="ChgPwdBtn" name="ChgPwdBtn" class="btn btn-success" />
+		</div>
 	</div>
 	}
 </div>

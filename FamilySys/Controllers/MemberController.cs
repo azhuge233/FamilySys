@@ -5,15 +5,27 @@ using System.Threading.Tasks;
 using FamilySys.Models;
 using FamilySys.Models.ViewModels;
 using FamilySys.Models.ViewModels.MemberViewModel;
+using FamilySys.Modules;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FamilySys.Controllers {
 	public class MemberController : Controller {
+		private readonly Encryption encryption;
 		private readonly FamilySysDbContext db;
 
-		public MemberController(FamilySysDbContext _db) {
+		public MemberController(FamilySysDbContext _db, Encryption _encryption) {
 			db = _db;
+			encryption = _encryption;
+		}
+
+		public JsonResult UsernameValidationJsonResult(string username) {
+			if (username == HttpContext.Session.GetString("Username")) {
+				return Json(true);
+			}
+
+			bool isExists = db.Users.Any(x => x.Username == username);
+			return Json(!isExists);
 		}
 
 		public void CommonWork() {
@@ -46,7 +58,7 @@ namespace FamilySys.Controllers {
 
 		public IActionResult Logout() {
 			HttpContext.Session.Clear();
-			return RedirectToAction("Index", "Home");
+			return RedirectToAction("Index", "Login");
 		}
 
 		public IActionResult MyInfo() {
@@ -58,14 +70,11 @@ namespace FamilySys.Controllers {
 				var me = db.Users.Single(x => x.ID == HttpContext.Session.GetString("ID"));
 
 				var form = new Member_MyInfo_ChgPwd_ViewModel() {
-					ChgPwdViewModel = new MemberChangePwdViewModel(),
-					MyInfoViewModel = new MemberMyInfoViewModel() {
 						ID = me.ID,
 						Username = me.Username,
 						Sex = me.Sex,
 						Phone = me.Phone,
 						Mail = me.Mail
-					}
 				};
 
 				return View(form);
@@ -76,13 +85,57 @@ namespace FamilySys.Controllers {
 
 		[HttpPost]
 		public IActionResult ChgInfo(Member_MyInfo_ChgPwd_ViewModel form) {
-			return RedirectToAction("MyInfo");
-			//return View("MyInfo");
+			try {
+				var user = db.Users.Single(x => x.ID == HttpContext.Session.GetString("ID"));
+
+				user.Username = form.Username;
+				user.Sex = form.Sex;
+				user.Phone = form.Phone;
+				user.Mail = form.Mail;
+
+				db.SaveChanges();
+
+				return RedirectToAction("MyInfo");
+			}
+			catch (Exception) {
+				return RedirectToAction("Error");
+			}
 		}
 
 		[HttpPost]
 		public IActionResult ChgPwd(Member_MyInfo_ChgPwd_ViewModel form) {
-			return RedirectToAction("Logout");
+			try {
+				var user = db.Users.Single(x => x.ID == form.ID);
+				if (encryption.Encrypt(form.Password) == db.Users.Single(x => x.ID == form.ID).Password) {
+					user.Password = encryption.Encrypt(form.NewPassword);
+					db.SaveChanges();
+
+					TempData["msg"] = "<script>alert('密码已修改，请重新登录');</script>";
+					return RedirectToAction("Logout");
+				} else {
+					CommonWork();
+
+					var me = db.Users.Single(x => x.ID == HttpContext.Session.GetString("ID"));
+
+					var newform = new Member_MyInfo_ChgPwd_ViewModel() {
+						ID = me.ID,
+						Username = me.Username,
+						Password = form.Password,
+						NewPassword = form.NewPassword,
+						RetypePassword = form.RetypePassword,
+						Sex = me.Sex,
+						Phone = me.Phone,
+						Mail = me.Mail
+					};
+
+					return View("MyInfo", newform);
+					//TempData["msg"] = "<script>alert('原密码输入错误');</script>";
+					//return RedirectToAction("MyInfo");
+				}
+			}
+			catch {
+				return RedirectToAction("Error");
+			}
 		}
 
 		public IActionResult Members() {

@@ -4,18 +4,17 @@
 	ViewData["Title"] = "登录";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@Html.Raw(TempData["msg"])
 <h2 align="center">登录</h2>
 <div style="text-align: center">
-	@using (Html.BeginForm("Login", "Login", FormMethod.Post))
-	{
+	@using (Html.BeginForm("Login", "Login", FormMethod.Post)) {
 		<table id="mainTable" class="table" style="margin: auto; width: 400px;">
 			<tr>
 				<td style="width: 60px">
 					@Html.LabelFor(Model => Model.Username)
 				</td>
 				<td>
-					@Html.TextBoxFor(Model => Model.Username, new {@class = "form-control", @placeholder = "用户名"})
+					@Html.TextBoxFor(Model => Model.Username, new { @class = "form-control", @placeholder = "用户名" })
 				</td>
 				<td>
 					@Html.ValidationMessageFor(Model => Model.Username)
@@ -26,24 +25,24 @@
 					@Html.LabelFor(Model => Model.Password)
 				</td>
 				<td>
-					@Html.TextBoxFor(Model => Model.Password, new {@class = "form-control", @placeholder = "密码", @type="password"})
+					@Html.TextBoxFor(Model => Model.Password, new { @class = "form-control", @placeholder = "密码", @type = "password" })
 				</td>
 				<td>
 					@Html.ValidationMessageFor(Model => Model.Password)
 				</td>
 			</tr>
 		</table>
-		<div class = "field-validation-error">
+		<div class="field-validation-error">
 			@Html.DisplayFor(Model => Model.ErrMessage)
 		</div>
-		<br/>
+		<br />
 		<div>
 			<input type="submit" name="LoginBtn" class="btn btn-primary" />
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type="reset" name="LoginReset" class="btn btn-danger" />
 		</div>
 	}
-	<br/>
+	<br />
 	<div>
 		<label>没有账号？</label>
 		<a asp-area="" asp-controller="Login" asp-action="Signup">去注册</a>

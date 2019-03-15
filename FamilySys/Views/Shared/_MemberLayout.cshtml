@@ -29,146 +29,150 @@
 	</environment>
 </head>
 @if (Context.Request.Cookies["mode"] == "night") {
-	<body style="background-color: #333; color: #F5F5F5;">
-		<nav class="navbar navbar-inverse navbar-fixed-top">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a asp-area="" asp-controller="Member" asp-action="Index" class="navbar-brand">家庭事务分配与统计管理系统 - @ViewData["Title"]</a>
-				</div>
-				<div class="navbar-collapse collapse">
-					<ul class="nav navbar-nav">
-						<li><a asp-area="" asp-controller="Member" asp-action="Index">主页</a></li>
-						<li><a asp-area="" asp-controller="Member" asp-action="Members">家庭成员</a></li>
-					</ul>
-					<ul class="nav navbar-right navbar-nav" style="background-color: azure">
-						<li>
-							<a id="chg-mode" style="background-color: #000; color: #fff;" onclick="changeMode('chg-mode')">夜间</a>
-						</li>
-					</ul>
-					<ul class="nav navbar-right navbar-nav">
-						<li>
-							<a asp-controller="Member" asp-action="MyInfo">你好，@ViewBag.Username</a>
-						</li>
-						<li>
-							<a asp-area="" asp-controller="Member" asp-action="Logout">登出</a>
-						</li>
-					</ul>
-				</div>
+<body style="background-color: #333; color: #F5F5F5;">
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a asp-area="" asp-controller="Member" asp-action="Index" class="navbar-brand">家庭事务分配与统计管理系统 - @ViewData["Title"]</a>
 			</div>
-		</nav>
-
-		<partial name="_CookieConsentPartial" />
-
-		<div class="container body-content">
-			@RenderBody()
-			<hr />
-			<footer>
-				<p>
-					&copy; @DateTime.Now.Year - 家庭事务分配与统计管理系统 by
-					<a href="https://azhuge233.com" target="_blank">azhuge233</a>
-				</p>
-			</footer>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li><a asp-area="" asp-controller="Member" asp-action="Index">主页</a></li>
+					<li><a asp-area="" asp-controller="Member" asp-action="Members">家庭成员</a></li>
+				</ul>
+				<ul class="nav navbar-right navbar-nav" style="background-color: azure">
+					<li>
+						<a id="chg-mode" style="background-color: #000; color: #fff;" onclick="changeMode('chg-mode')">夜间</a>
+					</li>
+				</ul>
+				<ul class="nav navbar-right navbar-nav">
+					<li>
+						<a asp-controller="Member" asp-action="MyInfo">你好，@ViewBag.Username</a>
+					</li>
+					<li>
+						<a asp-area="" asp-controller="Member" asp-action="Logout">登出</a>
+					</li>
+				</ul>
+			</div>
 		</div>
+	</nav>
 
-		<environment include="Development">
-			<script src="~/lib/jquery/dist/jquery.js"></script>
-			<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-			<script src="~/js/site.js" asp-append-version="true"></script>
-		</environment>
-		<environment exclude="Development">
-			<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-					asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-					asp-fallback-test="window.jQuery"
-					crossorigin="anonymous"
-					integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
-			</script>
-			<script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
-					asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-					asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-					crossorigin="anonymous"
-					integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
-			</script>
-			<script src="~/js/site.min.js" asp-append-version="true"></script>
-		</environment>
+	<partial name="_CookieConsentPartial" />
 
-		@RenderSection("Scripts", required: false)
-	</body>
+	<div class="container body-content">
+		@RenderBody()
+		<hr />
+		<footer>
+			<p>
+				&copy; @DateTime.Now.Year - 家庭事务分配与统计管理系统 by
+				<a href="https://azhuge233.com" target="_blank">azhuge233</a>
+			</p>
+		</footer>
+	</div>
+
+	<environment include="Development">
+		<script src="~/lib/jquery/dist/jquery.js"></script>
+		<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+		<script src="~/js/site.js" asp-append-version="true"></script>
+	</environment>
+	<environment exclude="Development">
+		<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+				asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+				asp-fallback-test="window.jQuery"
+				crossorigin="anonymous"
+				integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+		</script>
+		<script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+				asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+				asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+				crossorigin="anonymous"
+				integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+		</script>
+		<script src="~/js/site.min.js" asp-append-version="true"></script>
+	</environment>
+
+	@RenderSection("Scripts", required: false)
+	<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+</body>
 } else if (Context.Request.Cookies["mode"] == "sun") {
-	<body>
-		<nav class="navbar navbar-inverse navbar-fixed-top">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">家庭事务分配与统计管理系统 - @ViewData["Title"]</a>
-				</div>
-				<div class="navbar-collapse collapse">
-					<ul class="nav navbar-nav">
-						<li><a asp-area="" asp-controller="Home" asp-action="Index">主页</a></li>
-						<li><a asp-area="" asp-controller="Member" asp-action="Members">家庭成员</a></li>
-					</ul>
-					<ul class="nav navbar-right navbar-nav" style="background-color: azure">
-						<li>
-							<a id="chg-mode" style="background-color: #d2691e; color: #e0ffff;" onclick="changeMode('chg-mode')">日间</a>
-						</li>
-					</ul>
-					<ul class="nav navbar-right navbar-nav">
-						<li>
-							<a asp-controller="Member" asp-action="MyInfo">你好，@ViewBag.Username</a>
-						</li>
-						<li>
-							<a asp-area="" asp-controller="Member" asp-action="Logout">登出</a>
-						</li>
-					</ul>
-				</div>
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">家庭事务分配与统计管理系统 - @ViewData["Title"]</a>
 			</div>
-		</nav>
-
-		<partial name="_CookieConsentPartial" />
-
-		<div class="container body-content">
-			@RenderBody()
-			<hr />
-			<footer>
-				<p>
-					&copy; @DateTime.Now.Year - 家庭事务分配与统计管理系统 by
-					<a href="https://azhuge233.com" target="_blank">azhuge233</a>
-				</p>
-			</footer>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li><a asp-area="" asp-controller="Home" asp-action="Index">主页</a></li>
+					<li><a asp-area="" asp-controller="Member" asp-action="Members">家庭成员</a></li>
+				</ul>
+				<ul class="nav navbar-right navbar-nav" style="background-color: azure">
+					<li>
+						<a id="chg-mode" style="background-color: #d2691e; color: #e0ffff;" onclick="changeMode('chg-mode')">日间</a>
+					</li>
+				</ul>
+				<ul class="nav navbar-right navbar-nav">
+					<li>
+						<a asp-controller="Member" asp-action="MyInfo">你好，@ViewBag.Username</a>
+					</li>
+					<li>
+						<a asp-area="" asp-controller="Member" asp-action="Logout">登出</a>
+					</li>
+				</ul>
+			</div>
 		</div>
+	</nav>
 
-		<environment include="Development">
-			<script src="~/lib/jquery/dist/jquery.js"></script>
-			<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-			<script src="~/js/site.js" asp-append-version="true"></script>
-		</environment>
-		<environment exclude="Development">
-			<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-					asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-					asp-fallback-test="window.jQuery"
-					crossorigin="anonymous"
-					integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
-			</script>
-			<script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
-					asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-					asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-					crossorigin="anonymous"
-					integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
-			</script>
-			<script src="~/js/site.min.js" asp-append-version="true"></script>
-		</environment>
+	<partial name="_CookieConsentPartial" />
 
-		@RenderSection("Scripts", required: false)
-	</body>
+	<div class="container body-content">
+		@RenderBody()
+		<hr />
+		<footer>
+			<p>
+				&copy; @DateTime.Now.Year - 家庭事务分配与统计管理系统 by
+				<a href="https://azhuge233.com" target="_blank">azhuge233</a>
+			</p>
+		</footer>
+	</div>
+
+	<environment include="Development">
+		<script src="~/lib/jquery/dist/jquery.js"></script>
+		<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+		<script src="~/js/site.js" asp-append-version="true"></script>
+	</environment>
+	<environment exclude="Development">
+		<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+				asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+				asp-fallback-test="window.jQuery"
+				crossorigin="anonymous"
+				integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+		</script>
+		<script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+				asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+				asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+				crossorigin="anonymous"
+				integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+		</script>
+		<script src="~/js/site.min.js" asp-append-version="true"></script>
+	</environment>
+
+	@RenderSection("Scripts", required: false)
+	<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+</body>
 }
 </html>
