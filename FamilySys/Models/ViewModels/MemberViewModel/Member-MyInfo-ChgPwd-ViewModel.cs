@@ -56,7 +56,5 @@ namespace FamilySys.Models.ViewModels.MemberViewModel {
 		[StringLength(20, MinimumLength = 8, ErrorMessage = "密码长度在8-20位之间")]
 		[Compare("NewPassword", ErrorMessage = "与新密码不一致")]
 		public string RetypePassword { get; set; }
-
-		public string ErrMsg { get; set; }
 	}
 }

@@ -84,7 +84,7 @@ namespace FamilySys.Controllers {
 		}
 
 		[HttpPost]
-		public IActionResult ChgInfo(Member_MyInfo_ChgPwd_ViewModel form) {
+		public IActionResult ChgInfo(Member_MyInfo_ChgPwd_ViewModel form, string command) {
 			try {
 				var user = db.Users.Single(x => x.ID == HttpContext.Session.GetString("ID"));
 
@@ -113,24 +113,8 @@ namespace FamilySys.Controllers {
 					TempData["msg"] = "<script>alert('密码已修改，请重新登录');</script>";
 					return RedirectToAction("Logout");
 				} else {
-					CommonWork();
-
-					var me = db.Users.Single(x => x.ID == HttpContext.Session.GetString("ID"));
-
-					var newform = new Member_MyInfo_ChgPwd_ViewModel() {
-						ID = me.ID,
-						Username = me.Username,
-						Password = form.Password,
-						NewPassword = form.NewPassword,
-						RetypePassword = form.RetypePassword,
-						Sex = me.Sex,
-						Phone = me.Phone,
-						Mail = me.Mail
-					};
-
-					return View("MyInfo", newform);
-					//TempData["msg"] = "<script>alert('原密码输入错误');</script>";
-					//return RedirectToAction("MyInfo");
+					TempData["ErrMsg"] = "原密码输入错误";
+					return RedirectToAction("MyInfo");
 				}
 			}
 			catch {
