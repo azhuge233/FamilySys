@@ -3,16 +3,18 @@
 @{
 	ViewData["Title"] = "无法访问";
 	Layout = "~/Views/Shared/_Layout.cshtml";
+	TempData["Alert"] = "<script>alert('您尚未登录');</script>";
 	Context.Response.WriteAsync("<meta http-equiv='refresh' content='3; url=/Login' />");
 }
 
 <h2>无法访问</h2>
 
 <body>
+@Html.Raw(TempData["Alert"])
 <form id="form1" runat="server">
-	<div>
+	@*<div>
 		<label style="color: red">您尚未登陆</label>
-	</div>
+	</div>*@
 	<br/>
 	<div id='div1'>
 	</div>

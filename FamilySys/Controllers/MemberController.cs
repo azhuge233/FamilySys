@@ -105,8 +105,9 @@ namespace FamilySys.Controllers {
 		[HttpPost]
 		public IActionResult ChgPwd(Member_MyInfo_ChgPwd_ViewModel form) {
 			try {
-				var user = db.Users.Single(x => x.ID == form.ID);
 				if (encryption.Encrypt(form.Password) == db.Users.Single(x => x.ID == form.ID).Password) {
+					var user = db.Users.Single(x => x.ID == form.ID);
+
 					user.Password = encryption.Encrypt(form.NewPassword);
 					db.SaveChanges();
 
