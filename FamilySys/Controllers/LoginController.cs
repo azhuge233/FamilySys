@@ -48,11 +48,7 @@ namespace FamilySys.Controllers {
 				return RedirectToAction("Index", "Member");
 			} else {
 				var username = form.Username;
-				var password = form.Password;
-				//if条件测试用，发布时删除
-				if (username != "admin") {
-					password = encryption.Encrypt(password);
-				}
+				var password = encryption.Encrypt(form.Password);
 
 				try {
 					if (db.Users.Any(x => x.Username == username && x.Password == password)) {
