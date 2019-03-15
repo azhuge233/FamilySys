@@ -84,7 +84,7 @@ namespace FamilySys.Controllers {
 		}
 
 		[HttpPost]
-		public IActionResult ChgInfo(Member_MyInfo_ChgPwd_ViewModel form, string command) {
+		public IActionResult ChgInfo(Member_MyInfo_ChgPwd_ViewModel form) {
 			try {
 				var user = db.Users.Single(x => x.ID == HttpContext.Session.GetString("ID"));
 

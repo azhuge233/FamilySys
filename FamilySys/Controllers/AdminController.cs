@@ -49,10 +49,7 @@ namespace FamilySys.Controllers
 
         public IActionResult MyInfo() {
 	        if (HttpContext.Session.GetInt32("isAdmin") == 1) {
-		        return RedirectToAction("Index", "Admin");
-	        } else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
-
-		        var me = db.Users.Single(x => x.ID == HttpContext.Session.GetString("ID"));
+		        var me = db.Users.Single(x => x.IsAdmin == 1);
 
 		        var form = new Member_MyInfo_ChgPwd_ViewModel() {
 			        ID = me.ID,
@@ -63,17 +60,19 @@ namespace FamilySys.Controllers
 		        };
 
 		        return View(form);
-	        } else {
+				
+	        } else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+		        return RedirectToAction("Index", "Member");
+			} else {
 		        return RedirectToAction("nonMemberAlarm", "Home");
 	        }
         }
 
         [HttpPost]
-        public IActionResult ChgInfo(Member_MyInfo_ChgPwd_ViewModel form, string command) {
+        public IActionResult ChgInfo(Member_MyInfo_ChgPwd_ViewModel form) {
 	        try {
-		        var user = db.Users.Single(x => x.ID == HttpContext.Session.GetString("ID"));
+		        var user = db.Users.Single(x => x.IsAdmin == 1);
 
-		        user.Username = form.Username;
 		        user.Sex = form.Sex;
 		        user.Phone = form.Phone;
 		        user.Mail = form.Mail;
@@ -89,7 +88,7 @@ namespace FamilySys.Controllers
         [HttpPost]
         public IActionResult ChgPwd(Member_MyInfo_ChgPwd_ViewModel form) {
 	        try {
-		        if (encryption.Encrypt(form.Password) == db.Users.Single(x => x.ID == form.ID).Password) {
+		        if (encryption.Encrypt(form.Password) == db.Users.Single(x => x.IsAdmin == 1).Password) {
 			        var user = db.Users.Single(x => x.ID == form.ID);
 
 			        user.Password = encryption.Encrypt(form.NewPassword);
@@ -107,7 +106,19 @@ namespace FamilySys.Controllers
         }
 
         public IActionResult Members() {
-	        return View();
-        }
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				try {
+					var Users = db.Users.Where(x => x.IsAdmin == 0);
+					return View(Users);
+				} catch (Exception) {
+					return RedirectToAction("Error");
+				}
+				
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				return RedirectToAction("Index", "Admin");
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
     }
 }
