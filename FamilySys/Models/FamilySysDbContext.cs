@@ -13,5 +13,6 @@ namespace FamilySys.Models {
 
 		public DbSet<User> Users { get; set; }
 		public DbSet<Housework> Houseworks { get; set; }
+		public DbSet<Announcement> Announcements { get; set; }
 	}
 }

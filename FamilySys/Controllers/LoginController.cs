@@ -80,7 +80,7 @@ namespace FamilySys.Controllers {
 				var formWithID = new UserSignUpViewModel();
 				Random rd = new Random();
 				do {
-					formWithID.ID = rd.Next(00000, 99999).ToString() + rd.Next(00000, 99999).ToString();
+					formWithID.ID = rd.Next(10000, 99999).ToString() + rd.Next(10000, 99999).ToString();
 				} while (db.Users.Any(x => x.ID == formWithID.ID));
 
 				return View(formWithID);

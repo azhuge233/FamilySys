@@ -63,7 +63,7 @@ namespace FamilySys.Controllers {
 
 		public IActionResult MyInfo() {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
-				return RedirectToAction("Index", "Admin");
+				return RedirectToAction("MyInfo", "Admin");
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				CommonWork();
 
@@ -125,7 +125,7 @@ namespace FamilySys.Controllers {
 
 		public IActionResult Members() {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
-				return RedirectToAction("Index", "Admin");
+				return RedirectToAction("Members", "Admin");
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				CommonWork();
 
