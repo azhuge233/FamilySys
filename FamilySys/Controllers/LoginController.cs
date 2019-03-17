@@ -96,7 +96,8 @@ namespace FamilySys.Controllers {
 				Password = encryption.Encrypt(form.Password),
 				Sex = form.Sex,
 				Phone = form.Phone,
-				Mail = form.Mail
+				Mail = form.Mail,
+				Score = 10
 			};
 
 			try {

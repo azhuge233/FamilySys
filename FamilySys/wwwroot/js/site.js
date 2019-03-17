@@ -3,6 +3,14 @@
 
 // Write your JavaScript code.
 
+function ensure() {
+	if(window.confirm('确认提交？')) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 function getCookie(name) {
 	var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
 	if (arr = document.cookie.match(reg))

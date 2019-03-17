@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FamilySys.Models;
+using FamilySys.Models.ViewModels.AdminViewModel;
 using FamilySys.Models.ViewModels.MemberViewModel;
 using FamilySys.Modules;
 using Microsoft.AspNetCore.Http;
@@ -21,7 +22,14 @@ namespace FamilySys.Controllers
 		    encryption = _encryption;
 	    }
 
-		public IActionResult Index()
+	    public JsonResult UsernameValidationJsonResult(string id, string username) {
+		    if (db.Users.Single(x => x.ID == id).Username == username)
+			    return Json(true);
+		    bool isExists = db.Users.Any(x => x.Username == username);
+		    return Json(!isExists);
+	    }
+
+	    public IActionResult Index()
         {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
 				return View();
@@ -120,5 +128,53 @@ namespace FamilySys.Controllers
 				return RedirectToAction("nonMemberAlarm", "Home");
 			}
 		}
+
+        public IActionResult EditMemberInfo(string ID) {
+	        if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				try {
+					var user = db.Users.Single(x => x.ID == ID);
+
+					var userViewModel = new AdminEditMemberViewModel() {
+						ID = user.ID,
+						Username = user.Username,
+						Password = "",
+						Sex = user.Sex,
+						Phone = user.Phone,
+						Mail = user.Mail,
+						Score = user.Score
+					};
+
+					return View(userViewModel);
+				} catch (Exception) {
+					return RedirectToAction("Error");
+				}
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+		        return RedirectToAction("Index", "Admin");
+	        } else {
+		        return RedirectToAction("nonMemberAlarm", "Home");
+	        }
+        }
+
+        [HttpPost]
+        public IActionResult DoEditMemberInfo(AdminEditMemberViewModel form) {
+	        try {
+		        var user = db.Users.Single(x => x.ID == form.ID);
+
+		        user.Username = form.Username;
+		        user.Password = string.IsNullOrEmpty(form.Password) ? user.Password : encryption.Encrypt(form.Password);
+		        user.Sex = form.Sex;
+		        user.Mail = form.Mail;
+		        user.Phone = form.Phone;
+		        user.Score = form.Score;
+
+		        db.SaveChanges();
+				
+		        TempData["Success"] = "<script>alert(\'用户 " + user.Username + " 的信息已修改\');</script>";
+				return RedirectToAction("Members");
+	        } catch (Exception) {
+		        return RedirectToAction("Error");
+	        }
+        }
+
     }
 }

@@ -30,6 +30,9 @@ namespace FamilySys.Models.DbModels {
 		public string Mail { get; set; }
 
 		[Required]
+		public int Score { get; set; }
+
+		[Required]
 		public int IsAdmin { get; set; }
 	}
 }
