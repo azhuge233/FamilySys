@@ -30,6 +30,7 @@ namespace FamilySys.Models.DbModels {
 		public string Mail { get; set; }
 
 		[Required]
+		[Range(0, 100)]
 		public int Score { get; set; }
 
 		[Required]

@@ -41,6 +41,7 @@ namespace FamilySys.Models.ViewModels.AdminViewModel {
 
 		[Required(ErrorMessage = "请填写分数")]
 		[DisplayName("分数")]
+		[Range(0, 100, ErrorMessage = "分数在0-100之间")]
 		public int Score { get; set; }
 
 		public int IsAdmin { get; set; }
