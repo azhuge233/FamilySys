@@ -202,11 +202,7 @@ namespace FamilySys.Controllers
 
 		public IActionResult PublishAnnouncement() {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
-				try {
-					return View();
-				} catch (Exception) {
-					return RedirectToAction("Error");
-				}
+				return View();
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("Index", "Member");
 			} else {
