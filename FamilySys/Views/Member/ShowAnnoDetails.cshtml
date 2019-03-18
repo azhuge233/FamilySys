@@ -1,0 +1,23 @@
+﻿@model FamilySys.Models.DbModels.Announcement
+@{
+	ViewData["Title"] = "家庭成员";
+	Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+<div>
+	<h2 align="center">公告 #@Model.ID</h2>
+	<div style="font-size: smaller">
+		<h3>标题： @Model.Title</h3>
+		<p>
+			发布时间：@Model.Date.GetDateTimeFormats('f')[0].ToString() <br />
+			最后修改时间：@Model.ModifyDate.GetDateTimeFormats('f')[0].ToString()
+		</p>
+	</div>
+	<h3>内容</h3>
+	@Html.Raw(Model.Content)
+</div>
+<br />
+<div class="text-right">
+	<a asp-action="ShowAnnouncements" asp-controller="Member">< 返回</a>
+</div>
+

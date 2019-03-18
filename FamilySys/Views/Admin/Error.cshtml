@@ -1,12 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Http
 
 @{
-	ViewData["Title"] = "操作失败";
+	ViewData["Title"] = "管理员";
 	Layout = "~/Views/Shared/_AdminLayout.cshtml";
 	Context.Response.WriteAsync("<meta http-equiv='refresh' content='3; url=/Admin' />");
 }
 <h2>操作失败</h2>
-
+@Html.Raw(TempData["ErrMsg"])
 <body>
 	<form id="form1" runat="server">
 		<div id='div1'>

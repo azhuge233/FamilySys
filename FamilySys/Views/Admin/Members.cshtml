@@ -28,7 +28,7 @@
 		<td style="text-align: center">@each.Score</td>
 		<td style="text-align: center">
 			@using (Html.BeginForm("EditMemberInfo", "Admin", HttpMethod.Post)) {
-				<input type="hidden" value=@each.ID name="ID" />
+				<input type="hidden" value="@each.ID" name="ID" />
 				<input type="submit" name="SubBtn" value="编辑信息" class="btn btn-sm btn-primary" />
 			}
 		</td>

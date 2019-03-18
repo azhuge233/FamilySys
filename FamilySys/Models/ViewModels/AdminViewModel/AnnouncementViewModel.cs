@@ -8,6 +8,8 @@ using FamilySys.Models.DbModels;
 
 namespace FamilySys.Models.ViewModels.AdminViewModel {
 	public class AnnouncementViewModel {
+		[DisplayName("ID")]
+		public string ID { get; set; }
 
 		[DisplayName("标题")]
 		[Required(ErrorMessage = "请填写公告标题")]

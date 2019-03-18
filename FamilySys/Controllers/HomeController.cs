@@ -41,22 +41,17 @@ namespace FamilySys.Controllers {
 			return View();
 		}
 
-		public IActionResult Members()
-		{
+		public IActionResult Members() {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
 				return RedirectToAction("Index", "Admin");
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("Index", "Member");
-			}
-			else
-			{
-				try
-				{
+			} else {
+				try {
 					var Users = db.Users.Where(x => x.IsAdmin == 0);
 					return View(Users);
-				}
-				catch (Exception)
-				{
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 					return RedirectToAction("Error");
 				}
 			}

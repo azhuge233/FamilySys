@@ -62,7 +62,7 @@ namespace FamilySys.Controllers
 
 		public IActionResult Logout() {
 			HttpContext.Session.Clear();
-			return RedirectToAction("Login", "Login");
+			return RedirectToAction("Index", "Login");
 		}
 
 		public IActionResult MyInfo() {
@@ -98,7 +98,8 @@ namespace FamilySys.Controllers
 				db.SaveChanges();
 
 				return RedirectToAction("MyInfo");
-			} catch (Exception) {
+			} catch (Exception ex) {
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 				return RedirectToAction("Error");
 			}
 		}
@@ -118,7 +119,8 @@ namespace FamilySys.Controllers
 					TempData["ErrMsg"] = "原密码输入错误";
 					return RedirectToAction("MyInfo");
 				}
-			} catch {
+			} catch(Exception ex) {
+				TempData["ErrMsg"] = "alert(\'" + ex.Message.ToString() + "\');";
 				return RedirectToAction("Error");
 			}
 		}
@@ -128,7 +130,8 @@ namespace FamilySys.Controllers
 				try {
 					var Users = db.Users.Where(x => x.IsAdmin == 0);
 					return View(Users);
-				} catch (Exception) {
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 					return RedirectToAction("Error");
 				}
 
@@ -155,7 +158,8 @@ namespace FamilySys.Controllers
 					};
 
 					return View(userViewModel);
-				} catch (Exception) {
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 					return RedirectToAction("Error");
 				}
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
@@ -181,7 +185,8 @@ namespace FamilySys.Controllers
 
 				TempData["Success"] = "<script>alert(\'用户 " + user.Username + " 的信息已修改\');</script>";
 				return RedirectToAction("Members");
-			} catch (Exception) {
+			} catch (Exception ex) {
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 				return RedirectToAction("Error");
 			}
 		}
@@ -189,12 +194,14 @@ namespace FamilySys.Controllers
 		public IActionResult ShowAnnouncements() {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
 				try {
-					return View();
-				} catch (Exception) {
+					var Annos = db.Announcements.Where(x => x.ID == x.ID).OrderByDescending(x => x.Date);
+					return View(Annos);
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 					return RedirectToAction("Error");
 				}
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
-				return RedirectToAction("Index", "Member");
+				return RedirectToAction("ShowAnnouncements", "Member");
 			} else {
 				return RedirectToAction("nonMemberAlarm", "Home");
 			}
@@ -218,15 +225,80 @@ namespace FamilySys.Controllers
 					Date = DateTime.Now,
 					ModifyDate = DateTime.Now,
 					Title = form.Title,
-					Content = form.Content
+					Content = form.Content.Replace("\n", "<br />")
 				};
 
 				db.Announcements.Add(newAnno);
 				db.SaveChanges();
-
-				TempData["Success"] = "<script>alert(\'公告发布成功\');</script>";
+				
+				TempData["Success"] = "<script>alert(\'公告 " + newAnno.Title + " 发布成功\');</script>";
 				return RedirectToAction("ShowAnnouncements");
-			} catch (Exception) {
+			} catch (Exception ex) {
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
+				return RedirectToAction("Error");
+			}
+		}
+
+		public IActionResult ShowAnnoDetails(string ID) {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				var Anno = db.Announcements.Single(x => x.ID == ID);
+				return View(Anno);
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				return RedirectToAction("ShowAnnoDetails", "Member");
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		[HttpPost]
+		public IActionResult DelAnno(string ID) {
+			try {
+				var delAnno = db.Announcements.Single(x => x.ID == ID);
+				var title = delAnno.Title;
+
+				db.Announcements.Remove(delAnno);
+				db.SaveChanges();
+
+				TempData["Success"] = "<script>alert(\'公告 " + title + " 删除成功\');</script>";
+				return RedirectToAction("ShowAnnouncements");
+			} catch (Exception ex) {
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
+				return RedirectToAction("Error");
+			}
+		}
+
+		public IActionResult EditAnno(string ID) {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				var Anno = db.Announcements.Single(x => x.ID == ID);
+
+				var AnnoViewModel = new AnnouncementViewModel() {
+					ID = Anno.ID,
+					Title = Anno.Title,
+					Content = Anno.Content
+				};
+
+				return View(AnnoViewModel);
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				return RedirectToAction("Index", "Member");
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		[HttpPost]
+		public IActionResult DoEditAnno(AnnouncementViewModel form) {
+			try {
+				var thisAnno = db.Announcements.Single(x => x.ID == form.ID);
+				thisAnno.Title = form.Title;
+				thisAnno.Content = form.Content;
+				thisAnno.ModifyDate = DateTime.Now;
+
+				db.SaveChanges();
+
+				TempData["Success"] = "<script>alert(\'公告 " + thisAnno.Title + " 修改成功\');</script>";
+				return RedirectToAction("ShowAnnouncements");
+			} catch (Exception ex) {
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 				return RedirectToAction("Error");
 			}
 		}

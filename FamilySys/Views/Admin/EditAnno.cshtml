@@ -1,0 +1,46 @@
+﻿@using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http
+@model FamilySys.Models.ViewModels.AdminViewModel.AnnouncementViewModel
+@{
+    ViewData["Title"] = "管理员";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div>
+	@using (Html.BeginForm("DoEditAnno", "Admin", HttpMethod.Post)) {
+		<h2 align="center">编辑公告 #@Model.ID</h2>
+		<table class="table" style="margin: auto; width: auto; text-align: center;">
+			<tr style="display: none">
+				<td>
+					@Html.TextBoxFor(Model => Model.ID, new {@style="display: none"})
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.LabelFor(Model => Model.Title)
+				</td>
+				<td>
+					@Html.TextBoxFor(Model => Model.Title, new {@class = "form-control", @placeholder = "标题"})
+				</td>
+				<td>
+					@Html.ValidationMessageFor(Model => Model.Title)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.LabelFor(Model => Model.Content)
+				</td>
+				<td>
+					@Html.TextAreaFor(Model => Model.Content, new {@class = "form-control", @placeholder = "内容", @style = "height: 150px;width: 600px"})
+				</td>
+				<td>
+					@Html.ValidationMessageFor(Model => Model.Content)
+				</td>
+			</tr>
+		</table>
+		<div align="center">
+			<input type="submit" name="SubBtn" onclick="return ensure()" class="btn btn-success" />
+		</div>
+	}
+</div>
+
+

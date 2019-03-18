@@ -97,7 +97,8 @@ namespace FamilySys.Controllers {
 
 				return RedirectToAction("MyInfo");
 			}
-			catch (Exception) {
+			catch (Exception ex) {
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 				return RedirectToAction("Error");
 			}
 		}
@@ -132,7 +133,44 @@ namespace FamilySys.Controllers {
 				try {
 					var Users = db.Users.Where(x => x.IsAdmin == 0);
 					return View(Users);
-				} catch (Exception) {
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
+					return RedirectToAction("Error");
+				}
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		public IActionResult ShowAnnouncements() {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				return RedirectToAction("ShowAnnouncements", "Admin");
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				CommonWork();
+
+				try {
+					var Annos = db.Announcements.Where(x => x.ID == x.ID).OrderByDescending(x => x.Date);
+					return View(Annos);
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
+					return RedirectToAction("Error");
+				}
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		public IActionResult ShowAnnoDetails(string ID) {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				return RedirectToAction("ShowAnnoDetails", "Admin");
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				CommonWork();
+
+				try {
+					var Anno = db.Announcements.Single(x => x.ID == ID);
+					return View(Anno);
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 					return RedirectToAction("Error");
 				}
 			} else {
