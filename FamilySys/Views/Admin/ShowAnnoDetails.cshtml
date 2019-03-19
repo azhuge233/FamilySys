@@ -13,11 +13,13 @@
 		</p>
 	</div>
 	<h3>内容</h3>
-	@Html.Raw(Model.Content)
+	<p style="white-space: pre-wrap;word-wrap: break-word;">@Html.Raw(Model.Content)</p>
 </div>
 <br/>
 <div class="text-right">
-	<a asp-action="ShowAnnouncements" asp-controller="Admin">< 返回</a>
+	<a asp-action="ShowAnnouncements" asp-controller="Admin">
+		<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> 返回
+	</a>
 </div>
 
 

@@ -1,0 +1,50 @@
+﻿@model FamilySys.Models.ViewModels.MemberViewModel.HouseworkShowcaseViewModel
+@{
+    ViewData["Title"] = "家庭成员";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+<div>
+	@if (Model.Type == 1) {
+		<h2 align="center">公共事务 #@Model.ID </h2>
+	} else {
+		<h2 align="center">个人事务 #@Model.ID </h2>
+	}
+	<div>
+		@if (Model.IsDone == false) {
+			<h3>
+				标题 - @Model.Title&nbsp;
+				<label style="color: cornflowerblue; font-size: medium">待完成</label>
+			</h3>
+		} else {
+			<h3>
+				标题 - @Model.Title&nbsp;
+				<label style="color: green; font-size: medium">已完成</label>
+			</h3>
+		}
+		<p>
+			发布人：@Model.FromUsername &nbsp;
+			接收人: @Model.ToUsername
+		</p>
+		<p>
+			发布时间：@Model.Date.GetDateTimeFormats('f')[0].ToString() &nbsp;
+			修改时间：@Model.ModifyDate.GetDateTimeFormats('f')[0].ToString()
+		</p>
+		<p>
+			分值：@Model.Score 分
+		</p>
+	</div>
+	<br/>
+	<div>
+		<h3>事务描述</h3>
+		<p style="white-space: pre-wrap; word-wrap: break-word;">@Html.Raw(Model.Content)</p>
+	</div>
+	<br />
+	<div class="text-right">
+		<a asp-action="ShowHouseworks" asp-controller="Member">
+			<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> 返回
+		</a>
+	</div>
+</div>
+
+

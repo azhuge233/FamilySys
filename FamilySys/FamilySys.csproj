@@ -13,6 +13,14 @@
     <Compile Remove="Migrations\20190312054815_Update-User-Table.Designer.cs" />
     <Compile Remove="Migrations\20190312055148_Initialize.cs" />
     <Compile Remove="Migrations\20190312055148_Initialize.Designer.cs" />
+    <Compile Remove="Migrations\20190319055851_Modify-Housework-Col.cs" />
+    <Compile Remove="Migrations\20190319055851_Modify-Housework-Col.Designer.cs" />
+    <Compile Remove="Migrations\20190319060011_Modify-Housework-Col.cs" />
+    <Compile Remove="Migrations\20190319060011_Modify-Housework-Col.Designer.cs" />
+    <Compile Remove="Migrations\20190319060709_Modify-Housework-Col.cs" />
+    <Compile Remove="Migrations\20190319060709_Modify-Housework-Col.Designer.cs" />
+    <Compile Remove="Migrations\20190319060934_Redesign-Housework-Table.cs" />
+    <Compile Remove="Migrations\20190319060934_Redesign-Housework-Table.Designer.cs" />
     <Compile Remove="Models\DbModels\Users.cs" />
   </ItemGroup>
 

@@ -4,14 +4,16 @@ using FamilySys.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FamilySys.Migrations
 {
     [DbContext(typeof(FamilySysDbContext))]
-    partial class FamilySysDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190319061019_Redesign-Housework-Table")]
+    partial class RedesignHouseworkTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,13 +48,11 @@ namespace FamilySys.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(10);
 
-                    b.Property<string>("Content")
-                        .IsRequired();
+                    b.Property<string>("Content");
 
                     b.Property<DateTime>("Date");
 
                     b.Property<string>("FromID")
-                        .IsRequired()
                         .HasMaxLength(10);
 
                     b.Property<bool>("IsDone");
@@ -61,8 +61,7 @@ namespace FamilySys.Migrations
 
                     b.Property<int>("Score");
 
-                    b.Property<string>("Title")
-                        .IsRequired();
+                    b.Property<string>("Title");
 
                     b.Property<string>("ToID")
                         .HasMaxLength(10);

@@ -45,6 +45,20 @@
 				<ul class="nav navbar-nav">
 					<li><a asp-area="" asp-controller="Member" asp-action="Index">主页</a></li>
 					<li><a asp-area="" asp-controller="Member" asp-action="ShowAnnouncements">公告</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							家庭事务
+							<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu nav" style="background-color: #333;">
+							<li>
+								<a style="color: #9d9d9d" asp-controller="Member" asp-action="PublishHousework">发布事务</a>
+							</li>
+							<li>
+								<a style="color: #9d9d9d" asp-controller="Member" asp-action="ShowHouseworks">查看事务</a>
+							</li>
+						</ul>
+					</li>
 					<li><a asp-area="" asp-controller="Member" asp-action="Members">家庭成员</a></li>
 				</ul>
 				<ul class="nav navbar-right navbar-nav" style="background-color: azure">
@@ -119,6 +133,20 @@
 				<ul class="nav navbar-nav">
 					<li><a asp-area="" asp-controller="Home" asp-action="Index">主页</a></li>
 					<li><a asp-area="" asp-controller="Member" asp-action="ShowAnnouncements">公告</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							家庭事务
+							<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu nav" style="background-color: #333;">
+							<li>
+								<a style="color: #9d9d9d" asp-controller="Member" asp-action="PublishHousework">发布事务</a>
+							</li>
+							<li>
+								<a style="color: #9d9d9d" asp-controller="Member" asp-action="ShowHouseworks">查看事务</a>
+							</li>
+						</ul>
+					</li>
 					<li><a asp-area="" asp-controller="Member" asp-action="Members">家庭成员</a></li>
 				</ul>
 				<ul class="nav navbar-right navbar-nav" style="background-color: azure">
