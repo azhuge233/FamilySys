@@ -464,5 +464,23 @@ namespace FamilySys.Controllers {
 				return RedirectToAction("Error");
 			}
 		}
+
+		public IActionResult MyDream() {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				return RedirectToAction("Index", "Admin");
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				CommonWork();
+
+				try {
+
+					return View();
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+					return RedirectToAction("Error");
+				}
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
 	}
 }
