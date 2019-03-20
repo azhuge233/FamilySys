@@ -24,7 +24,7 @@
 		</tr>
 		@foreach (var housework in Model) {
 			if (housework.IsDone) {
-				<tr class="success">
+				<tr class="success" style="background-color: darkseagreen;">
 					<td>@housework.ID</td>
 					<td style="width: 200px">@housework.Title</td>
 					<td>@housework.FromUsername</td>
@@ -47,7 +47,7 @@
 					</td>
 				</tr>
 			} else if (housework.ToID != null) {
-				<tr class="info">
+				<tr style="background-color: cornflowerblue;">
 					<td>@housework.ID</td>
 					<td style="width: 200px">@housework.Title</td>
 					<td>@housework.FromUsername</td>
