@@ -264,14 +264,16 @@ namespace FamilySys.Controllers {
 					IsDone = false
 				};
 
-				if (me.Score <= 0) {
-					TempData["ErrMsg"] = "<script>alert(\'您的分值小于0，无法发布个人事务\')</script>";
-					return RedirectToAction("ShowHouseworks");
-				} else if (me.Score - form.Score < 0) {
-					TempData["CannotPublish"] = "<script>alert(\'您的分值小于事务分值，无法发布事务 #" + form.ID + "\')</script>";
-					return RedirectToAction("PublishHousework");
-				} else {
-					me.Score -= form.Type == 2 ? form.Score : 0;
+				if (form.Type == 2) {
+					if (me.Score <= 0) {
+						TempData["ErrMsg"] = "<script>alert(\'您的分值小于0，无法发布个人事务\')</script>";
+						return RedirectToAction("ShowHouseworks");
+					} else if (me.Score - form.Score < 0) {
+						TempData["CannotPublish"] = "<script>alert(\'您的分值小于事务分值，无法发布事务 #" + form.ID + "\')</script>";
+						return RedirectToAction("PublishHousework");
+					} else {
+						me.Score -= form.Type == 2 ? form.Score : 0;
+					}
 				}
 
 				db.Houseworks.Add(newHousework);
@@ -310,6 +312,40 @@ namespace FamilySys.Controllers {
 				return View(houseworkShowcase);
 			} else {
 				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		[HttpPost]
+		public IActionResult SignHousework(string ID) {
+			try {
+				var housework = db.Houseworks.Single(x => x.ID == ID);
+
+				housework.ToID = HttpContext.Session.GetString("ID");
+
+				db.SaveChanges();
+
+				TempData["Success"] = "<script>alert(\'已接受事务 #" + housework.ID + "\')</script>";
+				return RedirectToAction("ShowHouseworks");
+			} catch (Exception ex) {
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+				return RedirectToAction("Error");
+			}
+		}
+
+		[HttpPost]
+		public IActionResult GiveUpHousework(string ID) {
+			try {
+				var housework = db.Houseworks.Single(x => x.ID == ID);
+
+				housework.ToID = null;
+
+				db.SaveChanges();
+
+				TempData["Success"] = "<script>alert(\'已放弃事务 #" + housework.ID + "\')</script>";
+				return RedirectToAction("ShowHouseworks");
+			} catch (Exception ex) {
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+				return RedirectToAction("Error");
 			}
 		}
 	}
