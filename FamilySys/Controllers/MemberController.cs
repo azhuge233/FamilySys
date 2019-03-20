@@ -48,6 +48,17 @@ namespace FamilySys.Controllers {
 			return ID;
 		}
 
+		public string GetRandomNum5() {
+			Random rd = new Random();
+			string ID = "";
+
+			do {
+				ID = rd.Next(10000, 99999).ToString();
+			} while (db.Houseworks.Any(x => x.ID == ID));
+
+			return ID;
+		}
+
 		public IActionResult Index() {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
 				return RedirectToAction("Index", "Admin");
@@ -472,8 +483,83 @@ namespace FamilySys.Controllers {
 				CommonWork();
 
 				try {
+					var myID = HttpContext.Session.GetString("ID");
+					var newDream = new MemberDreamViewModel();
 
-					return View();
+					if (db.Dreams.Any(x => x.UserID == myID)) {
+						var oldDream = db.Dreams.Single(x => x.UserID == myID);
+						newDream.ID = oldDream.ID;
+						newDream.Title = oldDream.Title;
+						newDream.Content = oldDream.Content;
+					} else {
+						newDream.ID = GetRandomNum5();
+					}
+
+					return View(newDream);
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+					return RedirectToAction("Error");
+				}
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		[HttpPost]
+		public IActionResult UploadDream(MemberDreamViewModel form) {
+			try {
+				
+				var newDream = new Dream() {
+					ID = form.ID,
+					Title = form.Title,
+					Content = form.Content,
+					UserID = HttpContext.Session.GetString("ID"),
+					Agree = 1,
+					Veto = 0
+				};
+
+				db.Dreams.Add(newDream);
+				db.SaveChanges();
+
+				TempData["Success"] = "<script>alert(\'已设置家庭梦想 " + newDream.Title + "\');</script>";
+				return RedirectToAction("ShowDreams");
+			} catch (Exception ex) {
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+				return RedirectToAction("Error");
+			}
+		}
+
+		public IActionResult ShowDreams() {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				return RedirectToAction("Index", "Admin");
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				CommonWork();
+
+				try {
+					var myID = HttpContext.Session.GetString("ID");
+					var dreams = db.Dreams.Select(x => x).Where(x => x.UserID != myID);
+					var myDream = db.Dreams.Single(x => x.UserID == myID);
+
+					ViewBag.myDreamTitle = myDream.Title;
+					ViewBag.myDreamAgree = myDream.Agree;
+					ViewBag.myDreamVeto = myDream.Veto;
+					ViewBag.UserCount = db.Users.Count() - 1;
+
+					var dreamsList = new List<ShowDreamsViewModel>();
+
+					foreach (var dream in dreams) {
+						dreamsList.Add(
+							new ShowDreamsViewModel() {
+								ID = dream.ID,
+								Title = dream.Title,
+								Agree = dream.Agree,
+								Veto = dream.Veto,
+								Username = db.Users.Single(x => x.ID == dream.UserID).Username
+							}
+						);
+					}
+
+					return View(dreamsList.AsQueryable());
 				} catch (Exception ex) {
 					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 					return RedirectToAction("Error");

@@ -24,29 +24,29 @@
 		</tr>
 		@foreach (var housework in Model) {
 			if (housework.IsDone) {
-		<tr style="background-color: darkseagreen;">
-			<td>@housework.ID</td>
-			<td style="width: 200px">@housework.Title</td>
-			<td>@housework.FromUsername</td>
-			<td>@housework.ToUsername</td>
-			<td>@housework.Date.GetDateTimeFormats('f')[0].ToString()</td>
-			<td>@housework.ModifyDate.GetDateTimeFormats('f')[0].ToString()</td>
-			@if (housework.Type == 1) {
-				<td>公共</td>
-			} else {
-				<td>个人</td>
-			}
-			<td>@housework.Score 分</td>
-			<td>已接受</td>
-			<td>已完成</td>
-			<td>
-				@using (Html.BeginForm("ShowHouseworkDetails", "Member", HttpMethod.Post)) {
-					<input type="hidden" name="ID" value="@housework.ID" />
-					<input type="hidden" name="FromPage" value="1" />
-					<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success" />
-				}
-			</td>
-		</tr>
+				<tr style="background-color: darkseagreen;">
+					<td>@housework.ID</td>
+					<td style="width: 200px">@housework.Title</td>
+					<td>@housework.FromUsername</td>
+					<td>@housework.ToUsername</td>
+					<td>@housework.Date.GetDateTimeFormats('f')[0].ToString()</td>
+					<td>@housework.ModifyDate.GetDateTimeFormats('f')[0].ToString()</td>
+					@if (housework.Type == 1) {
+						<td>公共</td>
+					} else {
+						<td>个人</td>
+					}
+					<td>@housework.Score 分</td>
+					<td>已接受</td>
+					<td>已完成</td>
+					<td>
+						@using (Html.BeginForm("ShowHouseworkDetails", "Member", HttpMethod.Post)) {
+							<input type="hidden" name="ID" value="@housework.ID"/>
+							<input type="hidden" name="FromPage" value="1"/>
+							<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success"/>
+						}
+					</td>
+				</tr>
 			} else if (housework.ToID != null) {
 				<tr style="background-color: cornflowerblue;">
 					<td>@housework.ID</td>
@@ -68,28 +68,28 @@
 							<tr>
 								<td>
 									@using (Html.BeginForm("ShowHouseworkDetails", "Member", HttpMethod.Post)) {
-										<input type="hidden" name="ID" value="@housework.ID" />
-										<input type="hidden" name="FromPage" value="1" />
-										<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success" />
+										<input type="hidden" name="ID" value="@housework.ID"/>
+										<input type="hidden" name="FromPage" value="1"/>
+										<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success"/>
 									}
 								</td>
 								@if (housework.ToUsername == ViewBag.Username) {
 									<td></td>
 									<td>
 										@using (Html.BeginForm("HouseworkOperation", "Member", HttpMethod.Post)) {
-											<input type="hidden" name="ID" value="@housework.ID" />
-											<input type="hidden" value="2" name="action" />
-											<input type="hidden" name="FromPage" value="1" />
-											<input type="submit" name="ShowBtn" value="放弃" onclick="return ensure()" class="btn btn-sm btn-danger" />
+											<input type="hidden" name="ID" value="@housework.ID"/>
+											<input type="hidden" value="2" name="action"/>
+											<input type="hidden" name="FromPage" value="1"/>
+											<input type="submit" name="ShowBtn" value="放弃" onclick="return ensure()" class="btn btn-sm btn-danger"/>
 										}
 									</td>
 									<td></td>
 									<td>
 										@using (Html.BeginForm("HouseworkOperation", "Member", HttpMethod.Post)) {
-											<input type="hidden" name="ID" value="@housework.ID" />
-											<input type="hidden" value="3" name="action" />
-											<input type="hidden" name="FromPage" value="1" />
-											<input type="submit" name="ShowBtn" value="完成" onclick="return ensure()" class="btn btn-sm btn-primary" />
+											<input type="hidden" name="ID" value="@housework.ID"/>
+											<input type="hidden" value="3" name="action"/>
+											<input type="hidden" name="FromPage" value="1"/>
+											<input type="submit" name="ShowBtn" value="完成" onclick="return ensure()" class="btn btn-sm btn-primary"/>
 										}
 									</td>
 								}
@@ -118,28 +118,28 @@
 							<tr>
 								<td>
 									@using (Html.BeginForm("ShowHouseworkDetails", "Member", HttpMethod.Post)) {
-										<input type="hidden" name="ID" value="@housework.ID" />
-										<input type="hidden" name="FromPage" value="1" />
-										<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success" />
+										<input type="hidden" name="ID" value="@housework.ID"/>
+										<input type="hidden" name="FromPage" value="1"/>
+										<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success"/>
 									}
 								</td>
 								@if (housework.FromUsername == ViewBag.Username) {
 									<td></td>
 									<td>
 										@using (Html.BeginForm("EditHousework", "Member", HttpMethod.Post)) {
-											<input type="hidden" name="ID" value="@housework.ID" />
-											<input type="hidden" name="FromPage" value="1" />
-											<input type="submit" name="ShowBtn" value="修改" onclick="return ensure()" class="btn btn-sm btn-info" />
+											<input type="hidden" name="ID" value="@housework.ID"/>
+											<input type="hidden" name="FromPage" value="1"/>
+											<input type="submit" name="ShowBtn" value="修改" onclick="return ensure()" class="btn btn-sm btn-info"/>
 										}
 									</td>
 								}
 								<td></td>
 								<td>
 									@using (Html.BeginForm("HouseworkOperation", "Member", HttpMethod.Post)) {
-										<input type="hidden" name="ID" value="@housework.ID" />
-										<input type="hidden" value="1" name="action" />
-										<input type="hidden" name="FromPage" value="1" />
-										<input type="submit" name="ShowBtn" value="接受" onclick="return ensure()" class="btn btn-sm btn-primary" />
+										<input type="hidden" name="ID" value="@housework.ID"/>
+										<input type="hidden" value="1" name="action"/>
+										<input type="hidden" name="FromPage" value="1"/>
+										<input type="submit" name="ShowBtn" value="接受" onclick="return ensure()" class="btn btn-sm btn-primary"/>
 									}
 								</td>
 							</tr>
@@ -147,7 +147,6 @@
 					</td>
 				</tr>
 			}
-
 		}
 	</table>
 </div>

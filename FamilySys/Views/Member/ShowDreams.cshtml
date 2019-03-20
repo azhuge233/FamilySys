@@ -1,0 +1,73 @@
+﻿@using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http
+@model IQueryable<FamilySys.Models.ViewModels.MemberViewModel.ShowDreamsViewModel>
+@{
+	ViewData["Title"] = "家庭成员";
+	Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+@Html.Raw(TempData["Success"])
+@Html.Raw(TempData["ErrMsg"])
+
+<h2 align="center">成员梦想</h2>
+
+<div align="center">
+	<h3>我的梦想</h3>
+	<table class="table" style="margin: auto; text-align: center; ">
+		<tr>
+			<th style="text-align: center">标题</th>
+			<th style="text-align: center">通过数</th>
+			<th style="text-align: center">不通过数</th>
+			<th style="text-align: center">操作</th>
+		</tr>
+		<tr>
+			<td>@ViewBag.myDreamTitle</td>
+			<td>@ViewBag.myDreamAgree</td>
+			<td>@ViewBag.myDreamVeto</td>
+			<td>
+				@using (Html.BeginForm("MyDream", "Member", HttpMethod.Get)) {
+					<input type="submit" name="SubBtn" value="修改" class="btn btn-primary" />
+				}
+			</td>
+		</tr>
+	</table>
+</div>
+
+<div align="center">
+	<h3>其他成员梦想</h3>
+	<table class="table" style="margin: auto; text-align: center; ">
+		<tr>
+			<th style="text-align: center">发布人</th>
+			<th style="text-align: center">标题</th>
+			<th style="text-align: center">通过数</th>
+			<th style="text-align: center">不通过数</th>
+			<th style="text-align: center">通过情况</th>
+			<th style="text-align: center">操作</th>
+		</tr>
+		@foreach (var dream in Model) {
+			if (dream.Veto == 0 && dream.Agree == ViewBag.UserCount) {
+				<tr style="background-color: darkseagreen;">
+					<td>@dream.Username</td>
+					<td>@dream.Title</td>
+					<td>@dream.Agree</td>
+					<td>@dream.Veto</td>
+					<td>已通过</td>
+					<td>
+
+					</td>
+				</tr>
+			} else {
+				<tr>
+					<td>@dream.Username</td>
+					<td>@dream.Title</td>
+					<td>@dream.Agree</td>
+					<td>@dream.Veto</td>
+					<td>未通过</td>
+					<td>
+
+					</td>
+				</tr>
+			}
+		}
+	</table>
+</div>
+
+
