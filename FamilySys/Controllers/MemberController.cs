@@ -316,32 +316,23 @@ namespace FamilySys.Controllers {
 		}
 
 		[HttpPost]
-		public IActionResult SignHousework(string ID) {
+		public IActionResult HouseworkOperation(string ID, string action) {
 			try {
 				var housework = db.Houseworks.Single(x => x.ID == ID);
 
-				housework.ToID = HttpContext.Session.GetString("ID");
+				if (action == "1") {
+					housework.ToID = HttpContext.Session.GetString("ID");
+					TempData["Success"] = "<script>alert(\'已接受事务 #" + housework.ID + "\')</script>";
+				} else if (action == "2") {
+					housework.ToID = null;
+					TempData["Success"] = "<script>alert(\'已放弃事务 #" + housework.ID + "\')</script>";
+				} else if(action == "3") {
+					housework.IsDone = true;
+					TempData["Success"] = "<script>alert(\'事务 #" + housework.ID + " 已完成，将通知事务发布人\')</script>";
+				}
 
 				db.SaveChanges();
 
-				TempData["Success"] = "<script>alert(\'已接受事务 #" + housework.ID + "\')</script>";
-				return RedirectToAction("ShowHouseworks");
-			} catch (Exception ex) {
-				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
-				return RedirectToAction("Error");
-			}
-		}
-
-		[HttpPost]
-		public IActionResult GiveUpHousework(string ID) {
-			try {
-				var housework = db.Houseworks.Single(x => x.ID == ID);
-
-				housework.ToID = null;
-
-				db.SaveChanges();
-
-				TempData["Success"] = "<script>alert(\'已放弃事务 #" + housework.ID + "\')</script>";
 				return RedirectToAction("ShowHouseworks");
 			} catch (Exception ex) {
 				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
