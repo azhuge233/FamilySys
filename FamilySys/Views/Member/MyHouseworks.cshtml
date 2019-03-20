@@ -17,53 +17,110 @@
 			<th style="text-align: center">接收人</th>
 			<th style="text-align: center">发布日期</th>
 			<th style="text-align: center">分值</th>
+			<th style="text-align: center">完成情况</th>
 			<th style="text-align: center">操作</th>
 		</tr>
 		@foreach (var housework in Model) {
 			if (housework.FromID == ViewBag.ID) {
-		<tr>
-			<td>@housework.ID</td>
-			<td>@housework.Title</td>
-			@if (housework.Type == 1) {
-				<td>公共</td>
-			} else {
-				<td>个人</td>
-			}
-			<td>@housework.ToUsername</td>
-			<td>@housework.Date.GetDateTimeFormats('f')[0].ToString()</td>
-			<td>@housework.Score 分</td>
-			<td>
-				<table style="margin: auto">
+				if (housework.ToUsername == "无") {
 					<tr>
-						<td>
-							@using (Html.BeginForm("ShowHouseworkDetails", "Member", HttpMethod.Post)) {
-								<input type="hidden" name="ID" value="@housework.ID" />
-								<input type="hidden" name="FromPage" value="2" />
-								<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success" />
-							}
-						</td>
-						@if (housework.ToUsername == "无") {
-							<td></td>
-							<td>
-								@using (Html.BeginForm("EditHousework", "Member", HttpMethod.Post)) {
-									<input type="hidden" name="ID" value="@housework.ID" />
-									<input type="hidden" name="FromPage" value="2" />
-									<input type="submit" name="ShowBtn" value="修改" class="btn btn-sm btn-primary" />
-								}
-							</td>
-							<td></td>
-							<td>
-								@using (Html.BeginForm("HouseworkOperation", "Member", HttpMethod.Post)) {
-									<input type="hidden" name="ID" value="@housework.ID" />
-									<input type="hidden" value="4" name="action" />
-									<input type="hidden" name="FromPage" value="2" />
-									<input type="submit" name="ShowBtn" value="删除" onclick="return ensure()" class="btn btn-sm btn-danger" />
-								}
-							</td>
+						<td>@housework.ID</td>
+						<td>@housework.Title</td>
+						@if (housework.Type == 1) {
+							<td>公共</td>
+						} else {
+							<td>个人</td>
 						}
-				</table>
-			</td>
-		</tr>
+						<td>@housework.ToUsername</td>
+						<td>@housework.Date.GetDateTimeFormats('f')[0].ToString()</td>
+						<td>@housework.Score 分</td>
+						<td>未完成</td>
+						<td>
+							<table style="margin: auto">
+								<tr>
+									<td>
+										@using (Html.BeginForm("ShowHouseworkDetails", "Member", HttpMethod.Post)) {
+											<input type="hidden" name="ID" value="@housework.ID"/>
+											<input type="hidden" name="FromPage" value="2"/>
+											<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success"/>
+										}
+									</td>
+									<td></td>
+									<td>
+										@using (Html.BeginForm("EditHousework", "Member", HttpMethod.Post)) {
+											<input type="hidden" name="ID" value="@housework.ID"/>
+											<input type="hidden" name="FromPage" value="2"/>
+											<input type="submit" name="ShowBtn" value="修改" class="btn btn-sm btn-primary"/>
+										}
+									</td>
+									<td></td>
+									<td>
+										@using (Html.BeginForm("HouseworkOperation", "Member", HttpMethod.Post)) {
+											<input type="hidden" name="ID" value="@housework.ID"/>
+											<input type="hidden" value="4" name="action"/>
+											<input type="hidden" name="FromPage" value="2"/>
+											<input type="submit" name="ShowBtn" value="删除" onclick="return ensure()" class="btn btn-sm btn-danger"/>
+										}
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				} else if (housework.IsDone == false) {
+					<tr style="background-color: cornflowerblue;">
+						<td>@housework.ID</td>
+						<td>@housework.Title</td>
+						@if (housework.Type == 1) {
+							<td>公共</td>
+						} else {
+							<td>个人</td>
+						}
+						<td>@housework.ToUsername</td>
+						<td>@housework.Date.GetDateTimeFormats('f')[0].ToString()</td>
+						<td>@housework.Score 分</td>
+						<td>待完成</td>
+						<td>
+							<table style="margin: auto">
+								<tr>
+									<td>
+										@using (Html.BeginForm("ShowHouseworkDetails", "Member", HttpMethod.Post)) {
+											<input type="hidden" name="ID" value="@housework.ID"/>
+											<input type="hidden" name="FromPage" value="2"/>
+											<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success"/>
+										}
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				} else {
+					<tr style="background-color: darkseagreen;">
+						<td>@housework.ID</td>
+						<td>@housework.Title</td>
+						@if (housework.Type == 1) {
+							<td>公共</td>
+						} else {
+							<td>个人</td>
+						}
+						<td>@housework.ToUsername</td>
+						<td>@housework.Date.GetDateTimeFormats('f')[0].ToString()</td>
+						<td>@housework.Score 分</td>
+						<td>已完成</td>
+						<td>
+							<table style="margin: auto">
+								<tr>
+									<td>
+										@using (Html.BeginForm("ShowHouseworkDetails", "Member", HttpMethod.Post)) {
+											<input type="hidden" name="ID" value="@housework.ID"/>
+											<input type="hidden" name="FromPage" value="2"/>
+											<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success"/>
+										}
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				}
 			}
 		}
 	</table>
@@ -75,56 +132,87 @@
 			<th style="text-align: center">ID</th>
 			<th style="text-align: center">标题</th>
 			<th style="text-align: center">类型</th>
-			<th style="text-align: center">接收人</th>
+			<th style="text-align: center">发布人</th>
 			<th style="text-align: center">发布日期</th>
 			<th style="text-align: center">分值</th>
+			<th style="text-align: center">完成情况</th>
 			<th style="text-align: center">操作</th>
 		</tr>
 		@foreach (var housework in Model) {
 			if (housework.ToID == ViewBag.ID) {
-				<tr>
-					<td>@housework.ID</td>
-					<td>@housework.Title</td>
-					@if (housework.Type == 1) {
-						<td>公共</td>
-					} else {
-						<td>个人</td>
-					}
-					<td>@housework.FromUsername</td>
-					<td>@housework.Date.GetDateTimeFormats('f')[0].ToString()</td>
-					<td>@housework.Score 分</td>
-					<td>
-						<table style="margin: auto">
-							<tr>
-								<td>
-									@using (Html.BeginForm("ShowHouseworkDetails", "Member", HttpMethod.Post)) {
-										<input type="hidden" name="ID" value="@housework.ID" />
-										<input type="hidden" name="FromPage" value="2" />
-										<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success" />
-									}
-								</td>
-								<td></td>
-								<td>
-									@using (Html.BeginForm("HouseworkOperation", "Member", HttpMethod.Post)) {
-										<input type="hidden" name="ID" value="@housework.ID" />
-										<input type="hidden" value="2" name="action" />
-										<input type="hidden" name="FromPage" value="2" />
-										<input type="submit" name="ShowBtn" value="放弃" onclick="return ensure()" class="btn btn-sm btn-danger" />
-									}
-								</td>
-								<td></td>
-								<td>
-									@using (Html.BeginForm("HouseworkOperation", "Member", HttpMethod.Post)) {
-										<input type="hidden" name="ID" value="@housework.ID" />
-										<input type="hidden" value="3" name="action" />
-										<input type="hidden" name="FromPage" value="2" />
-										<input type="submit" name="ShowBtn" value="完成" onclick="return ensure()" class="btn btn-sm btn-primary" />
-									}
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
+				if (housework.IsDone == false) {
+					<tr style="background-color: cornflowerblue;">
+						<td>@housework.ID</td>
+						<td>@housework.Title</td>
+						@if (housework.Type == 1) {
+							<td>公共</td>
+						} else {
+							<td>个人</td>
+						}
+						<td>@housework.FromUsername</td>
+						<td>@housework.Date.GetDateTimeFormats('f')[0].ToString()</td>
+						<td>@housework.Score 分</td>
+						<td>待完成</td>
+						<td>
+							<table style="margin: auto">
+								<tr>
+									<td>
+										@using (Html.BeginForm("ShowHouseworkDetails", "Member", HttpMethod.Post)) {
+											<input type="hidden" name="ID" value="@housework.ID"/>
+											<input type="hidden" name="FromPage" value="2"/>
+											<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success"/>
+										}
+									</td>
+									<td></td>
+									<td>
+										@using (Html.BeginForm("HouseworkOperation", "Member", HttpMethod.Post)) {
+											<input type="hidden" name="ID" value="@housework.ID"/>
+											<input type="hidden" value="2" name="action"/>
+											<input type="hidden" name="FromPage" value="2"/>
+											<input type="submit" name="ShowBtn" value="放弃" onclick="return ensure()" class="btn btn-sm btn-danger"/>
+										}
+									</td>
+									<td></td>
+									<td>
+										@using (Html.BeginForm("HouseworkOperation", "Member", HttpMethod.Post)) {
+											<input type="hidden" name="ID" value="@housework.ID"/>
+											<input type="hidden" value="3" name="action"/>
+											<input type="hidden" name="FromPage" value="2"/>
+											<input type="submit" name="ShowBtn" value="完成" onclick="return ensure()" class="btn btn-sm btn-primary"/>
+										}
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				} else {
+					<tr style="background-color: darkseagreen;">
+						<td>@housework.ID</td>
+						<td>@housework.Title</td>
+						@if (housework.Type == 1) {
+							<td>公共</td>
+						} else {
+							<td>个人</td>
+						}
+						<td>@housework.FromUsername</td>
+						<td>@housework.Date.GetDateTimeFormats('f')[0].ToString()</td>
+						<td>@housework.Score 分</td>
+						<td>已完成</td>
+						<td>
+							<table style="margin: auto">
+								<tr>
+									<td>
+										@using (Html.BeginForm("ShowHouseworkDetails", "Member", HttpMethod.Post)) {
+											<input type="hidden" name="ID" value="@housework.ID"/>
+											<input type="hidden" name="FromPage" value="2"/>
+											<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success"/>
+										}
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				}
 			}
 		}
 	</table>
