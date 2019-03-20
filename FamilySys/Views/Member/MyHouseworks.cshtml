@@ -13,6 +13,7 @@
 		<tr>
 			<th style="text-align: center">ID</th>
 			<th style="text-align: center">标题</th>
+			<th style="text-align: center">类型</th>
 			<th style="text-align: center">接收人</th>
 			<th style="text-align: center">发布日期</th>
 			<th style="text-align: center">分值</th>
@@ -20,44 +21,49 @@
 		</tr>
 		@foreach (var housework in Model) {
 			if (housework.FromID == ViewBag.ID) {
-				<tr>
-					<td>@housework.ID</td>
-					<td>@housework.Title</td>
-					<td>@housework.ToUsername</td>
-					<td>@housework.Date.GetDateTimeFormats('f')[0].ToString()</td>
-					<td>@housework.Score 分</td>
-					<td>
-						<table style="margin: auto">
-							<tr>
-								<td>
-									@using (Html.BeginForm("ShowHouseworkDetails", "Member", HttpMethod.Post)) {
-										<input type="hidden" name="ID" value="@housework.ID" />
-										<input type="hidden" name="FromPage" value="2" />
-										<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success" />
-									}
-								</td>
-								@if (housework.ToUsername == "无") {
-									<td></td>
-									<td>
-										@using (Html.BeginForm("EditHousework", "Member", HttpMethod.Post)) {
-											<input type="hidden" name="ID" value="@housework.ID" />
-											<input type="hidden" name="FromPage" value="2" />
-											<input type="submit" name="ShowBtn" value="修改" class="btn btn-sm btn-primary" />
-										}
-									</td>
-									<td></td>
-									<td>
-										@using (Html.BeginForm("HouseworkOperation", "Member", HttpMethod.Post)) {
-											<input type="hidden" name="ID" value="@housework.ID" />
-											<input type="hidden" value="4" name="action" />
-											<input type="hidden" name="FromPage" value="2" />
-											<input type="submit" name="ShowBtn" value="删除" onclick="return ensure()" class="btn btn-sm btn-danger" />
-										}
-									</td>
+		<tr>
+			<td>@housework.ID</td>
+			<td>@housework.Title</td>
+			@if (housework.Type == 1) {
+				<td>公共</td>
+			} else {
+				<td>个人</td>
+			}
+			<td>@housework.ToUsername</td>
+			<td>@housework.Date.GetDateTimeFormats('f')[0].ToString()</td>
+			<td>@housework.Score 分</td>
+			<td>
+				<table style="margin: auto">
+					<tr>
+						<td>
+							@using (Html.BeginForm("ShowHouseworkDetails", "Member", HttpMethod.Post)) {
+								<input type="hidden" name="ID" value="@housework.ID" />
+								<input type="hidden" name="FromPage" value="2" />
+								<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success" />
+							}
+						</td>
+						@if (housework.ToUsername == "无") {
+							<td></td>
+							<td>
+								@using (Html.BeginForm("EditHousework", "Member", HttpMethod.Post)) {
+									<input type="hidden" name="ID" value="@housework.ID" />
+									<input type="hidden" name="FromPage" value="2" />
+									<input type="submit" name="ShowBtn" value="修改" class="btn btn-sm btn-primary" />
 								}
-						</table>
-					</td>
-				</tr>
+							</td>
+							<td></td>
+							<td>
+								@using (Html.BeginForm("HouseworkOperation", "Member", HttpMethod.Post)) {
+									<input type="hidden" name="ID" value="@housework.ID" />
+									<input type="hidden" value="4" name="action" />
+									<input type="hidden" name="FromPage" value="2" />
+									<input type="submit" name="ShowBtn" value="删除" onclick="return ensure()" class="btn btn-sm btn-danger" />
+								}
+							</td>
+						}
+				</table>
+			</td>
+		</tr>
 			}
 		}
 	</table>
@@ -68,6 +74,7 @@
 		<tr>
 			<th style="text-align: center">ID</th>
 			<th style="text-align: center">标题</th>
+			<th style="text-align: center">类型</th>
 			<th style="text-align: center">接收人</th>
 			<th style="text-align: center">发布日期</th>
 			<th style="text-align: center">分值</th>
@@ -78,6 +85,11 @@
 				<tr>
 					<td>@housework.ID</td>
 					<td>@housework.Title</td>
+					@if (housework.Type == 1) {
+						<td>公共</td>
+					} else {
+						<td>个人</td>
+					}
 					<td>@housework.FromUsername</td>
 					<td>@housework.Date.GetDateTimeFormats('f')[0].ToString()</td>
 					<td>@housework.Score 分</td>

@@ -268,10 +268,10 @@ namespace FamilySys.Controllers {
 
 				if (form.Type == 2) {
 					if (me.Score <= 0) {
-						TempData["ErrMsg"] = "<script>alert(\'您的分值小于0，无法发布个人事务\')</script>";
+						TempData["ErrMsg"] = "<script>alert(\'您的积分不足，无法发布个人事务\')</script>";
 						return RedirectToAction("MyHouseworks");
 					} else if (me.Score - form.Score < 0) {
-						TempData["CannotPublish"] = "<script>alert(\'您的分值小于事务分值，无法发布事务 #" + form.ID + "\')</script>";
+						TempData["CannotPublish"] = "<script>alert(\'您的积分小于事务分值，无法发布事务 #" + form.ID + "\')</script>";
 						return RedirectToAction("PublishHousework");
 					} else {
 						me.Score -= form.Type == 2 ? form.Score : 0;
@@ -428,6 +428,17 @@ namespace FamilySys.Controllers {
 		public IActionResult DoEditHousework(HouseworkPublishViewModel form, string FromPage) {
 			try {
 				var housework = db.Houseworks.Single(x => x.ID == form.ID);
+				var me = db.Users.Single(x => x.ID == HttpContext.Session.GetString("ID"));
+				var differ = housework.Score - form.Score;
+
+				if (differ < 0 && (me.Score + differ) < 0) {
+					TempData["ErrMsg"] = "<script>alert(\'无法修改事务 #" + housework.ID + "，账户积分不足 \')</script>";
+					return FromPage == "1" ? RedirectToAction("ShowHouseworks") : RedirectToAction("MyHouseworks");
+				}
+
+				if (housework.Type == 2 && differ != 0) { //修改个人事务积分后返还或扣除积分
+						me.Score += differ;
+				}
 
 				housework.Title = form.Title;
 				housework.Type = form.Type;
@@ -435,8 +446,18 @@ namespace FamilySys.Controllers {
 				housework.Score = form.Score;
 
 				db.SaveChanges();
+				if (housework.Type == 2) {
+					if (differ < 0) {
+						TempData["Success"] = "<script>alert(\'事务 #" + housework.ID + " 已修改，积分 " + differ +
+						                      " 分\')</script>";
+					} else if (differ > 0) {
+						TempData["Success"] = "<script>alert(\'事务 #" + housework.ID + " 已修改，返还" + differ +
+						                      " 积分\')</script>";
+					}
+				} else {
+					TempData["Success"] = "<script>alert(\'事务 #" + housework.ID + " 已修改\')</script>";
+				}
 
-				TempData["Success"] = "<script>alert(\'事务 #" + housework.ID + " 已修改\')</script>";
 				return FromPage == "1" ? RedirectToAction("ShowHouseworks") : RedirectToAction("MyHouseworks");
 			} catch (Exception ex) {
 				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
