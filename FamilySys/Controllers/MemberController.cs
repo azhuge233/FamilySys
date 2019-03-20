@@ -34,6 +34,7 @@ namespace FamilySys.Controllers {
 
 		public void CommonWork() {
 			ViewBag.Username = HttpContext.Session.GetString("Username");
+			ViewBag.ID = HttpContext.Session.GetString("ID");
 		}
 
 		public string GetRandomNum() {
@@ -89,7 +90,8 @@ namespace FamilySys.Controllers {
 						Username = me.Username,
 						Sex = me.Sex,
 						Phone = me.Phone,
-						Mail = me.Mail
+						Mail = me.Mail,
+						Score = me.Score
 				};
 
 				return View(form);
@@ -200,7 +202,7 @@ namespace FamilySys.Controllers {
 				CommonWork();
 
 				try {
-					var houseworks = db.Houseworks.Select(x => x);
+					var houseworks = db.Houseworks.Select(x => x).OrderByDescending(x => x.Date);
 					var houseworkShowcase = new List<HouseworkShowcaseViewModel>();
 
 					foreach (var housework in houseworks) {
@@ -267,7 +269,7 @@ namespace FamilySys.Controllers {
 				if (form.Type == 2) {
 					if (me.Score <= 0) {
 						TempData["ErrMsg"] = "<script>alert(\'您的分值小于0，无法发布个人事务\')</script>";
-						return RedirectToAction("ShowHouseworks");
+						return RedirectToAction("MyHouseworks");
 					} else if (me.Score - form.Score < 0) {
 						TempData["CannotPublish"] = "<script>alert(\'您的分值小于事务分值，无法发布事务 #" + form.ID + "\')</script>";
 						return RedirectToAction("PublishHousework");
@@ -280,18 +282,20 @@ namespace FamilySys.Controllers {
 				db.SaveChanges();
 
 				TempData["Success"] = "<script>alert(\'事务 #" + newHousework.ID + " 已成功发布\')</script>";
-				return RedirectToAction("ShowHouseworks");
+				return RedirectToAction("MyHouseworks");
 			} catch (Exception ex) {
 				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 				return RedirectToAction("Error");
 			}
 		}
 
-		public IActionResult ShowHouseworkDetails(string ID) {
+		public IActionResult ShowHouseworkDetails(string ID, string FromPage) {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
 				return RedirectToAction("Index", "Admin");
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				CommonWork();
+
+				ViewBag.FromPage = FromPage;
 
 				var housework = db.Houseworks.Single(x => x.ID == ID);
 				var houseworkShowcase = new HouseworkShowcaseViewModel() {
@@ -316,12 +320,13 @@ namespace FamilySys.Controllers {
 		}
 
 		[HttpPost]
-		public IActionResult HouseworkOperation(string ID, string action) {
+		public IActionResult HouseworkOperation(string ID, string action, string FromPage) {
 			try {
 				var housework = db.Houseworks.Single(x => x.ID == ID);
+				var myID = HttpContext.Session.GetString("ID");
 
 				if (action == "1") {
-					housework.ToID = HttpContext.Session.GetString("ID");
+					housework.ToID = myID;
 					TempData["Success"] = "<script>alert(\'已接受事务 #" + housework.ID + "\')</script>";
 				} else if (action == "2") {
 					housework.ToID = null;
@@ -329,11 +334,110 @@ namespace FamilySys.Controllers {
 				} else if(action == "3") {
 					housework.IsDone = true;
 					TempData["Success"] = "<script>alert(\'事务 #" + housework.ID + " 已完成，将通知事务发布人\')</script>";
-				}
+				} else if(action == "4") {
+					if (housework.Type == 2) { //返还积分
+						var me = db.Users.Single(x => x.ID == myID);
+						me.Score += housework.Score;
+						TempData["Success"] = "<script>alert(\'事务 #" + housework.ID + " 已删除，返还 " + housework.Score + " 积分\')</script>";
+					} else {
+						TempData["Success"] = "<script>alert(\'事务 #" + housework.ID + " 已删除\')</script>";
+					}
+					db.Houseworks.Remove(housework);
+				}	
 
 				db.SaveChanges();
 
-				return RedirectToAction("ShowHouseworks");
+				return FromPage == "1" ? RedirectToAction("ShowHouseworks") : RedirectToAction("MyHouseworks");
+			} catch (Exception ex) {
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+				return RedirectToAction("Error");
+			}
+		}
+
+		public IActionResult MyHouseworks() {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				return RedirectToAction("Index", "Admin");
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				CommonWork();
+
+				try {
+					var myID = HttpContext.Session.GetString("ID");
+					var houseworks = db.Houseworks.Where(x => x.FromID == myID || x.ToID == myID);
+					var houseworkShowcase = new List<HouseworkShowcaseViewModel>();
+
+					foreach (var housework in houseworks) {
+						houseworkShowcase.Add(new HouseworkShowcaseViewModel() {
+								ID = housework.ID,
+								Title = housework.Title,
+								Content = housework.Content,
+								Score = housework.Score,
+								Type = housework.Type,
+								IsDone = housework.IsDone,
+								Date = housework.Date,
+								ModifyDate = housework.ModifyDate,
+								FromID = housework.FromID,
+								ToID = housework.ToID,
+								FromUsername = db.Users.Single(x => x.ID == housework.FromID).Username,
+								ToUsername = housework.ToID == null
+									? "无"
+									: db.Users.Single(x => x.ID == housework.ToID).Username
+							}
+						);
+					}
+
+					return View(houseworkShowcase.AsQueryable());
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+					return RedirectToAction("Error");
+				}
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		public IActionResult EditHousework(string ID, string FromPage) {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				return RedirectToAction("Index", "Admin");
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				CommonWork();
+
+				try {
+					var editWork = db.Houseworks.Single(x => x.ID == ID);
+
+					var editWorkViewModel = new HouseworkPublishViewModel() {
+						ID = editWork.ID,
+						Title = editWork.Title,
+						Content = editWork.Content,
+						Type = editWork.Type,
+						Score = editWork.Score
+					};
+
+					ViewBag.FromPage = FromPage;
+
+					return View(editWorkViewModel);
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+					return RedirectToAction("Error");
+				}
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		[HttpPost]
+		public IActionResult DoEditHousework(HouseworkPublishViewModel form, string FromPage) {
+			try {
+				var housework = db.Houseworks.Single(x => x.ID == form.ID);
+
+				housework.Title = form.Title;
+				housework.Type = form.Type;
+				housework.Content = form.Content;
+				housework.Score = form.Score;
+
+				db.SaveChanges();
+
+				TempData["Success"] = "<script>alert(\'事务 #" + housework.ID + " 已修改\')</script>";
+				return FromPage == "1" ? RedirectToAction("ShowHouseworks") : RedirectToAction("MyHouseworks");
 			} catch (Exception ex) {
 				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 				return RedirectToAction("Error");

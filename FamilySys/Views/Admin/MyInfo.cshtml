@@ -22,6 +22,14 @@
 				</tr>
 				<tr>
 					<td>
+						@Html.LabelFor(Model => Model.Score, new { @style = "width:60px;" })
+					</td>
+					<td>
+						@Html.TextBoxFor(Model => Model.Score, new { @class = "form-control", @readonly = "true", @style = "width: 80px" })
+					</td>
+				</tr>
+				<tr>
+					<td>
 						@Html.LabelFor(Model => Model.Username, new { @style = "width:90" })
 					</td>
 					<td>
@@ -65,7 +73,7 @@
 			<br />
 			<div align="center">
 				<input type="button" id="confirmBtn" value="更改" onclick="EnableTextBoxStats('Username', 'Sex', 'Phone', 'Mail', 'ChgInfoBtn', 'RstInfoBtn', 'confirmBtn')" class="btn btn-primary" />
-				<input type="hidden" id="ChgInfoBtn" name="ChgInfoBtn" class="btn btn-success" />
+				<input type="hidden" id="ChgInfoBtn" name="ChgInfoBtn" onclick="return ensure()" class="btn btn-success" />
 				&emsp;
 				<input type="hidden" id="RstInfoBtn" name="RstInfoBtn" value="取消" onclick="DisableTextBoxStats('Username', 'Sex', 'Phone', 'Mail', 'ChgInfoBtn', 'confirmBtn', 'RstInfoBtn')" class="btn btn-danger" />
 			</div>

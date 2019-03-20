@@ -74,7 +74,8 @@ namespace FamilySys.Controllers
 					Username = me.Username,
 					Sex = me.Sex,
 					Phone = me.Phone,
-					Mail = me.Mail
+					Mail = me.Mail,
+					Score = me.Score
 				};
 
 				return View(form);

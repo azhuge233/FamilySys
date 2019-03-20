@@ -1,0 +1,80 @@
+﻿@using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http
+@model FamilySys.Models.ViewModels.MemberViewModel.HouseworkPublishViewModel
+@{
+    ViewData["Title"] = "家庭成员";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+<div align="center">
+	<h2>编辑事务 #@Model.ID</h2>
+	@using (Html.BeginForm("DoEditHousework", "Member", HttpMethod.Post)) {
+		<table class="table" style="margin: auto; text-align: center; width: auto;">
+			<tr style="display: none">
+				<td>
+					@Html.TextBoxFor(Model => Model.ID)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.LabelFor(Model => Model.Title)
+				</td>
+				<td>
+					@Html.TextBoxFor(Model => Model.Title, new { @class = "form-control", @placeholder = "标题" })
+				</td>
+				<td>
+					@Html.ValidationMessageFor(Model => Model.Title)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.LabelFor(Model => Model.Type)
+				</td>
+				<td>
+					@Html.DropDownListFor(Model => Model.Type, Model.TypeList, "选择事务类型", new { @class = "form-control", @style = "width: 150px" })
+				</td>
+				<td>
+					@Html.ValidationMessageFor(Model => Model.Type)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.LabelFor(Model => Model.Score)
+				</td>
+				<td>
+					@Html.DropDownListFor(Model => Model.Score, Model.ScoreList, "选择分值", new { @class = "form-control", @style = "width: 110px" })
+				</td>
+				<td>
+					@Html.ValidationMessageFor(Model => Model.Score)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.LabelFor(Model => Model.Content)
+				</td>
+				<td>
+					@Html.TextAreaFor(Model => Model.Content, new { @class = "form-control", @rows = "6", @placeholder = "描述内容", @style = "width:600px" })
+				</td>
+				<td>
+					@Html.ValidationMessageFor(Model => Model.Content)
+				</td>
+			</tr>
+		</table>
+		<div align="center">
+			<input type="hidden" name="FromPage" value="@ViewBag.FromPage" />
+			<input type="submit" name="SubBtn" onclick="return ensure()" class="btn btn-success"/>
+		</div>
+	}
+	<br />
+	<div class="text-right">
+		@if (ViewBag.FromPage == "1") {
+			<a asp-action="ShowHouseworks" asp-controller="Member">
+				<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> 返回
+			</a>
+		} else if (ViewBag.FromPage == "2") {
+			<a asp-action="MyHouseworks" asp-controller="Member">
+				<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> 返回
+			</a>
+		}
+	</div>
+</div>
+

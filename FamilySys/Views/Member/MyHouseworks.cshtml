@@ -1,0 +1,119 @@
+﻿@using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http
+@model IQueryable<FamilySys.Models.ViewModels.MemberViewModel.HouseworkShowcaseViewModel>
+@{
+	ViewData["Title"] = "家庭成员";
+	Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+@Html.Raw(TempData["Success"])
+@Html.Raw(TempData["ErrMsg"])
+<h2 align="center">我的事务</h2>
+<div align="center">
+	<h3>我发布的事务</h3>
+	<table class="table" style="margin: auto; text-align: center;">
+		<tr>
+			<th style="text-align: center">ID</th>
+			<th style="text-align: center">标题</th>
+			<th style="text-align: center">接收人</th>
+			<th style="text-align: center">发布日期</th>
+			<th style="text-align: center">分值</th>
+			<th style="text-align: center">操作</th>
+		</tr>
+		@foreach (var housework in Model) {
+			if (housework.FromID == ViewBag.ID) {
+				<tr>
+					<td>@housework.ID</td>
+					<td>@housework.Title</td>
+					<td>@housework.ToUsername</td>
+					<td>@housework.Date.GetDateTimeFormats('f')[0].ToString()</td>
+					<td>@housework.Score 分</td>
+					<td>
+						<table style="margin: auto">
+							<tr>
+								<td>
+									@using (Html.BeginForm("ShowHouseworkDetails", "Member", HttpMethod.Post)) {
+										<input type="hidden" name="ID" value="@housework.ID" />
+										<input type="hidden" name="FromPage" value="2" />
+										<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success" />
+									}
+								</td>
+								@if (housework.ToUsername == "无") {
+									<td></td>
+									<td>
+										@using (Html.BeginForm("EditHousework", "Member", HttpMethod.Post)) {
+											<input type="hidden" name="ID" value="@housework.ID" />
+											<input type="hidden" name="FromPage" value="2" />
+											<input type="submit" name="ShowBtn" value="修改" class="btn btn-sm btn-primary" />
+										}
+									</td>
+									<td></td>
+									<td>
+										@using (Html.BeginForm("HouseworkOperation", "Member", HttpMethod.Post)) {
+											<input type="hidden" name="ID" value="@housework.ID" />
+											<input type="hidden" value="4" name="action" />
+											<input type="hidden" name="FromPage" value="2" />
+											<input type="submit" name="ShowBtn" value="删除" onclick="return ensure()" class="btn btn-sm btn-danger" />
+										}
+									</td>
+								}
+						</table>
+					</td>
+				</tr>
+			}
+		}
+	</table>
+</div>
+<div align="center">
+	<h3>我接受的事务</h3>
+	<table class="table" style="margin: auto; text-align: center;">
+		<tr>
+			<th style="text-align: center">ID</th>
+			<th style="text-align: center">标题</th>
+			<th style="text-align: center">接收人</th>
+			<th style="text-align: center">发布日期</th>
+			<th style="text-align: center">分值</th>
+			<th style="text-align: center">操作</th>
+		</tr>
+		@foreach (var housework in Model) {
+			if (housework.ToID == ViewBag.ID) {
+				<tr>
+					<td>@housework.ID</td>
+					<td>@housework.Title</td>
+					<td>@housework.FromUsername</td>
+					<td>@housework.Date.GetDateTimeFormats('f')[0].ToString()</td>
+					<td>@housework.Score 分</td>
+					<td>
+						<table style="margin: auto">
+							<tr>
+								<td>
+									@using (Html.BeginForm("ShowHouseworkDetails", "Member", HttpMethod.Post)) {
+										<input type="hidden" name="ID" value="@housework.ID" />
+										<input type="hidden" name="FromPage" value="2" />
+										<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success" />
+									}
+								</td>
+								<td></td>
+								<td>
+									@using (Html.BeginForm("HouseworkOperation", "Member", HttpMethod.Post)) {
+										<input type="hidden" name="ID" value="@housework.ID" />
+										<input type="hidden" value="2" name="action" />
+										<input type="hidden" name="FromPage" value="2" />
+										<input type="submit" name="ShowBtn" value="放弃" onclick="return ensure()" class="btn btn-sm btn-danger" />
+									}
+								</td>
+								<td></td>
+								<td>
+									@using (Html.BeginForm("HouseworkOperation", "Member", HttpMethod.Post)) {
+										<input type="hidden" name="ID" value="@housework.ID" />
+										<input type="hidden" value="3" name="action" />
+										<input type="hidden" name="FromPage" value="2" />
+										<input type="submit" name="ShowBtn" value="完成" onclick="return ensure()" class="btn btn-sm btn-primary" />
+									}
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			}
+		}
+	</table>
+</div>
