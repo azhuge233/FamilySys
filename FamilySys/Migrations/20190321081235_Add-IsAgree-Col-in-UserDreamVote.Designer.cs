@@ -4,14 +4,16 @@ using FamilySys.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FamilySys.Migrations
 {
     [DbContext(typeof(FamilySysDbContext))]
-    partial class FamilySysDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190321081235_Add-IsAgree-Col-in-UserDreamVote")]
+    partial class AddIsAgreeColinUserDreamVote
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,8 +146,6 @@ namespace FamilySys.Migrations
                         .HasMaxLength(5);
 
                     b.Property<bool>("IsAgree");
-
-                    b.Property<bool>("IsVeto");
 
                     b.Property<string>("UserID")
                         .IsRequired()

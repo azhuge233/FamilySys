@@ -54,7 +54,18 @@ namespace FamilySys.Controllers {
 
 			do {
 				ID = rd.Next(10000, 99999).ToString();
-			} while (db.Houseworks.Any(x => x.ID == ID));
+			} while (db.Dreams.Any(x => x.ID == ID));
+
+			return ID;
+		}
+
+		public string GetRandomNum5Vote() {
+			Random rd = new Random();
+			string ID = "";
+
+			do {
+				ID = rd.Next(10000, 99999).ToString();
+			} while (db.UserDreamVotes.Any(x => x.ID == ID));
 
 			return ID;
 		}
@@ -508,23 +519,36 @@ namespace FamilySys.Controllers {
 		[HttpPost]
 		public IActionResult UploadDream(MemberDreamViewModel form) {
 			try {
-				
-				var newDream = new Dream() {
-					ID = form.ID,
-					Title = form.Title,
-					Content = form.Content,
-					UserID = HttpContext.Session.GetString("ID"),
-					Agree = 1,
-					Veto = 0
-				};
 
-				db.Dreams.Add(newDream);
+				if (db.Dreams.Any(x => x.ID == form.ID)) {
+
+					var dream = db.Dreams.Single(x => x.ID == form.ID);
+
+					dream.Title = form.Title;
+					dream.Content = form.Content;
+					dream.Agree = 1;
+					dream.Veto = 0;
+
+					db.UserDreamVotes.RemoveRange(db.UserDreamVotes.Where(x => x.DreamID == dream.ID));
+				} else {
+					var newDream = new Dream() {
+						ID = form.ID,
+						Title = form.Title,
+						Content = form.Content,
+						UserID = HttpContext.Session.GetString("ID"),
+						Agree = 1,
+						Veto = 0
+					};
+
+					db.Dreams.Add(newDream);
+				}
+
 				db.SaveChanges();
 
-				TempData["Success"] = "<script>alert(\'已设置家庭梦想 " + newDream.Title + "\');</script>";
+				TempData["Success"] = "<script>alert(\'已设置家庭梦想\');</script>";
 				return RedirectToAction("ShowDreams");
 			} catch (Exception ex) {
-				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
 				return RedirectToAction("Error");
 			}
 		}
@@ -554,7 +578,9 @@ namespace FamilySys.Controllers {
 								Title = dream.Title,
 								Agree = dream.Agree,
 								Veto = dream.Veto,
-								Username = db.Users.Single(x => x.ID == dream.UserID).Username
+								Username = db.Users.Single(x => x.ID == dream.UserID).Username,
+								IsAgree = db.UserDreamVotes.Any(x => x.UserID == myID && x.DreamID == dream.ID) ? db.UserDreamVotes.Single(x => x.UserID == myID && x.DreamID == dream.ID).IsAgree.ToString() : null,
+								IsVeto = db.UserDreamVotes.Any(x => x.UserID == myID && x.DreamID == dream.ID) ? db.UserDreamVotes.Single(x => x.UserID == myID && x.DreamID == dream.ID).IsVeto.ToString() : null,
 							}
 						);
 					}
@@ -566,6 +592,75 @@ namespace FamilySys.Controllers {
 				}
 			} else {
 				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		[HttpPost]
+		public IActionResult VoteDreams(string ID, string action) {
+			try {
+				var dream = db.Dreams.Single(x => x.ID == ID);
+				var myID = HttpContext.Session.GetString("ID");
+
+				if (action == "1") {
+					dream.Agree += 1;
+
+					if (db.UserDreamVotes.Any(x => x.DreamID == ID && x.UserID == myID)) {
+						var vote = db.UserDreamVotes.Single(x => x.DreamID == ID && x.UserID == myID);
+						vote.IsAgree = true;
+					} else {
+						var newVote = new UserDreamVote() {
+							ID = GetRandomNum5Vote(),
+							UserID = myID,
+							DreamID = dream.ID,
+							IsAgree = true,
+							IsVeto = false
+						};
+
+						db.UserDreamVotes.Add(newVote);
+					}
+
+					TempData["Success"] = "<script>alert(\'已通过家庭梦想 \"" + dream.Title + "\"\');</script>";
+				} else if(action == "2") {
+					dream.Agree -= 1;
+
+					var vote = db.UserDreamVotes.Single(x => x.DreamID == ID && x.UserID == myID);
+					vote.IsAgree = false;
+
+					TempData["Success"] = "<script>alert(\'已取消通过家庭梦想 \"" + dream.Title + "\"\');</script>";
+				} else if(action == "3") {
+					dream.Veto += 1;
+
+					if (db.UserDreamVotes.Any(x => x.DreamID == ID && x.UserID == myID)) {
+						var vote = db.UserDreamVotes.Single(x => x.DreamID == ID && x.UserID == myID);
+						vote.IsVeto = true;
+					} else {
+						var newVote = new UserDreamVote() {
+							ID = GetRandomNum5Vote(),
+							UserID = myID,
+							DreamID = dream.ID,
+							IsAgree = false,
+							IsVeto = true
+						};
+
+						db.UserDreamVotes.Add(newVote);
+					}
+
+					TempData["Success"] = "<script>alert(\'已否决家庭梦想 \"" + dream.Title + "\"\');</script>";
+				} else if(action == "4") {
+					dream.Veto -= 1;
+
+					var vote = db.UserDreamVotes.Single(x => x.DreamID == ID && x.UserID == myID);
+					vote.IsVeto = false;
+
+					TempData["Success"] = "<script>alert(\'已取消否决家庭梦想 \"" + dream.Title + "\"\');</script>";
+				}
+
+				db.SaveChanges();
+
+				return RedirectToAction("ShowDreams");
+			} catch (Exception ex) {
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+				return RedirectToAction("Error");
 			}
 		}
 	}

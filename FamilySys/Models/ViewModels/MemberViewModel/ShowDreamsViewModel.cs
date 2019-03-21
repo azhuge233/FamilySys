@@ -14,5 +14,9 @@ namespace FamilySys.Models.ViewModels.MemberViewModel {
 		public int Agree { get; set; }
 
 		public int Veto { get; set; }
+
+		public string IsAgree { get; set; }
+
+		public string IsVeto { get; set; }
 	}
 }
