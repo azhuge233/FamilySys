@@ -1,0 +1,51 @@
+﻿@using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http
+@model FamilySys.Models.ViewModels.MemberViewModel.RateViewModel
+@{
+    ViewData["Title"] = "家庭成员";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+<div align="center">
+    <h2>事务 #@Model.HouseworkID 的评分 #@Model.ID</h2>
+    <div>
+        <h3>评分</h3>
+        @if (Model.Star == 1) {
+            <p style="font: bold; font-size: large; text-align: center; color: red">
+                1星
+            </p>
+		} else if (Model.Star == 2) {
+		    <p style="font: bold; font-size: large; text-align: center; color: coral">
+                2星
+            </p>
+		} else if (Model.Star == 3) {
+		    <p style="font: bold; font-size: large; text-align: center; color: darkorange">
+                3星
+            </p>
+		} else if (Model.Star == 4) {
+		    <p style="font: bold; font-size: large; text-align: center; color: greenyellow">
+                4星
+            </p>
+		} else {
+		    <p style="font: bold; font-size: large; text-align: center; color: green">
+                5星
+            </p>
+		}
+    </div>
+    <br/>
+    <div>
+        <h3>备注</h3>
+        @Html.TextAreaFor(Model => Model.Comment, new {@class = "form-control", @placeholder = "备注", @rows = "5", @style = "width: 600px"})
+    </div>
+</div>
+<br />
+<div class="text-right">
+    @if (ViewBag.FromPage == "1") {
+        <a asp-action="ShowHouseworks" asp-controller="Member">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> 返回
+        </a>
+    } else if (ViewBag.FromPage == "2") {
+        <a asp-action="MyHouseworks" asp-controller="Member">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> 返回
+        </a>
+    }
+</div>

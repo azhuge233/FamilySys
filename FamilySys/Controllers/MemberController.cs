@@ -70,6 +70,17 @@ namespace FamilySys.Controllers {
 			return ID;
 		}
 
+		public string GetRandomNum5Rate() {
+			Random rd = new Random();
+			string ID = "";
+
+			do {
+				ID = rd.Next(10000, 99999).ToString();
+			} while (db.Rates.Any(x => x.ID == ID));
+
+			return ID;
+		}
+
 		public IActionResult Index() {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
 				return RedirectToAction("Index", "Admin");
@@ -137,7 +148,7 @@ namespace FamilySys.Controllers {
 				return RedirectToAction("MyInfo");
 			}
 			catch (Exception ex) {
-				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\');</script>";
 				return RedirectToAction("Error");
 			}
 		}
@@ -173,7 +184,7 @@ namespace FamilySys.Controllers {
 					var Users = db.Users.Where(x => x.IsAdmin == 0);
 					return View(Users);
 				} catch (Exception ex) {
-					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\');</script>";
 					return RedirectToAction("Error");
 				}
 			} else {
@@ -191,7 +202,7 @@ namespace FamilySys.Controllers {
 					var Annos = db.Announcements.Where(x => x.ID == x.ID).OrderByDescending(x => x.Date);
 					return View(Annos);
 				} catch (Exception ex) {
-					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\');</script>";
 					return RedirectToAction("Error");
 				}
 			} else {
@@ -209,7 +220,7 @@ namespace FamilySys.Controllers {
 					var Anno = db.Announcements.Single(x => x.ID == ID);
 					return View(Anno);
 				} catch (Exception ex) {
-					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\');</script>";
 					return RedirectToAction("Error");
 				}
 			} else {
@@ -241,14 +252,15 @@ namespace FamilySys.Controllers {
 								FromID = housework.FromID,
 								ToID = housework.ToID,
 								FromUsername = db.Users.Single(x => x.ID == housework.FromID).Username,
-								ToUsername = housework.ToID == null ? "无" : db.Users.Single(x => x.ID == housework.ToID).Username
+								ToUsername = housework.ToID == null ? "无" : db.Users.Single(x => x.ID == housework.ToID).Username,
+								IsRated = db.Rates.Any(x => x.HouseworkID == housework.ID)
 							}
 						);
 					}
 
 					return View(houseworkShowcase.AsQueryable());
 				} catch (Exception ex) {
-					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
 					return RedirectToAction("Error");
 				}
 			} else {
@@ -306,7 +318,7 @@ namespace FamilySys.Controllers {
 				TempData["Success"] = "<script>alert(\'事务 #" + newHousework.ID + " 已成功发布\')</script>";
 				return RedirectToAction("MyHouseworks");
 			} catch (Exception ex) {
-				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
 				return RedirectToAction("Error");
 			}
 		}
@@ -371,7 +383,7 @@ namespace FamilySys.Controllers {
 
 				return FromPage == "1" ? RedirectToAction("ShowHouseworks") : RedirectToAction("MyHouseworks");
 			} catch (Exception ex) {
-				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
 				return RedirectToAction("Error");
 			}
 		}
@@ -402,14 +414,15 @@ namespace FamilySys.Controllers {
 								FromUsername = db.Users.Single(x => x.ID == housework.FromID).Username,
 								ToUsername = housework.ToID == null
 									? "无"
-									: db.Users.Single(x => x.ID == housework.ToID).Username
+									: db.Users.Single(x => x.ID == housework.ToID).Username,
+								IsRated = db.Rates.Any(x => x.HouseworkID == housework.ID)
 							}
 						);
 					}
 
 					return View(houseworkShowcase.AsQueryable());
 				} catch (Exception ex) {
-					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
 					return RedirectToAction("Error");
 				}
 			} else {
@@ -438,7 +451,7 @@ namespace FamilySys.Controllers {
 
 					return View(editWorkViewModel);
 				} catch (Exception ex) {
-					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
 					return RedirectToAction("Error");
 				}
 			} else {
@@ -482,7 +495,7 @@ namespace FamilySys.Controllers {
 
 				return FromPage == "1" ? RedirectToAction("ShowHouseworks") : RedirectToAction("MyHouseworks");
 			} catch (Exception ex) {
-				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
 				return RedirectToAction("Error");
 			}
 		}
@@ -508,7 +521,7 @@ namespace FamilySys.Controllers {
 
 					return View(newDream);
 				} catch (Exception ex) {
-					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
 					return RedirectToAction("Error");
 				}
 			} else {
@@ -661,6 +674,102 @@ namespace FamilySys.Controllers {
 			} catch (Exception ex) {
 				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 				return RedirectToAction("Error");
+			}
+		}
+
+		public IActionResult Rate(string ID) {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				return RedirectToAction("Index", "Admin");
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				CommonWork();
+
+				try {
+
+					var rate = new RateViewModel() {
+						ID = GetRandomNum5Rate(),
+						HouseworkID = ID
+					};
+
+					return View(rate);
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
+					return RedirectToAction("Error");
+				}
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		[HttpPost]
+		public IActionResult DoRate(RateViewModel form) {
+			try {
+
+				var myID = HttpContext.Session.GetString("ID");
+				var housework = db.Houseworks.Single(x => x.ID == form.HouseworkID);
+
+				if (form.Star == 0) {
+					TempData["ErrMsg"] = "<script>alert(\'请填写评分\')</script>";
+					return RedirectToAction("Rate");
+				} else {
+					var newRate = new Rate() {
+						ID = form.ID,
+						Comment = form.Comment ?? "无",
+						Star = form.Star,
+						HouseworkID = form.HouseworkID,
+						FromID = myID,
+						ToID = housework.ToID
+					};
+
+					db.Rates.Add(newRate);
+
+					if (newRate.Star >= 3) {
+						var ToUser = db.Users.Single(x => x.ID == housework.ToID);
+						ToUser.Score += housework.Score;
+						TempData["Success"] = "<script>alert(\'已评价事务 #" + form.HouseworkID + " ，用户 " + ToUser.Username + " 积分 +" + housework.Score + "\')</script>";
+					} else if (housework.Type == 2 && newRate.Star < 3) {
+						var FromUser = db.Users.Single(x => x.ID == housework.FromID);
+						FromUser.Score += housework.Score;
+						TempData["Success"] = "<script>alert(\'已评价事务 #" + form.HouseworkID + "，已返还" + housework.Score + " 积分\')</script>";
+					} else if(housework.Type == 1 && newRate.Star < 3) {
+						TempData["Success"] = "<script>alert(\'已评价事务 #" + form.HouseworkID + "\')</script>";
+					}
+				}
+
+				db.SaveChanges();
+
+				return RedirectToAction("MyHouseworks");
+			} catch (Exception ex) {
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
+				return RedirectToAction("Error");
+			}
+		}
+
+		public IActionResult CheckRate(string ID, string FromPage) {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				return RedirectToAction("Index", "Admin");
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				CommonWork();
+
+				try {
+
+					var rate = db.Rates.Single(x => x.HouseworkID == ID);
+
+					var newRateModel = new RateViewModel() {
+						ID = rate.ID,
+						Comment = rate.Comment,
+						Star = rate.Star,
+						HouseworkID = rate.HouseworkID
+					};
+
+					ViewBag.FromPage = FromPage;
+
+					return View(newRateModel);
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
+					return RedirectToAction("Error");
+				}
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
 			}
 		}
 	}

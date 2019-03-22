@@ -111,11 +111,29 @@
 								<tr>
 									<td>
 										@using (Html.BeginForm("ShowHouseworkDetails", "Member", HttpMethod.Post)) {
-											<input type="hidden" name="ID" value="@housework.ID"/>
-											<input type="hidden" name="FromPage" value="2"/>
-											<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success"/>
+											<input type="hidden" name="ID" value="@housework.ID" />
+											<input type="hidden" name="FromPage" value="2" />
+											<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success" />
 										}
 									</td>
+									@if (housework.IsRated == false) {
+										<td></td>
+										<td>
+											@using (Html.BeginForm("Rate", "Member", HttpMethod.Post)) {
+												<input type="hidden" name="ID" value="@housework.ID" />
+												<input type="submit" name="ShowBtn" value="评分" class="btn btn-sm btn-primary" />
+											}
+										</td>
+									} else {
+										<td></td>
+										<td>
+											@using (Html.BeginForm("CheckRate", "Member", HttpMethod.Post)) {
+												<input type="hidden" name="ID" value="@housework.ID" />
+												<input type="hidden" name="FromPage" value="2" />
+												<input type="submit" name="SubBtn" class="btn btn-sm btn-primary" value="查看评分" />
+											}
+										</td>
+									}
 								</tr>
 							</table>
 						</td>
@@ -203,11 +221,21 @@
 								<tr>
 									<td>
 										@using (Html.BeginForm("ShowHouseworkDetails", "Member", HttpMethod.Post)) {
-											<input type="hidden" name="ID" value="@housework.ID"/>
-											<input type="hidden" name="FromPage" value="2"/>
-											<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success"/>
+											<input type="hidden" name="ID" value="@housework.ID" />
+											<input type="hidden" name="FromPage" value="2" />
+											<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success" />
 										}
 									</td>
+									@if (housework.IsRated == true) {
+										<td></td>
+										<td>
+											@using (Html.BeginForm("CheckRate", "Member", HttpMethod.Post)) {
+												<input type="hidden" name="ID" value="@housework.ID" />
+												<input type="hidden" name="FromPage" value="2" />
+												<input type="submit" name="SubBtn" class="btn btn-sm btn-primary" value="查看评分" />
+											}
+										</td>
+									}
 								</tr>
 							</table>
 						</td>

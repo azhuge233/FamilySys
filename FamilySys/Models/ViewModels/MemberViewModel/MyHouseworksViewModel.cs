@@ -20,5 +20,7 @@ namespace FamilySys.Models.ViewModels.MemberViewModel {
 		public DateTime Date { get; set; }
 
 		public bool IsDone { get; set; }
+
+		public bool IsRated { get; set; }
 	}
 }

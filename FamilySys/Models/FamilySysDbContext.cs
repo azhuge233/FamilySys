@@ -16,5 +16,6 @@ namespace FamilySys.Models {
 		public DbSet<Announcement> Announcements { get; set; }
 		public DbSet<Dream> Dreams { get; set; }
 		public DbSet<UserDreamVote> UserDreamVotes { get; set; }
+		public DbSet<Rate> Rates { get; set; }
 	}
 }

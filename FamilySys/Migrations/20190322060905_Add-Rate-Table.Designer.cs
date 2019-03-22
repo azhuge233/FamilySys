@@ -4,14 +4,16 @@ using FamilySys.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FamilySys.Migrations
 {
     [DbContext(typeof(FamilySysDbContext))]
-    partial class FamilySysDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190322060905_Add-Rate-Table")]
+    partial class AddRateTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,18 +111,15 @@ namespace FamilySys.Migrations
                         .IsRequired();
 
                     b.Property<string>("FromID")
-                        .IsRequired()
-                        .HasMaxLength(10);
+                        .IsRequired();
 
                     b.Property<string>("HouseworkID")
-                        .IsRequired()
-                        .HasMaxLength(10);
+                        .IsRequired();
 
                     b.Property<int>("Star");
 
                     b.Property<string>("ToID")
-                        .IsRequired()
-                        .HasMaxLength(10);
+                        .IsRequired();
 
                     b.HasKey("ID");
 
