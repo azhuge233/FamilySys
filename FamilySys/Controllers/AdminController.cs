@@ -332,7 +332,7 @@ namespace FamilySys.Controllers
 
 					return View(houseworkShowcase.AsQueryable());
 				} catch (Exception ex) {
-					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 					return RedirectToAction("Error");
 				}
 				
@@ -357,7 +357,7 @@ namespace FamilySys.Controllers
 
 					return View(newRate);
 				} catch (Exception ex) {
-					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 					return RedirectToAction("Error");
 				}
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
