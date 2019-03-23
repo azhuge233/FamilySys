@@ -10,6 +10,7 @@ using FamilySys.Modules;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Pages.Internal.Account.Manage;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FamilySys.Controllers
 {
@@ -400,6 +401,7 @@ namespace FamilySys.Controllers
 
 				db.SaveChanges();
 
+				TempData["Success"] = "<script>alert(\'已修改评价 #" + rate.ID + "\');</script>";
 				return RedirectToAction("ShowHouseworks");
 			} catch (Exception ex) {
 				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
@@ -411,20 +413,16 @@ namespace FamilySys.Controllers
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
 				try {
 					var housework = db.Houseworks.Single(x => x.ID == ID);
+					var users = db.Users.Select(x => x);
 
-					var newHouseworkViewModel = new HouseworkShowcaseViewModel() {
+					var newHouseworkViewModel = new HouseworkEditViewModel(users) {
 						ID = housework.ID,
 						Title = housework.Title,
-						Content = housework.Content.Replace("\n", "<br />"),
+						Content = housework.Content,
 						Score = housework.Score,
 						Type = housework.Type,
-						IsDone = housework.IsDone,
-						Date = housework.Date,
-						ModifyDate = housework.ModifyDate,
-						FromID = housework.FromID,
-						ToID = housework.ToID,
-						FromUsername = db.Users.Single(x => x.ID == housework.FromID).Username,
-						ToUsername = housework.ToID == null ? "无" : db.Users.Single(x => x.ID == housework.ToID).Username
+						FromID = db.Users.Single(x => x.ID == housework.FromID).ID,
+						ToID = housework.ToID == null ? "无" : db.Users.Single(x => x.ID == housework.ToID).ID
 					};
 
 					return View(newHouseworkViewModel);
@@ -437,6 +435,70 @@ namespace FamilySys.Controllers
 				return RedirectToAction("ShowHouseworks", "Member");
 			} else {
 				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		[HttpPost]
+		public IActionResult DoEditHousework(HouseworkEditViewModel form) {
+			try {
+				var housework = db.Houseworks.Single(x => x.ID == form.ID);
+				var oldUser =  db.Users.Single(x => x.ID == housework.FromID);
+				var curUser =  db.Users.Single(x => x.ID == form.FromID);
+
+				housework.Title = form.Title;
+				housework.Content = form.Content;
+				housework.ToID = form.ToID;
+				housework.ModifyDate = DateTime.Now;
+
+				if (housework.Type == form.Type) { //没改变事务类型
+					if (housework.Type == 2) { //个人事务
+						if (housework.FromID == form.FromID) { //发布人没变
+							oldUser.Score += housework.Score;
+							oldUser.Score -= form.Score;
+							if (oldUser.Score < 0) {
+								TempData["ErrMsg"] = "<script>alert(\'用户 " + oldUser.Username + " 的积分不足，修改失败\')</script>";
+								return RedirectToAction("ShowHouseworks");
+							}
+						} else { //发布人改变
+							oldUser.Score += housework.Score;
+							curUser.Score -= form.Score;
+							if (curUser.Score < 0) {
+								TempData["ErrMsg"] = "<script>alert(\'用户 " + curUser.Username + " 的积分不足，修改失败\')</script>";
+								return RedirectToAction("ShowHouseworks");
+							}
+						}
+					}
+				} else {
+					if (form.Type == 1 && housework.Type == 2) { //个人变公共
+						oldUser.Score += housework.Score;
+					} else if (form.Type == 2 && housework.Type == 1) { //公共变个人
+						if (housework.FromID == form.FromID) { //发布人没变
+							oldUser.Score -= form.Score;
+							if (oldUser.Score < 0) {
+								TempData["ErrMsg"] = "<script>alert(\'用户 " + oldUser.Username + " 的积分不足，修改失败\')</script>";
+								return RedirectToAction("ShowHouseworks");
+							}
+						} else { //发布人改变
+							curUser.Score -= form.Score;
+							if (curUser.Score < 0) {
+								TempData["ErrMsg"] = "<script>alert(\'用户 " + curUser.Username + " 的积分不足，修改失败\')</script>";
+								return RedirectToAction("ShowHouseworks");
+							}
+						}
+					}
+				}
+
+				housework.Type = form.Type;
+				housework.Score = form.Score;
+				housework.FromID = form.FromID;
+
+				db.SaveChanges();
+
+				TempData["Success"] = "<script>alert(\'事务 #" + housework.ID + "修改成功\')</script>";
+				return RedirectToAction("ShowHouseworks");
+			} catch (Exception ex) {
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+				return RedirectToAction("Error");
 			}
 		}
 	}

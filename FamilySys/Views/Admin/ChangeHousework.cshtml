@@ -1,8 +1,95 @@
-﻿
+﻿@using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http
+@model FamilySys.Models.ViewModels.AdminViewModel.HouseworkEditViewModel
 @{
-    ViewData["Title"] = "管理员";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+	ViewData["Title"] = "管理员";
+	Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>ChangeHousework</h2>
+<div align="center">
+	<h2>编辑事务 #@Model.ID</h2>
+	@using (Html.BeginForm("DoEditHousework", "Admin", HttpMethod.Post)) {
+	<table class="table" style="margin: auto; text-align: center; width: auto;">
+		<tr style="display: none">
+			<td>
+				@Html.TextBoxFor(Model => Model.ID)
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.LabelFor(Model => Model.Title)
+			</td>
+			<td>
+				@Html.TextBoxFor(Model => Model.Title, new { @class = "form-control", @placeholder = "标题" })
+			</td>
+			<td>
+				@Html.ValidationMessageFor(Model => Model.Title)
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.LabelFor(Model => Model.Type)
+			</td>
+			<td>
+				@Html.DropDownListFor(Model => Model.Type, Model.TypeList, "选择事务类型", new { @class = "form-control", @style = "width: 150px" })
+			</td>
+			<td>
+				@Html.ValidationMessageFor(Model => Model.Type)
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.LabelFor(Model => Model.FromID)
+			</td>
+			<td>
+				@Html.DropDownListFor(Model => Model.FromID, Model.UserList, "选择发布人", new { @class = "form-control", @style = "width: 150px" })
+			</td>
+			<td>
+				@Html.ValidationMessageFor(Model => Model.FromID)
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.LabelFor(Model => Model.ToID)
+			</td>
+			<td>
+				@Html.DropDownListFor(Model => Model.ToID, Model.UserList, "选择接收人", new { @class = "form-control", @style = "width: 150px" })
+			</td>
+			<td>
+				@Html.ValidationMessageFor(Model => Model.ToID)
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.LabelFor(Model => Model.Score)
+			</td>
+			<td>
+				@Html.DropDownListFor(Model => Model.Score, Model.ScoreList, "选择分值", new { @class = "form-control", @style = "width: 110px" })
+			</td>
+			<td>
+				@Html.ValidationMessageFor(Model => Model.Score)
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.LabelFor(Model => Model.Content)
+			</td>
+			<td>
+				@Html.TextAreaFor(Model => Model.Content, new { @class = "form-control", @rows = "6", @placeholder = "描述内容", @style = "width:600px" })
+			</td>
+			<td>
+				@Html.ValidationMessageFor(Model => Model.Content)
+			</td>
+		</tr>
+	</table>
+		<div align="center">
+			<input type="submit" name="SubBtn" onclick="return ensure()" class="btn btn-success" />
+		</div>
+	}
+	<br />
+	<div class="text-right">
+		<a asp-action="ShowHouseworks" asp-controller="Admin">
+			<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> 返回
+		</a>
+	</div>
+</div>
 

@@ -47,7 +47,7 @@
 									<td>
 										@using (Html.BeginForm("ChangeRate", "Admin", HttpMethod.Post)) {
 											<input type="hidden" name="ID" value="@housework.ID" />
-											<input type="submit" name="SubBtn" value="修改评价" class="btn btn-sm btn-warning" />
+											<input type="submit" name="SubBtn" value="修改评价" class="btn btn-sm btn-info" />
 										}
 									</td>
 								}
@@ -71,7 +71,18 @@
 					<td>@housework.Score 分</td>
 					<td>已接受</td>
 					<td>未完成</td>
-					<td></td>
+					<td>
+						<table style="margin: auto">
+							<tr>
+								<td>
+									@using (Html.BeginForm("ChangeHousework", "Admin", HttpMethod.Post)) {
+										<input type="hidden" name="ID" value="@housework.ID" />
+										<input type="submit" name="SubBtn" value="修改信息" class="btn btn-sm btn-primary" />
+									}
+								</td>
+							</tr>
+						</table>
+					</td>
 				</tr>
 			} else {
 				<tr>
@@ -95,7 +106,7 @@
 								<td>
 									@using (Html.BeginForm("ChangeHousework", "Admin", HttpMethod.Post)) {
 										<input type="hidden" name="ID" value="@housework.ID" />
-										<input type="submit" name="SubBtn" value="修改信息" class="btn btn-sm btn-warning" />
+										<input type="submit" name="SubBtn" value="修改信息" class="btn btn-sm btn-primary" />
 									}
 								</td>
 							</tr>
