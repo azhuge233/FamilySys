@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http
+@model FamilySys.Models.ViewModels.MemberViewModel.RateViewModel
+@{
+    ViewData["Title"] = "管理员";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@Html.Raw(TempData["ErrMsg"])
+<div align="center">
+    <h2>修改评价 #@Model.ID</h2>
+    @using (Html.BeginForm("DoChangeRate", "Admin", HttpMethod.Post)) {
+        <div>
+            <h3>评分</h3>
+            <div id="starBg" class="star_bg">
+                <input type="radio" id="starScore1" class="score score_1" value="1" name="Star">
+                <a href="#starScore1" class="star star_1" title="差"><label for="starScore1">差</label></a>
+                <input type="radio" id="starScore2" class="score score_2" value="2" name="Star">
+                <a href="#starScore2" class="star star_2" title="较差"><label for="starScore2">较差</label></a>
+                <input type="radio" id="starScore3" class="score score_3" value="3" name="Star">
+                <a href="#starScore3" class="star star_3" title="普通"><label for="starScore3">普通</label></a>
+                <input type="radio" id="starScore4" class="score score_4" value="4" name="Star">
+                <a href="#starScore4" class="star star_4" title="较好"><label for="starScore4">较好</label></a>
+                <input type="radio" id="starScore5" class="score score_5" value="5" name="Star">
+                <a href="#5" class="star star_5" title="好"><label for="starScore5">好</label></a>
+            </div>
+        </div>
+        <br />
+        <div>
+            <h3>备注</h3>
+            @Html.TextAreaFor(Model => Model.Comment, new { @class = "form-control", @placeholder = "备注", @rows = "5", @style = "width: 600px" })
+        </div>
+        <br />
+        <div>
+            <input id="ID" name="ID" value="@Model.ID" type="hidden"/>
+            <input id="HouseworkID" name="HouseworkID" value="@Model.HouseworkID" type="hidden"/>
+            <input type="submit" name="SubBtn" class="btn btn-success"/>
+        </div>
+    }
+</div>
+<br/>
+<div class="text-right">
+    <a asp-action="ShowHouseworks" asp-controller="Admin">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> 返回
+    </a>
+</div>

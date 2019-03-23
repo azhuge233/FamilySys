@@ -303,5 +303,141 @@ namespace FamilySys.Controllers
 				return RedirectToAction("Error");
 			}
 		}
+
+		public IActionResult ShowHouseworks() {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				try {
+					var houseworks = db.Houseworks.Select(x => x).OrderByDescending(x => x.Date);
+					var houseworkShowcase = new List<HouseworkShowcaseViewModel>();
+
+					foreach (var housework in houseworks) {
+						houseworkShowcase.Add(
+							new HouseworkShowcaseViewModel() {
+								ID = housework.ID,
+								Title = housework.Title,
+								Content = housework.Content,
+								Score = housework.Score,
+								Type = housework.Type,
+								IsDone = housework.IsDone,
+								Date = housework.Date,
+								ModifyDate = housework.ModifyDate,
+								FromID = housework.FromID,
+								ToID = housework.ToID,
+								FromUsername = db.Users.Single(x => x.ID == housework.FromID).Username,
+								ToUsername = housework.ToID == null ? "无" : db.Users.Single(x => x.ID == housework.ToID).Username,
+								IsRated = db.Rates.Any(x => x.HouseworkID == housework.ID)
+							}
+						);
+					}
+
+					return View(houseworkShowcase.AsQueryable());
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
+					return RedirectToAction("Error");
+				}
+				
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				return RedirectToAction("ShowHouseworks", "Member");
+			} else {
+				return RedirectToAction("ShowHouseworks", "Home");
+			}
+		}
+
+		public IActionResult ChangeRate(string ID) {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				try {
+					var rate = db.Rates.Single(x => x.HouseworkID == ID);
+
+					var newRate = new RateViewModel() {
+						ID = rate.ID,
+						Star = 0,
+						Comment = rate.Comment,
+						HouseworkID = rate.HouseworkID
+					};
+
+					return View(newRate);
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
+					return RedirectToAction("Error");
+				}
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				return RedirectToAction("ShowHouseworks", "Member");
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		[HttpPost]
+		public IActionResult DoChangeRate(RateViewModel form) {
+			try {
+				if (form.Star == 0) {
+					TempData["ErrMsg"] = "<script>alert(\'请填写评分\');</script>";
+					return RedirectToAction("ShowHouseworks");
+				}
+
+				var rate = db.Rates.Single(x => x.ID == form.ID);
+				var housework = db.Houseworks.Single(x => x.ID == form.HouseworkID);
+				var fromUser = db.Users.Single(x => x.ID == rate.FromID);
+				var toUser = db.Users.Single(x => x.ID == rate.ToID);
+
+				rate.Comment = form.Comment ?? "无";
+				if (housework.Type == 1) { //公共事务
+					if (form.Star < 3 && rate.Star >= 3) {
+						toUser.Score -= housework.Score;
+					} else if (form.Star >= 3 && rate.Star < 3) {
+						toUser.Score += housework.Score;
+					}
+				} else { //个人事务
+					if (form.Star < 3 && rate.Star >= 3) {
+						toUser.Score -= housework.Score;
+						fromUser.Score += housework.Score;
+					} else if (form.Star >= 3 && rate.Star < 3) {
+						toUser.Score += housework.Score;
+						fromUser.Score -= housework.Score;
+					}
+				}
+				rate.Star = form.Star;
+
+				db.SaveChanges();
+
+				return RedirectToAction("ShowHouseworks");
+			} catch (Exception ex) {
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
+				return RedirectToAction("Error");
+			}
+		}
+
+		public IActionResult ChangeHousework(string ID) {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				try {
+					var housework = db.Houseworks.Single(x => x.ID == ID);
+
+					var newHouseworkViewModel = new HouseworkShowcaseViewModel() {
+						ID = housework.ID,
+						Title = housework.Title,
+						Content = housework.Content.Replace("\n", "<br />"),
+						Score = housework.Score,
+						Type = housework.Type,
+						IsDone = housework.IsDone,
+						Date = housework.Date,
+						ModifyDate = housework.ModifyDate,
+						FromID = housework.FromID,
+						ToID = housework.ToID,
+						FromUsername = db.Users.Single(x => x.ID == housework.FromID).Username,
+						ToUsername = housework.ToID == null ? "无" : db.Users.Single(x => x.ID == housework.ToID).Username
+					};
+
+					return View(newHouseworkViewModel);
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+					return RedirectToAction("Error");
+				}
+
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				return RedirectToAction("ShowHouseworks", "Member");
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
 	}
 }

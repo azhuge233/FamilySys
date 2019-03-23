@@ -148,7 +148,7 @@ namespace FamilySys.Controllers {
 				return RedirectToAction("MyInfo");
 			}
 			catch (Exception ex) {
-				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\');</script>";
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 				return RedirectToAction("Error");
 			}
 		}
@@ -184,7 +184,7 @@ namespace FamilySys.Controllers {
 					var Users = db.Users.Where(x => x.IsAdmin == 0);
 					return View(Users);
 				} catch (Exception ex) {
-					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\');</script>";
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 					return RedirectToAction("Error");
 				}
 			} else {
@@ -202,7 +202,7 @@ namespace FamilySys.Controllers {
 					var Annos = db.Announcements.Where(x => x.ID == x.ID).OrderByDescending(x => x.Date);
 					return View(Annos);
 				} catch (Exception ex) {
-					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\');</script>";
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 					return RedirectToAction("Error");
 				}
 			} else {
@@ -220,7 +220,7 @@ namespace FamilySys.Controllers {
 					var Anno = db.Announcements.Single(x => x.ID == ID);
 					return View(Anno);
 				} catch (Exception ex) {
-					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\');</script>";
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 					return RedirectToAction("Error");
 				}
 			} else {
@@ -260,7 +260,7 @@ namespace FamilySys.Controllers {
 
 					return View(houseworkShowcase.AsQueryable());
 				} catch (Exception ex) {
-					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 					return RedirectToAction("Error");
 				}
 			} else {
@@ -318,7 +318,7 @@ namespace FamilySys.Controllers {
 				TempData["Success"] = "<script>alert(\'事务 #" + newHousework.ID + " 已成功发布\')</script>";
 				return RedirectToAction("MyHouseworks");
 			} catch (Exception ex) {
-				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 				return RedirectToAction("Error");
 			}
 		}
@@ -383,7 +383,7 @@ namespace FamilySys.Controllers {
 
 				return FromPage == "1" ? RedirectToAction("ShowHouseworks") : RedirectToAction("MyHouseworks");
 			} catch (Exception ex) {
-				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 				return RedirectToAction("Error");
 			}
 		}
@@ -422,7 +422,7 @@ namespace FamilySys.Controllers {
 
 					return View(houseworkShowcase.AsQueryable());
 				} catch (Exception ex) {
-					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 					return RedirectToAction("Error");
 				}
 			} else {
@@ -451,7 +451,7 @@ namespace FamilySys.Controllers {
 
 					return View(editWorkViewModel);
 				} catch (Exception ex) {
-					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 					return RedirectToAction("Error");
 				}
 			} else {
@@ -495,7 +495,7 @@ namespace FamilySys.Controllers {
 
 				return FromPage == "1" ? RedirectToAction("ShowHouseworks") : RedirectToAction("MyHouseworks");
 			} catch (Exception ex) {
-				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 				return RedirectToAction("Error");
 			}
 		}
@@ -521,7 +521,7 @@ namespace FamilySys.Controllers {
 
 					return View(newDream);
 				} catch (Exception ex) {
-					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 					return RedirectToAction("Error");
 				}
 			} else {
@@ -561,7 +561,7 @@ namespace FamilySys.Controllers {
 				TempData["Success"] = "<script>alert(\'已设置家庭梦想\');</script>";
 				return RedirectToAction("ShowDreams");
 			} catch (Exception ex) {
-				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 				return RedirectToAction("Error");
 			}
 		}
@@ -692,7 +692,7 @@ namespace FamilySys.Controllers {
 
 					return View(rate);
 				} catch (Exception ex) {
-					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 					return RedirectToAction("Error");
 				}
 			} else {
@@ -739,7 +739,7 @@ namespace FamilySys.Controllers {
 
 				return RedirectToAction("MyHouseworks");
 			} catch (Exception ex) {
-				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 				return RedirectToAction("Error");
 			}
 		}
@@ -765,7 +765,7 @@ namespace FamilySys.Controllers {
 
 					return View(newRateModel);
 				} catch (Exception ex) {
-					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message[0].ToString() + "\')</script>";
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 					return RedirectToAction("Error");
 				}
 			} else {

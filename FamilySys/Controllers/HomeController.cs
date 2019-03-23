@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FamilySys.Models;
 using FamilySys.Models.ViewModels;
+using FamilySys.Models.ViewModels.MemberViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -52,6 +53,44 @@ namespace FamilySys.Controllers {
 					return View(Users);
 				} catch (Exception ex) {
 					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
+					return RedirectToAction("Error");
+				}
+			}
+		}
+
+		public IActionResult ShowHouseworks() {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				return RedirectToAction("Index", "Admin");
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				return RedirectToAction("ShowHouseworks", "Member");
+			} else {
+				try {
+					var houseworks = db.Houseworks.Select(x => x).OrderByDescending(x => x.Date);
+					var houseworkShowcase = new List<HouseworkShowcaseViewModel>();
+
+					foreach (var housework in houseworks) {
+						houseworkShowcase.Add(
+							new HouseworkShowcaseViewModel() {
+								ID = housework.ID,
+								Title = housework.Title,
+								Content = housework.Content,
+								Score = housework.Score,
+								Type = housework.Type,
+								IsDone = housework.IsDone,
+								Date = housework.Date,
+								ModifyDate = housework.ModifyDate,
+								FromID = housework.FromID,
+								ToID = housework.ToID,
+								FromUsername = db.Users.Single(x => x.ID == housework.FromID).Username,
+								ToUsername = housework.ToID == null ? "无" : db.Users.Single(x => x.ID == housework.ToID).Username,
+								IsRated = db.Rates.Any(x => x.HouseworkID == housework.ID)
+							}
+						);
+					}
+
+					return View(houseworkShowcase.AsQueryable());
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 					return RedirectToAction("Error");
 				}
 			}
