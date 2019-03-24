@@ -5,7 +5,7 @@
     ViewData["Title"] = "家庭成员";
     Layout = "~/Views/Shared/_MemberLayout.cshtml";
 }
-
+@Html.Raw(TempData["Success"])
 <div class="row">
 	<h1 align="center">我的信息</h1>
 	@using (Html.BeginForm("ChgInfo", "Member", HttpMethod.Post)) {
@@ -121,7 +121,7 @@
 			</tr>
 		</table>
 		<div class="field-validation-error">
-			<p>@TempData["ErrMsg"]</p>
+			<p>@TempData["WrongPwd"]</p>
 		</div>
 		<br />
 		<div align="center">

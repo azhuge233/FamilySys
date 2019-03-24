@@ -99,6 +99,7 @@ namespace FamilySys.Controllers
 
 				db.SaveChanges();
 
+				TempData["Success"] = "<script>alert(\'信息已修改\');</script>";
 				return RedirectToAction("MyInfo");
 			} catch (Exception ex) {
 				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
@@ -110,7 +111,7 @@ namespace FamilySys.Controllers
 		public IActionResult ChgPwd(Member_MyInfo_ChgPwd_ViewModel form) {
 			try {
 				if (encryption.Encrypt(form.Password) == db.Users.Single(x => x.IsAdmin == 1).Password) {
-					var user = db.Users.Single(x => x.ID == form.ID);
+					var user = db.Users.Single(x => x.IsAdmin == 1);
 
 					user.Password = encryption.Encrypt(form.NewPassword);
 					db.SaveChanges();
@@ -118,11 +119,11 @@ namespace FamilySys.Controllers
 					TempData["msg"] = "<script>alert('密码已修改，请重新登录');</script>";
 					return RedirectToAction("Logout");
 				} else {
-					TempData["ErrMsg"] = "原密码输入错误";
+					TempData["WrongPwd"] = "原密码输入错误";
 					return RedirectToAction("MyInfo");
 				}
 			} catch(Exception ex) {
-				TempData["ErrMsg"] = "alert(\'" + ex.Message.ToString() + "\');";
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 				return RedirectToAction("Error");
 			}
 		}

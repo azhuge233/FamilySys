@@ -2,7 +2,7 @@
 	ViewData["Title"] = "访客";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@Html.Raw(TempData["Success"])
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
 	<ol class="carousel-indicators">
 		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -65,7 +65,7 @@
 </div>
 
 <div class="row">
-	<div class="col-md-4">
+	<div class="col-md-6">
 		<h2>功能 - 访客</h2>
 		<ul>
 			<li>
@@ -74,30 +74,44 @@
 			<li>
 				家庭事务 - 查看家庭事务信息
 			</li>
-			<br />
+			<li style="list-style: none"><br /></li>
 			<li>
 				<a asp-action="Index" asp-controller="Login">登录</a> 以使用更多功能
 			</li>
 		</ul>
-	</div>
 
-	<div class="col-md-4">
-		<h2>部署及使用</h2>
+		<h2>技术</h2>
 		<ul>
-			<li>
-				<p>在控制台执行指令</p>
-				<pre>dotnet run FamilySys</pre>
-			</li>
-			<li><p>初始管理员账户admin，密码同账户名</p></li>
+			<li>ASP.NET Core 跨平台（Windows、OSX 和 Linux）</li>
+			<li style="list-style: none"><br /></li>
+			<li>HTML、<a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a> CSS、JavaScript</li>
 		</ul>
 	</div>
 
-	<div class="col-md-4">
-		<h2>技术</h2>
+	<div class="col-md-6">
+		<h2>部署及使用</h2>
 		<ul>
-			<li>使用.Net Core，实现跨平台（Windows、OSX 和 Linux）</li>
-			<br />
-			<li>使用主题 <a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a></li>
+			<li>
+				<p>
+					下载
+					<a href="https://github.com/azhuge233/FamilySys" target="_blank">
+						<img src="images/web_github_256px_1174989_easyicon.net.png" height="25" width="25" /> Github
+					</a>
+					<pre style="white-space: pre-wrap; word-wrap: break-word;">git clone https://github.com/azhuge233/FamilySys.git</pre>
+				</p>
+			</li>
+			<li>
+				<p>
+					迁移数据库
+					<pre>dotnet ef database update</pre>
+				</p>
+			</li>
+			<li>
+				<p>
+					运行
+					<pre>dotnet run FamilySys</pre>
+				</p>
+			</li>
 		</ul>
 	</div>
 </div>

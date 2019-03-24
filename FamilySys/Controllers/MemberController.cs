@@ -145,6 +145,7 @@ namespace FamilySys.Controllers {
 
 				db.SaveChanges();
 
+				TempData["Success"] = "<script>alert(\'信息已修改\');</script>";
 				return RedirectToAction("MyInfo");
 			}
 			catch (Exception ex) {
@@ -165,11 +166,12 @@ namespace FamilySys.Controllers {
 					TempData["msg"] = "<script>alert('密码已修改，请重新登录');</script>";
 					return RedirectToAction("Logout");
 				} else {
-					TempData["ErrMsg"] = "原密码输入错误";
+					TempData["WrongPwd"] = "原密码输入错误";
 					return RedirectToAction("MyInfo");
 				}
 			}
-			catch {
+			catch(Exception ex) {
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 				return RedirectToAction("Error");
 			}
 		}
@@ -575,11 +577,17 @@ namespace FamilySys.Controllers {
 				try {
 					var myID = HttpContext.Session.GetString("ID");
 					var dreams = db.Dreams.Select(x => x).Where(x => x.UserID != myID);
-					var myDream = db.Dreams.Single(x => x.UserID == myID);
 
-					ViewBag.myDreamTitle = myDream.Title;
-					ViewBag.myDreamAgree = myDream.Agree;
-					ViewBag.myDreamVeto = myDream.Veto;
+					if (!db.Dreams.Any(x => x.UserID == myID)) {
+						ViewBag.myDreamTitle = "无";
+						ViewBag.myDreamAgree = 0;
+						ViewBag.myDreamVeto = 0;
+					} else {
+						var myDream = db.Dreams.Single(x => x.UserID == myID);
+						ViewBag.myDreamTitle = myDream.Title;
+						ViewBag.myDreamAgree = myDream.Agree;
+						ViewBag.myDreamVeto = myDream.Veto;
+					}
 					ViewBag.UserCount = db.Users.Count() - 1;
 
 					var dreamsList = new List<ShowDreamsViewModel>();

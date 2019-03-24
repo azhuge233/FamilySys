@@ -1,11 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http
 @model FamilySys.Models.ViewModels.MemberViewModel.Member_MyInfo_ChgPwd_ViewModel
 @{
-    ViewData["Title"] = "管理员";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+	ViewData["Title"] = "管理员";
+	Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-
+@Html.Raw(TempData["Success"])
 <div class="row">
 	<h1 align="center">我的信息</h1>
 	@using (Html.BeginForm("ChgInfo", "Admin", HttpMethod.Post)) {
@@ -118,7 +118,7 @@
 				</tr>
 			</table>
 			<div class="field-validation-error">
-				<p>@TempData["ErrMsg"]</p>
+				<p>@TempData["WrongPwd"]</p>
 			</div>
 			<br />
 			<div align="center">

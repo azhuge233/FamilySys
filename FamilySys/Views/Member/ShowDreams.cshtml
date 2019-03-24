@@ -36,7 +36,11 @@
 				<td>未通过</td>
 				<td>
 					@using (Html.BeginForm("MyDream", "Member", HttpMethod.Get)) {
-						<input type="submit" name="SubBtn" value="修改" class="btn btn-sm btn-primary" />
+						if (@ViewBag.myDreamAgree == 0) {
+							<input type="submit" name="SubBtn" value="新建" class="btn btn-sm btn-primary" />
+						} else {
+							<input type="submit" name="SubBtn" value="修改" class="btn btn-sm btn-primary" />
+						}
 					}
 				</td>
 			</tr>
