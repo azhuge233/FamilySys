@@ -20,16 +20,6 @@ namespace FamilySys.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("FamilySys.Models.DbModels.Housework", b =>
-                {
-                    b.Property<string>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Houseworks");
-                });
-
             modelBuilder.Entity("FamilySys.Models.DbModels.User", b =>
                 {
                     b.Property<string>("ID")

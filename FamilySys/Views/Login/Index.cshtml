@@ -6,7 +6,7 @@
 }
 @Html.Raw(TempData["msg"])
 <h2 align="center">登录</h2>
-<div style="text-align: center">
+<div align="center" style="text-align: center">
 	@using (Html.BeginForm("Login", "Login", FormMethod.Post)) {
 		<table id="mainTable" class="table" style="margin: auto; width: 400px;">
 			<tr>
@@ -44,7 +44,8 @@
 	}
 	<br />
 	<div>
-		<label>没有账号？</label>
-		<a asp-area="" asp-controller="Login" asp-action="Signup">去注册</a>
+		<label>
+			没有账号？<a asp-area="" asp-controller="Login" asp-action="Signup">去注册</a>
+		</label>
 	</div>
 </div>
