@@ -1,0 +1,57 @@
+﻿@using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http
+@model IQueryable<FamilySys.Models.ViewModels.AdminViewModel.DreamsViewModel>
+@{
+	ViewData["Title"] = "管理员";
+	Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@Html.Raw(TempData["Success"])
+@Html.Raw(TempData["ErrMsg"])
+<div align="center">
+	<h2>家庭梦想</h2>
+	<table class="table" style="margin: auto; text-align: center">
+		<tr>
+			<th style="text-align: center">ID</th>
+			<th style="text-align: center">标题</th>
+			<th style="text-align: center">用户</th>
+			<th style="text-align: center">赞成数</th>
+			<th style="text-align: center">反对数</th>
+			<th style="text-align: center">通过情况</th>
+			<th style="text-align: center">操作</th>
+		</tr>
+		@foreach (var dream in Model) {
+			if (dream.Agree == ViewBag.UserCount) {
+				<tr style="background-color: darkseagreen">
+					<td>@dream.ID</td>
+					<td>@dream.Title</td>
+					<td>@dream.Username</td>
+					<td>@dream.Agree</td>
+					<td>@dream.Veto</td>
+					<td>已通过</td>
+					<td>
+						@using (Html.BeginForm("ChangeDream", "Admin", HttpMethod.Post)) {
+							<input type="hidden" name="ID" value="@dream.ID"/>
+							<input type="submit" name="SubBtn" value="修改信息" class="btn btn-sm btn-primary"/>
+						}
+					</td>
+				</tr>
+			} else {
+				<tr>
+					<td>@dream.ID</td>
+					<td>@dream.Title</td>
+					<td>@dream.Username</td>
+					<td>@dream.Agree</td>
+					<td>@dream.Veto</td>
+					<td>未通过</td>
+					<td>
+						@using (Html.BeginForm("ChangeDream", "Admin", HttpMethod.Post)) {
+							<input type="hidden" name="ID" value="@dream.ID"/>
+							<input type="submit" name="SubBtn" value="修改信息" class="btn btn-sm btn-primary"/>
+						}
+					</td>
+				</tr>
+			}
+		}
+	</table>
+</div>
+
+

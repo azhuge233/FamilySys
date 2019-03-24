@@ -501,5 +501,84 @@ namespace FamilySys.Controllers
 				return RedirectToAction("Error");
 			}
 		}
+
+		public IActionResult ShowDreams() {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				try {
+					var dreams = db.Dreams.Select(x => x);
+					var DreamList = new List<DreamsViewModel>();
+
+					foreach (var dream in dreams) {
+						DreamList.Add(
+							new DreamsViewModel() {
+								ID = dream.ID,
+								Title = dream.Title,
+								UserID = dream.UserID,
+								Username = db.Users.Single(x => x.ID == dream.UserID).Username,
+								Agree = dream.Agree,
+								Veto = dream.Veto
+							}
+						);
+					}
+
+					ViewBag.UserCount = db.Users.Count() - 1;
+
+					return View(DreamList.AsQueryable());
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+					return RedirectToAction("Error");
+				}
+
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				return RedirectToAction("MyDream", "Member");
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		public IActionResult ChangeDream(string ID) {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				try {
+					var dream = db.Dreams.Single(x => x.ID == ID);
+
+					var editDream = new MemberDreamViewModel() {
+						ID = dream.ID,
+						Title = dream.Title,
+						Content = dream.Content
+					};
+
+					return View(editDream);
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+					return RedirectToAction("Error");
+				}
+
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				return RedirectToAction("MyDream", "Member");
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		public IActionResult DoChangeDream(MemberDreamViewModel form) {
+			try {
+				var dream = db.Dreams.Single(x => x.ID == form.ID);
+
+				dream.Title = form.Title;
+				dream.Content = form.Content;
+				dream.Agree = 1;
+				dream.Veto = 0;
+
+				db.UserDreamVotes.RemoveRange(db.UserDreamVotes.Where(x => x.DreamID == dream.ID));
+
+				db.SaveChanges();
+
+				TempData["Success"] = "<script>alert(\'已修改家庭梦想 #" + dream.ID + "\')</script>";
+				return RedirectToAction("ShowDreams");
+			} catch (Exception ex) {
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+				return RedirectToAction("Error");
+			}
+		}
 	}
 }

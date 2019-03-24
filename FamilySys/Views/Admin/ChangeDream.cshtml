@@ -1,0 +1,49 @@
+﻿@using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http
+@model FamilySys.Models.ViewModels.MemberViewModel.MemberDreamViewModel
+@{
+	ViewData["Title"] = "管理员";
+	Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div align="center">
+	<h2>修改家庭梦想 #@Model.ID</h2>
+	@using (Html.BeginForm("DoChangeDream", "Admin", HttpMethod.Post)) {
+		<table class="table" style="margin: auto; text-align: center; width: auto">
+			<tr>
+				<td>
+					@Html.LabelFor(Model => Model.Title)
+				</td>
+				<td>
+					@Html.TextBoxFor(Model => Model.Title, new {@class = "form-control", @placeholder = "梦想标题"})
+				</td>
+				<td>
+					@Html.ValidationMessageFor(Model => Model.Title)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.LabelFor(Model => Model.Content)
+				</td>
+				<td>
+					@Html.TextAreaFor(Model => Model.Content, new {@class = "form-control", @rows = "5", @placeholder = "梦想标题", @style = "width: 600px"})
+				</td>
+				<td>
+					@Html.ValidationMessageFor(Model => Model.Content)
+				</td>
+			</tr>
+		</table>
+		<div>
+
+			<input type="hidden" name="ID" value="@Model.ID"/>
+			<input type="submit" name="SubBtn" value="确认修改" onclick="return ensure()" class="btn btn-success"/>
+
+		</div>
+	}
+</div>
+<br/>
+<div class="text-right">
+	<a asp-action="ShowDreams" asp-controller="Admin">
+		<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> 返回
+	</a>
+</div>
+
