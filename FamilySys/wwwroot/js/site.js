@@ -32,6 +32,7 @@ function changeColor(btn, body, mode) {
 		btn.style.setProperty("color", "#fff");
 		btn.innerHTML = "夜间";
 
+		body.background = "images/prism.png";
 		body.style.setProperty("background-color", "#333");
 		body.style.setProperty("color", "#F5F5F5");
 	} else {
@@ -39,6 +40,7 @@ function changeColor(btn, body, mode) {
 		btn.style.setProperty("color", "#e0ffff");
 		btn.innerHTML = "日间";
 
+		body.background = "images/dynamic-style.png";
 		body.style.setProperty("background-color", "#fff");
 		body.style.setProperty("color", "#333");
 	}

@@ -19,16 +19,17 @@ namespace FamilySys.Controllers {
 			db = _db;
 		}
 
-		public IActionResult Index()
-		{
-			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+		public virtual IActionResult Index() {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1)
 				return RedirectToAction("Index", "Admin");
-			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+			else if (HttpContext.Session.GetInt32("isAdmin") == 0)
 				return RedirectToAction("Index", "Member");
-			}
-			else
-			{
-				return View();
+			else {
+				if (!db.Users.Any(x => x.Username == "admin")) {
+					return RedirectToAction("Index", "Welcome");
+				} else {
+					return View();
+				}
 			}
 		}
 

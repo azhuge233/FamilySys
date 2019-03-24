@@ -1,0 +1,158 @@
+﻿@using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http
+@model FamilySys.Models.ViewModels.WelcomeViewModel.FirstRunConfigViewModel
+@{
+	Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width , initial-scale=1.0" />
+	<title>首次运行 - 家庭事务分配与统计管理系统</title>
+	<environment include="Development">
+		<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+		<link rel="stylesheet" href="~/css/site.css" />
+	</environment>
+	<environment exclude="Development">
+		<link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
+			  asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+			  asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+		<link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+	</environment>
+
+	<style>
+		.field-validation-error {
+			color: red;
+			font-size: smaller;
+		}
+
+		.field-validation-valid {
+			color: red;
+			font-size: smaller;
+		}
+	</style>
+
+</head>
+<body background="images/dynamic-style.png">
+	<div>
+		@Html.Raw(TempData["Success"])
+		@Html.Raw(TempData["ErrMsg"])
+		@using (Html.BeginForm("FirstRunConfig", "Welcome", HttpMethod.Post)) {
+			<div align="center" style=" width: 500px; text-align: center; margin: auto">
+				<br />
+				<h2>设置管理员账户</h2>
+				<table class="table" style="margin: auto; text-align: center; width: auto;">
+					<tr>
+						<td>
+							@Html.LabelFor(Model => Model.ID)
+						</td>
+						<td>
+							@Html.TextBoxFor(Model => Model.ID, new { @class = "form-control", @disabled = "true", @style = "width: 110px" })
+						</td>
+					</tr>
+					<tr>
+						<td>
+							@Html.LabelFor(Model => Model.Username)
+						</td>
+						<td>
+							@Html.TextBoxFor(Model => Model.Username, new { @class = "form-control", @disabled = "true", @style = "width: 200px" })
+						</td>
+					</tr>
+					<tr>
+						<td>
+							@Html.LabelFor(Model => Model.Password)
+						</td>
+						<td>
+							@Html.TextBoxFor(Model => Model.Password, new { @type = "Password", @class = "form-control", @placeholder = "密码", @style = "width: 200px" })
+						</td>
+						<td>
+							@Html.ValidationMessageFor(Model => Model.Password)
+						</td>
+					</tr>
+					<tr>
+						<td>
+							@Html.LabelFor(Model => Model.RetypePassword)
+						</td>
+						<td>
+							@Html.TextBoxFor(Model => Model.RetypePassword, new { @type = "Password", @class = "form-control", @placeholder = "重新输入密码", @style = "width: 200px" })
+						</td>
+						<td>
+							@Html.ValidationMessageFor(Model => Model.RetypePassword)
+						</td>
+					</tr>
+					<tr>
+						<td>
+							@Html.LabelFor(Model => Model.Sex)
+						</td>
+						<td>
+							@Html.DropDownListFor(Model => Model.Sex, @Model.SexList, "选择性别", new { @class = "form-control", @style = "width: auto" })
+						</td>
+						<td>
+							@Html.ValidationMessageFor(Model => Model.Sex)
+						</td>
+					</tr>
+					<tr>
+						<td>
+							@Html.LabelFor(Model => Model.Phone)
+						</td>
+						<td>
+							@Html.TextBoxFor(Model => Model.Phone, new { @class = "form-control", @placeholder = "电话", @style = "width: 200px" })
+						</td>
+						<td>
+							@Html.ValidationMessageFor(Model => Model.Phone)
+						</td>
+					</tr>
+					<tr>
+						<td>
+							@Html.LabelFor(Model => Model.Mail)
+						</td>
+						<td>
+							@Html.TextBoxFor(Model => Model.Mail, new { @class = "form-control", @placeholder = "邮箱", @style = "width: 200px" })
+						</td>
+						<td>
+							@Html.ValidationMessageFor(Model => Model.Mail)
+						</td>
+					</tr>
+				</table>
+				<div>
+					<input type="submit" name="SubBtn" class="btn btn-success" />
+				</div>
+				<br />
+			</div>
+		}
+		<hr />
+		<footer>
+			<p align="center" style="">
+				&copy; @DateTime.Now.Year - 家庭事务分配与统计管理系统 by
+				<a href="https://azhuge233.com" target="_blank">azhuge233</a>
+			</p>
+		</footer>
+	</div>
+
+<environment include="Development">
+	<script src="~/lib/jquery/dist/jquery.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+</environment>
+<environment exclude="Development">
+	<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+	        asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+	        asp-fallback-test="window.jQuery"
+	        crossorigin="anonymous"
+	        integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+	</script>
+	<script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+	        asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+	        asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+	        crossorigin="anonymous"
+	        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+	</script>
+	<script src="~/js/site.min.js" asp-append-version="true"></script>
+</environment>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script src="~/js/canvas-nest.js"></script>
+
+</body>
+</html>
+
