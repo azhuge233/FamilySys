@@ -584,5 +584,35 @@ namespace FamilySys.Controllers
 				return RedirectToAction("Error");
 			}
 		}
+
+		public IActionResult ShowRecords() {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				try {
+					var records = db.ScoreRecords.Select(x => x);
+					var RecordList = new List<RecordViewModel>();
+
+					foreach (var record in records) {
+						RecordList.Add(
+							new RecordViewModel() {
+								ID = record.ID,
+								Username = db.Users.Single(x => x.ID == record.UserID).Username,
+								HouseworkName = db.Houseworks.Single(x => x.ID == record.HouseworkID).Title,
+								Star = db.Rates.Single(x => x.ID == record.RateID).Star,
+								Score = record.Score
+							}
+						);
+					}
+
+					return View(RecordList.AsQueryable());
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+					return RedirectToAction("Error");
+				}
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				return RedirectToAction("ShowRecords", "Member");
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
 	}
 }

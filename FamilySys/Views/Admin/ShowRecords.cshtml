@@ -1,0 +1,38 @@
+﻿@model IQueryable<FamilySys.Models.ViewModels.MemberViewModel.RecordViewModel>
+@{
+	ViewData["Title"] = "管理员";
+	Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div align="center">
+	<h2>得分记录</h2>
+	<table class="table" style="margin: auto; text-align: center">
+		<tr>
+			<th style="text-align: center">ID</th>
+			<th style="text-align: center">用户名</th>
+			<th style="text-align: center">家务名称</th>
+			<th style="text-align: center">家务评分</th>
+			<th style="text-align: center">得分</th>
+		</tr>
+		@foreach (var record in Model) {
+			<tr>
+				<td>@record.ID</td>
+				<td>@record.Username</td>
+				<td>@record.HouseworkName</td>
+				@if (record.Star == 1) {
+					<td style="color: red">一星</td>
+				} else if (record.Star == 2) {
+					<td style="color: coral">二星</td>
+				} else if (record.Star == 3) {
+					<td style="color: darkorange">三星</td>
+				} else if (record.Star == 4) {
+					<td style="color: greenyellow">四星</td>
+				} else if (record.Star == 5) {
+					<td style="color: darkgreen">五星</td>
+				}
+				<td>+@record.Score</td>
+			</tr>
+		}
+	</table>
+</div>
+
+
