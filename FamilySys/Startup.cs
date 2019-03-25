@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Sakura.AspNetCore.Mvc;
 
 namespace FamilySys {
 	public class Startup {
@@ -45,6 +46,10 @@ namespace FamilySys {
 					options.Cookie.HttpOnly = true;
 				}
 			);
+
+			services.AddBootstrapPagerGenerator(options => {
+				options.ConfigureDefault();
+			});
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 		}

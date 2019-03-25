@@ -8,6 +8,7 @@ using FamilySys.Models.ViewModels;
 using FamilySys.Models.ViewModels.MemberViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Sakura.AspNetCore;
 
 namespace FamilySys.Controllers {
 	public class HomeController : Controller
@@ -59,7 +60,8 @@ namespace FamilySys.Controllers {
 			}
 		}
 
-		public IActionResult ShowHouseworks() {
+		[HttpGet]
+		public IActionResult ShowHouseworks(int page = 1) {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
 				return RedirectToAction("Index", "Admin");
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
@@ -89,7 +91,9 @@ namespace FamilySys.Controllers {
 						);
 					}
 
-					return View(houseworkShowcase.AsQueryable());
+					var houseworksPagedList = houseworkShowcase.ToPagedList(8, page);
+
+					return View(houseworksPagedList);
 				} catch (Exception ex) {
 					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 					return RedirectToAction("Error");

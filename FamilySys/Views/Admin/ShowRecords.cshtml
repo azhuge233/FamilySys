@@ -1,4 +1,4 @@
-﻿@model IQueryable<FamilySys.Models.ViewModels.MemberViewModel.RecordViewModel>
+﻿@model Sakura.AspNetCore.IPagedList<FamilySys.Models.ViewModels.MemberViewModel.RecordViewModel>
 @{
 	ViewData["Title"] = "管理员";
 	Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -33,6 +33,9 @@
 			</tr>
 		}
 	</table>
+	<div>
+		<pager source="Model" />
+	</div>
 </div>
 
 

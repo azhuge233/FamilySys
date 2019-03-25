@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Pages.Internal.Account.Manage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Sakura.AspNetCore;
 
 namespace FamilySys.Controllers
 {
@@ -309,7 +310,8 @@ namespace FamilySys.Controllers
 			}
 		}
 
-		public IActionResult ShowHouseworks() {
+		[HttpGet]
+		public IActionResult ShowHouseworks(int page = 1) {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
 				try {
 					var houseworks = db.Houseworks.Select(x => x).OrderByDescending(x => x.Date);
@@ -335,7 +337,9 @@ namespace FamilySys.Controllers
 						);
 					}
 
-					return View(houseworkShowcase.AsQueryable());
+					var houseworksPagedList = houseworkShowcase.ToPagedList(8, page);
+
+					return View(houseworksPagedList);
 				} catch (Exception ex) {
 					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 					return RedirectToAction("Error");
@@ -585,7 +589,8 @@ namespace FamilySys.Controllers
 			}
 		}
 
-		public IActionResult ShowRecords() {
+		[HttpGet]
+		public IActionResult ShowRecords(int page = 1) {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
 				try {
 					var records = db.ScoreRecords.Select(x => x);
@@ -603,7 +608,9 @@ namespace FamilySys.Controllers
 						);
 					}
 
-					return View(RecordList.AsQueryable());
+					var RecordPageList = RecordList.ToPagedList(8, page);
+
+					return View(RecordPageList);
 				} catch (Exception ex) {
 					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 					return RedirectToAction("Error");

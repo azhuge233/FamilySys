@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http
-@model IQueryable<FamilySys.Models.ViewModels.MemberViewModel.HouseworkShowcaseViewModel>
+@model Sakura.AspNetCore.IPagedList<FamilySys.Models.ViewModels.MemberViewModel.HouseworkShowcaseViewModel>
 @{
 	ViewData["Title"] = "家庭成员";
 	Layout = "~/Views/Shared/_MemberLayout.cshtml";
@@ -66,7 +66,7 @@
 											<input type="submit" name="SubBtn" class="btn btn-sm btn-primary" value="查看评分" />
 										}
 									</td>
-								} else if (ViewBag.Username != housework.FromUsername) {
+								} else if (ViewBag.Username != housework.FromUsername && housework.IsRated == false) {
 									<td></td>
 									<td>
 										待评分
@@ -178,4 +178,7 @@
 			}
 		}
 	</table>
+	<div>
+		<pager source="Model" />
+	</div>
 </div>
