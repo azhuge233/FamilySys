@@ -81,6 +81,17 @@ namespace FamilySys.Controllers {
 			return ID;
 		}
 
+		public string GetRandomNum5ScoreRecord() {
+			Random rd = new Random();
+			string ID = "";
+
+			do {
+				ID = rd.Next(10000, 99999).ToString();
+			} while (db.ScoreRecords.Any(x => x.ID == ID));
+
+			return ID;
+		}
+
 		public IActionResult Index() {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
 				return RedirectToAction("Index", "Admin");
@@ -220,6 +231,9 @@ namespace FamilySys.Controllers {
 
 				try {
 					var Anno = db.Announcements.Single(x => x.ID == ID);
+
+					Anno.Content = Anno.Content.Replace("\n", "<br />");
+
 					return View(Anno);
 				} catch (Exception ex) {
 					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
@@ -730,7 +744,7 @@ namespace FamilySys.Controllers {
 
 					db.Rates.Add(newRate);
 
-					if (newRate.Star >= 3) {
+					if (newRate.Star >= 3) { //计算积分
 						var ToUser = db.Users.Single(x => x.ID == housework.ToID);
 						ToUser.Score += housework.Score;
 						TempData["Success"] = "<script>alert(\'已评价事务 #" + form.HouseworkID + " ，用户 " + ToUser.Username + " 积分 +" + housework.Score + "\')</script>";
@@ -741,6 +755,17 @@ namespace FamilySys.Controllers {
 					} else if(housework.Type == 1 && newRate.Star < 3) {
 						TempData["Success"] = "<script>alert(\'已评价事务 #" + form.HouseworkID + "\')</script>";
 					}
+
+					var newRecord = new ScoreRecord() {
+						ID = GetRandomNum5ScoreRecord(),
+						UserID = housework.ToID,
+						HouseworkID = housework.ID,
+						RateID = form.ID,
+						Score = form.Star >= 3 ? housework.Score : 0,
+						Date = DateTime.Now
+					};
+
+					db.ScoreRecords.Add(newRecord);
 				}
 
 				db.SaveChanges();
@@ -772,6 +797,38 @@ namespace FamilySys.Controllers {
 					ViewBag.FromPage = FromPage;
 
 					return View(newRateModel);
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+					return RedirectToAction("Error");
+				}
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		public IActionResult ShowRecords() {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				return RedirectToAction("Index", "Admin");
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				CommonWork();
+
+				try {
+					var records = db.ScoreRecords.Select(x => x);
+					var RecordList = new List<RecordViewModel>();
+
+					foreach (var record in records) {
+						RecordList.Add(
+							new RecordViewModel() {
+								ID = record.ID,
+								Username = db.Users.Single(x => x.ID == record.UserID).Username,
+								HouseworkName = db.Houseworks.Single(x => x.ID == record.HouseworkID).Title,
+								Star = db.Rates.Single(x => x.ID == record.RateID).Star,
+								Score = record.Score
+							}
+						);
+					}
+
+					return View(RecordList.AsQueryable());
 				} catch (Exception ex) {
 					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 					return RedirectToAction("Error");

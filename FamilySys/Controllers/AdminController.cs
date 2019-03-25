@@ -228,7 +228,7 @@ namespace FamilySys.Controllers
 					Date = DateTime.Now,
 					ModifyDate = DateTime.Now,
 					Title = form.Title,
-					Content = form.Content.Replace("\n", "<br />")
+					Content = form.Content
 				};
 
 				db.Announcements.Add(newAnno);
@@ -245,6 +245,9 @@ namespace FamilySys.Controllers
 		public IActionResult ShowAnnoDetails(string ID) {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
 				var Anno = db.Announcements.Single(x => x.ID == ID);
+
+				Anno.Content = Anno.Content.Replace("\n", "<br />");
+
 				return View(Anno);
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("ShowAnnoDetails", "Member");

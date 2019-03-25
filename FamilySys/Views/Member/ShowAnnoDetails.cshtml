@@ -6,15 +6,18 @@
 
 <div>
 	<h2 align="center">公告 #@Model.ID</h2>
-	<div style="font-size: smaller">
-		<h3>标题： @Model.Title</h3>
-		<p>
-			发布时间：@Model.Date.GetDateTimeFormats('f')[0].ToString() <br />
-			最后修改时间：@Model.ModifyDate.GetDateTimeFormats('f')[0].ToString()
-		</p>
+	<div class="panel panel-primary">
+		<div class="panel-heading" style="font-size: smaller">
+			<h3>@Model.Title</h3>
+			<p class="text-right">
+				发布时间：@Model.Date.GetDateTimeFormats('f')[0].ToString() <br />
+				最后修改时间：@Model.ModifyDate.GetDateTimeFormats('f')[0].ToString()
+			</p>
+		</div>
+		<div class="panel-body" style="color: black">
+			@Html.Raw(Model.Content)
+		</div>
 	</div>
-	<h3>内容</h3>
-	@Html.Raw(Model.Content)
 </div>
 <br />
 <div class="text-right">
