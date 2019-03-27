@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Rewrite.Internal;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Sakura.AspNetCore;
 
 namespace FamilySys.Controllers {
@@ -188,7 +189,8 @@ namespace FamilySys.Controllers {
 			}
 		}
 
-		public IActionResult Members() {
+		[HttpGet]
+		public IActionResult Members(int page = 1) {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
 				return RedirectToAction("Members", "Admin");
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
@@ -196,7 +198,10 @@ namespace FamilySys.Controllers {
 
 				try {
 					var Users = db.Users.Where(x => x.IsAdmin == 0);
-					return View(Users);
+
+					var UsersPagedList = Users.ToPagedList(8, page);
+
+					return View(UsersPagedList);
 				} catch (Exception ex) {
 					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 					return RedirectToAction("Error");
@@ -206,7 +211,8 @@ namespace FamilySys.Controllers {
 			}
 		}
 
-		public IActionResult ShowAnnouncements() {
+		[HttpGet]
+		public IActionResult ShowAnnouncements(int page = 1) {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
 				return RedirectToAction("ShowAnnouncements", "Admin");
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
@@ -214,7 +220,10 @@ namespace FamilySys.Controllers {
 
 				try {
 					var Annos = db.Announcements.Where(x => x.ID == x.ID).OrderByDescending(x => x.Date);
-					return View(Annos);
+
+					var AnnosPagedList = Annos.ToPagedList(8, page);
+
+					return View(AnnosPagedList);
 				} catch (Exception ex) {
 					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 					return RedirectToAction("Error");

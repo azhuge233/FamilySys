@@ -129,11 +129,15 @@ namespace FamilySys.Controllers
 			}
 		}
 
-		public IActionResult Members() {
+		[HttpGet]
+		public IActionResult Members(int page = 1) {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
 				try {
 					var Users = db.Users.Where(x => x.IsAdmin == 0);
-					return View(Users);
+
+					var UsersPagedList = Users.ToPagedList(8, page);
+
+					return View(UsersPagedList);
 				} catch (Exception ex) {
 					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 					return RedirectToAction("Error");
@@ -195,11 +199,15 @@ namespace FamilySys.Controllers
 			}
 		}
 
-		public IActionResult ShowAnnouncements() {
+		[HttpGet]
+		public IActionResult ShowAnnouncements(int page = 1) {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
 				try {
 					var Annos = db.Announcements.Where(x => x.ID == x.ID).OrderByDescending(x => x.Date);
-					return View(Annos);
+
+					var AnnosPagedList = Annos.ToPagedList(8, page);
+
+					return View(AnnosPagedList);
 				} catch (Exception ex) {
 					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 					return RedirectToAction("Error");

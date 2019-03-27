@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http
-@model IQueryable<FamilySys.Models.DbModels.Announcement>
+@model Sakura.AspNetCore.IPagedList<FamilySys.Models.DbModels.Announcement>
 @{
     ViewData["Title"] = "管理员";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -17,42 +17,45 @@
 		<th style="text-align: center">操作</th>
 	</tr>
 	@foreach (var each in Model) {
-	<tr>
-		<td>@each.Title</td>
-		<td>@each.Content.Length</td>
-		<td>管理员</td>
-		<td>@each.Date.GetDateTimeFormats('f')[0].ToString()</td>
-		<td>@each.ModifyDate.GetDateTimeFormats('f')[0].ToString()</td>
-		<td>
-			<table style="margin: auto; text-align: center;">
-				<tr>
-					<td>
-						@using (Html.BeginForm("ShowAnnoDetails", "Admin", HttpMethod.Post)) {
-							<input type="hidden" name="ID" value="@each.ID" />
-							<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success" />
-						}
-					</td>
-					<td>
-						&nbsp;
-					</td>
-					<td>
-						@using (Html.BeginForm("EditAnno", "Admin", HttpMethod.Post)) {
-							<input type="hidden" name="ID" value="@each.ID" />
-							<input type="submit" name="EditBtn" value="编辑" class="btn btn-sm btn-primary" />
-						}
-					</td>
-					<td>
-						&nbsp;
-					</td>
-					<td>
-						@using (Html.BeginForm("DelAnno", "Admin", HttpMethod.Post)) {
-							<input type="hidden" name="ID" value="@each.ID" />
-							<input type="submit" name="DelBtn" value="删除" onclick="return ensure()" class="btn btn-sm btn-danger" />
-						}
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
+		<tr>
+			<td>@each.Title</td>
+			<td>@each.Content.Length</td>
+			<td>管理员</td>
+			<td>@each.Date.GetDateTimeFormats('f')[0].ToString()</td>
+			<td>@each.ModifyDate.GetDateTimeFormats('f')[0].ToString()</td>
+			<td>
+				<table style="margin: auto; text-align: center;">
+					<tr>
+						<td>
+							@using (Html.BeginForm("ShowAnnoDetails", "Admin", HttpMethod.Post)) {
+								<input type="hidden" name="ID" value="@each.ID" />
+								<input type="submit" name="ShowBtn" value="查看" class="btn btn-sm btn-success" />
+							}
+						</td>
+						<td>
+							&nbsp;
+						</td>
+						<td>
+							@using (Html.BeginForm("EditAnno", "Admin", HttpMethod.Post)) {
+								<input type="hidden" name="ID" value="@each.ID" />
+								<input type="submit" name="EditBtn" value="编辑" class="btn btn-sm btn-primary" />
+							}
+						</td>
+						<td>
+							&nbsp;
+						</td>
+						<td>
+							@using (Html.BeginForm("DelAnno", "Admin", HttpMethod.Post)) {
+								<input type="hidden" name="ID" value="@each.ID" />
+								<input type="submit" name="DelBtn" value="删除" onclick="return ensure()" class="btn btn-sm btn-danger" />
+							}
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
 	}
 </table>
+<div align="center">
+	<pager source="Model"/>
+</div>

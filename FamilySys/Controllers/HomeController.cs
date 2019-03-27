@@ -44,7 +44,8 @@ namespace FamilySys.Controllers {
 			return View();
 		}
 
-		public IActionResult Members() {
+		[HttpGet]
+		public IActionResult Members(int page = 1) {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
 				return RedirectToAction("Index", "Admin");
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
@@ -52,7 +53,10 @@ namespace FamilySys.Controllers {
 			} else {
 				try {
 					var Users = db.Users.Where(x => x.IsAdmin == 0);
-					return View(Users);
+
+					var UsersPagedList = Users.ToPagedList(8, page);
+
+					return View(UsersPagedList);
 				} catch (Exception ex) {
 					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\');</script>";
 					return RedirectToAction("Error");

@@ -1,6 +1,6 @@
 ﻿@using FamilySys.Models.DbModels
 @using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http
-@model IQueryable<FamilySys.Models.DbModels.User>
+@model Sakura.AspNetCore.IPagedList<FamilySys.Models.DbModels.User>
 @{
 	ViewData["Title"] = "管理员";
 	Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -19,20 +19,23 @@
 		<th style="text-align: center">管理信息</th>
 	</tr>
 	@foreach (var each in Model) {
-	<tr>
-		<td style="text-align: center">@each.ID</td>
-		<td style="text-align: center">@each.Username</td>
-		<td style="text-align: center">@each.Sex</td>
-		<td style="text-align: center">@each.Phone</td>
-		<td style="text-align: center">@each.Mail</td>
-		<td style="text-align: center">@each.Score</td>
-		<td style="text-align: center">
-			@using (Html.BeginForm("EditMemberInfo", "Admin", HttpMethod.Post)) {
-				<input type="hidden" value="@each.ID" name="ID" />
-				<input type="submit" name="SubBtn" value="编辑信息" class="btn btn-sm btn-primary" />
-			}
-		</td>
-	</tr>
+		<tr>
+			<td style="text-align: center">@each.ID</td>
+			<td style="text-align: center">@each.Username</td>
+			<td style="text-align: center">@each.Sex</td>
+			<td style="text-align: center">@each.Phone</td>
+			<td style="text-align: center">@each.Mail</td>
+			<td style="text-align: center">@each.Score</td>
+			<td style="text-align: center">
+				@using (Html.BeginForm("EditMemberInfo", "Admin", HttpMethod.Post)) {
+					<input type="hidden" value="@each.ID" name="ID" />
+					<input type="submit" name="SubBtn" value="编辑信息" class="btn btn-sm btn-primary" />
+				}
+			</td>
+		</tr>
 	}
 </table>
+<div align="center">
+	<pager source="Model" />
+</div>
 
