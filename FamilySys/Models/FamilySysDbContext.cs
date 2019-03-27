@@ -18,5 +18,6 @@ namespace FamilySys.Models {
 		public DbSet<UserDreamVote> UserDreamVotes { get; set; }
 		public DbSet<Rate> Rates { get; set; }
 		public DbSet<ScoreRecord> ScoreRecords { get; set; }
+		public DbSet<MonthlyRank> MonthlyRanks { get; set; }
 	}
 }

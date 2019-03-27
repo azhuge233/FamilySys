@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FamilySys.Models;
+using FamilySys.Models.DbModels;
 using FamilySys.Modules;
+using FamilySys.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -47,9 +49,14 @@ namespace FamilySys {
 				}
 			);
 
+			//分页包注入
 			services.AddBootstrapPagerGenerator(options => {
 				options.ConfigureDefault();
 			});
+
+			//后台定时任务注入
+			services.AddHostedService<TimedTask>();
+			services.AddScoped<GenerateMonthlyRank.IMonthlyRank, GenerateMonthlyRank.MonthlyRank>();
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 		}
