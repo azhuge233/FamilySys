@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FamilySys.Models;
 using FamilySys.Models.DbModels;
+using FamilySys.Models.ViewModels;
 using FamilySys.Models.ViewModels.AdminViewModel;
 using FamilySys.Models.ViewModels.MemberViewModel;
 using FamilySys.Modules;
@@ -40,6 +41,38 @@ namespace FamilySys.Controllers
 			} while (db.Announcements.Any(x => x.ID == ID));
 
 			return ID;
+		}
+
+		public bool GenerateYearAndMonthList() {
+			if (!db.MonthlyRanks.Any()) return false;
+
+			ViewBag.MonthList = new SelectList(new List<SelectListItem>() {
+					new SelectListItem("1", "1"),
+					new SelectListItem("2", "2"),
+					new SelectListItem("3", "3"),
+					new SelectListItem("4", "4"),
+					new SelectListItem("5", "5"),
+					new SelectListItem("6", "6"),
+					new SelectListItem("7", "7"),
+					new SelectListItem("8", "8"),
+					new SelectListItem("9", "9"),
+					new SelectListItem("10", "10"),
+					new SelectListItem("11", "11"),
+					new SelectListItem("12", "12")
+
+				}, "Value", "Text"
+			);
+
+			var startYear = db.MonthlyRanks.Select(x => x).OrderBy(x => x.Date).First().Date.Year;
+			var YearList = new List<SelectListItem>();
+
+			for (int i = startYear; i <= DateTime.Now.Year; i++) {
+				YearList.Add(new SelectListItem(i.ToString(), i.ToString()));
+			}
+
+			ViewBag.YearList = new SelectList(YearList, "Value", "Text");
+
+			return true;
 		}
 
 		public IActionResult Index() {
@@ -625,6 +658,60 @@ namespace FamilySys.Controllers
 				}
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("ShowRecords", "Member");
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		[HttpGet]
+		public IActionResult ShowRanks(string year = null, string month = null) {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				try {
+					int Year = DateTime.Now.Year;
+					int Month = DateTime.Now.Month == 1 ? 12 : DateTime.Now.Month - 1;
+					if (year != null) Year = Convert.ToInt32(year);
+					if (month != null) Month = Convert.ToInt32(month);
+
+					bool hasRecord = GenerateYearAndMonthList();
+
+					if (!hasRecord) {
+						ViewBag.noRecord = true;
+
+						return View();
+					} else {
+						ViewBag.noRecord = false;
+					}
+
+					if (!db.MonthlyRanks.Any(x => x.Date.Year == Year && x.Date.Month == Month)) {
+						ViewBag.IsNull = true;
+
+						return View();
+					} else {
+						ViewBag.IsNull = false;
+						ViewBag.Year = Year;
+						ViewBag.Month = Month;
+
+						var ranks = db.MonthlyRanks.Where(x => x.Date.Year == Year && x.Date.Month == Month).OrderBy(x => x.Rank);
+
+						var ranksList = new List<RankModel>();
+
+						foreach (var rank in ranks) {
+							ranksList.Add(
+								new RankModel() {
+									Username = db.Users.Single(x => x.ID == rank.UserID).Username,
+									Score = rank.Score
+								}
+							);
+						}
+
+						return View(ranksList.AsQueryable());
+					}
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+					return RedirectToAction("Error");
+				}
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				return RedirectToAction("ShowRanks", "Member");
 			} else {
 				return RedirectToAction("nonMemberAlarm", "Home");
 			}

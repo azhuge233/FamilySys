@@ -95,7 +95,9 @@ namespace FamilySys.Controllers {
 			return ID;
 		}
 
-		public void GenerateYearAndMonthList() {
+		public bool GenerateYearAndMonthList() {
+			if (!db.MonthlyRanks.Any()) return false;
+
 			ViewBag.MonthList = new SelectList(new List<SelectListItem>() {
 					new SelectListItem("1", "1"),
 					new SelectListItem("2", "2"),
@@ -121,6 +123,8 @@ namespace FamilySys.Controllers {
 			}
 
 			ViewBag.YearList = new SelectList(YearList,"Value", "Text");
+
+			return true;
 		}
 
 		public IActionResult Index() {
@@ -896,7 +900,15 @@ namespace FamilySys.Controllers {
 					if (year != null) Year = Convert.ToInt32(year);
 					if (month != null) Month = Convert.ToInt32(month);
 
-					GenerateYearAndMonthList();
+					bool hasRecord = GenerateYearAndMonthList();
+
+					if (!hasRecord) {
+						ViewBag.noRecord = true;
+
+						return View();
+					} else {
+						ViewBag.noRecord = false;
+					}
 
 					if (!db.MonthlyRanks.Any(x => x.Date.Year == Year && x.Date.Month == Month)) {
 						ViewBag.IsNull = true;
