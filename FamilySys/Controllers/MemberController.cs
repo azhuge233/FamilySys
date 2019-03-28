@@ -943,8 +943,10 @@ namespace FamilySys.Controllers {
 
 		public IActionResult NoRecord() {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
-				return RedirectToAction("NoRecord", "Member");
+				return RedirectToAction("NoRecord", "Admin");
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				CommonWork();
+
 				return View();
 			} else {
 				return RedirectToAction("nonMemberAlarm", "Home");
