@@ -6,113 +6,109 @@
 }
 
 <div align="center">
-	@if (ViewBag.hasReocrd == false) {
-		<h2>没有统计记录</h2>
+	@if (ViewBag.IsNull == true) {
+	<h2>没有对应日期记录</h2>
+	<br/>
+	using (Html.BeginForm("ShowRanks", "Admin", FormMethod.Get)) {
+	<table style="margin: auto; text-align: center; width: 400px">
+		<tr>
+			<td>
+				<table>
+					<tr>
+						<td>
+							<label>年份</label>
+						</td>
+						<td>
+							&nbsp;
+						</td>
+						<td>
+							@Html.DropDownList("year", ViewBag.YearList as SelectList, "选择年份", new {@class = "btn btn-default dropdown-toggle"})
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td>
+				<table>
+					<tr>
+						<td>
+							<label>月份</label>
+						</td>
+						<td>
+							&nbsp;
+						</td>
+						<td>
+							@Html.DropDownList("month", ViewBag.MonthList as SelectList, "选择年份", new {@class = "btn btn-default dropdown-toggle"})
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td>
+				<input type="submit" name="SearchBtn" value="搜索" class="btn btn-primary"/>
+			</td>
+		</tr>
+	</table>
+	}
 	} else {
-		@if (ViewBag.IsNull) {
-			<h2>没有对应日期记录</h2>
-			<br />
-			@using (Html.BeginForm("ShowRanks", "Admin", FormMethod.Get)) {
-				<table style="margin: auto; text-align: center; width: 400px">
+	<h2>@ViewBag.Year 年 @ViewBag.Month 月 排名</h2>
+	<br/>
+	using (Html.BeginForm("ShowRanks", "Admin", FormMethod.Get)) {
+	<table style="margin: auto; text-align: center; width: 400px">
+		<tr>
+			<td>
+				<table>
 					<tr>
 						<td>
-							<table>
-								<tr>
-									<td>
-										<label>年份</label>
-									</td>
-									<td>
-										&nbsp;
-									</td>
-									<td>
-										@Html.DropDownList("year", ViewBag.YearList as SelectList, "选择年份", new { @class = "btn btn-default dropdown-toggle" })
-									</td>
-								</tr>
-							</table>
+							<label>年份</label>
 						</td>
 						<td>
-							<table>
-								<tr>
-									<td>
-										<label>月份</label>
-									</td>
-									<td>
-										&nbsp;
-									</td>
-									<td>
-										@Html.DropDownList("month", ViewBag.MonthList as SelectList, "选择年份", new { @class = "btn btn-default dropdown-toggle" })
-									</td>
-								</tr>
-							</table>
+							&nbsp;
 						</td>
 						<td>
-							<input type="submit" name="SearchBtn" value="搜索" class="btn btn-primary" />
+							@Html.DropDownList("year", ViewBag.YearList as SelectList, "选择年份", new {@class = "btn btn-default dropdown-toggle"})
 						</td>
 					</tr>
 				</table>
-			}
-		} else {
-			<h2>@ViewBag.Year 年 @ViewBag.Month 月 排名</h2>
-			<br />
-			@using (Html.BeginForm("ShowRanks", "Admin", FormMethod.Get)) {
-				<table style="margin: auto; text-align: center; width: 400px">
+			</td>
+			<td>
+				<table>
 					<tr>
 						<td>
-							<table>
-								<tr>
-									<td>
-										<label>年份</label>
-									</td>
-									<td>
-										&nbsp;
-									</td>
-									<td>
-										@Html.DropDownList("year", ViewBag.YearList as SelectList, "选择年份", new { @class = "btn btn-default dropdown-toggle" })
-									</td>
-								</tr>
-							</table>
+							<label>月份</label>
 						</td>
 						<td>
-							<table>
-								<tr>
-									<td>
-										<label>月份</label>
-									</td>
-									<td>
-										&nbsp;
-									</td>
-									<td>
-										@Html.DropDownList("month", ViewBag.MonthList as SelectList, "选择年份", new { @class = "btn btn-default dropdown-toggle" })
-									</td>
-								</tr>
-							</table>
+							&nbsp;
 						</td>
 						<td>
-							<input type="submit" name="SearchBtn" value="搜索" class="btn btn-primary" />
+							@Html.DropDownList("month", ViewBag.MonthList as SelectList, "选择年份", new {@class = "btn btn-default dropdown-toggle"})
 						</td>
 					</tr>
 				</table>
-			}
-			<br />
-			<table class="table" style="margin: auto; text-align: center">
-				<tr>
-					<th style="text-align: center">排名</th>
-					<th style="text-align: center">用户名</th>
-					<th style="text-align: center">当月得分</th>
-				</tr>
-				@{
-					int i = 1;
-				}
-				@foreach (var rank in Model) {
-					<tr>
-						<td>@i</td>
-						<td>@rank.Username</td>
-						<td>@rank.Score</td>
-					</tr>
-					i += 1;
-				}
-			</table>
+			</td>
+			<td>
+				<input type="submit" name="SearchBtn" value="搜索" class="btn btn-primary"/>
+			</td>
+		</tr>
+	</table>
+	}
+	<br/>
+	<table class="table" style="margin: auto; text-align: center">
+		<tr>
+			<th style="text-align: center">排名</th>
+			<th style="text-align: center">用户名</th>
+			<th style="text-align: center">当月得分</th>
+		</tr>
+		@{
+			int i = 1;
 		}
+		@foreach (var rank in Model) {
+			<tr>
+				<td>@i</td>
+				<td>@rank.Username</td>
+				<td>@rank.Score</td>
+			</tr>
+			i += 1;
+		}
+	</table>
 	}
 </div>
 

@@ -905,9 +905,7 @@ namespace FamilySys.Controllers {
 					if (!hasRecord) {
 						ViewBag.noRecord = true;
 
-						return View();
-					} else {
-						ViewBag.noRecord = false;
+						return RedirectToAction("NoRecord");
 					}
 
 					if (!db.MonthlyRanks.Any(x => x.Date.Year == Year && x.Date.Month == Month)) {
@@ -938,6 +936,16 @@ namespace FamilySys.Controllers {
 					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
 					return RedirectToAction("Error");
 				}
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		public IActionResult NoRecord() {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				return RedirectToAction("NoRecord", "Member");
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				return View();
 			} else {
 				return RedirectToAction("nonMemberAlarm", "Home");
 			}

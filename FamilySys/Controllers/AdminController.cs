@@ -43,10 +43,11 @@ namespace FamilySys.Controllers
 			return ID;
 		}
 
-		public bool GenerateYearAndMonthList() {
-			if (!db.MonthlyRanks.Any()) return false;
+		public virtual bool GenerateYearAndMonthList() {
+			if (!db.MonthlyRanks.Any()) { return false; }
 
-			ViewBag.MonthList = new SelectList(new List<SelectListItem>() {
+			ViewBag.MonthList = new SelectList(
+				new List<SelectListItem>() {
 					new SelectListItem("1", "1"),
 					new SelectListItem("2", "2"),
 					new SelectListItem("3", "3"),
@@ -59,7 +60,6 @@ namespace FamilySys.Controllers
 					new SelectListItem("10", "10"),
 					new SelectListItem("11", "11"),
 					new SelectListItem("12", "12")
-
 				}, "Value", "Text"
 			);
 
@@ -674,12 +674,10 @@ namespace FamilySys.Controllers
 
 					bool hasRecord = GenerateYearAndMonthList();
 
-					if (!hasRecord) {
+					if (hasRecord == false) {
 						ViewBag.noRecord = true;
 
-						return View();
-					} else {
-						ViewBag.noRecord = false;
+						return RedirectToAction("NoRecord");
 					}
 
 					if (!db.MonthlyRanks.Any(x => x.Date.Year == Year && x.Date.Month == Month)) {
@@ -691,13 +689,13 @@ namespace FamilySys.Controllers
 						ViewBag.Year = Year;
 						ViewBag.Month = Month;
 
-						var ranks = db.MonthlyRanks.Where(x => x.Date.Year == Year && x.Date.Month == Month).OrderBy(x => x.Rank);
+						var ranks = db.MonthlyRanks.Where(x => x.Date.Year == Year && x.Date.Month == Month)
+							.OrderBy(x => x.Rank);
 
 						var ranksList = new List<RankModel>();
 
 						foreach (var rank in ranks) {
-							ranksList.Add(
-								new RankModel() {
+							ranksList.Add(new RankModel() {
 									Username = db.Users.Single(x => x.ID == rank.UserID).Username,
 									Score = rank.Score
 								}
@@ -712,6 +710,16 @@ namespace FamilySys.Controllers
 				}
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("ShowRanks", "Member");
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		public IActionResult NoRecord() {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				return View();
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				return RedirectToAction("NoRecord", "Member");
 			} else {
 				return RedirectToAction("nonMemberAlarm", "Home");
 			}
