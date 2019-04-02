@@ -51,7 +51,7 @@ namespace FamilySys.Services {
 						new Models.DbModels.MonthlyRank() {
 							ID = GetRandomNumber10(),
 							UserID = score.Key,
-							Date = DateTime.Now,
+							Date = DateTime.Now.AddDays(-1),
 							Rank = rank,
 							Score = score.Value
 						}
