@@ -166,7 +166,7 @@ namespace FamilySys.Controllers
 		public IActionResult Members(int page = 1) {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
 				try {
-					var Users = db.Users.Where(x => x.IsAdmin == 0);
+					var Users = db.Users.Where(x => x.IsAdmin == 0).OrderBy(x => x.ID);
 
 					var UsersPagedList = Users.ToPagedList(8, page);
 

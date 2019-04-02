@@ -52,7 +52,7 @@ namespace FamilySys.Controllers {
 				return RedirectToAction("Index", "Member");
 			} else {
 				try {
-					var Users = db.Users.Where(x => x.IsAdmin == 0);
+					var Users = db.Users.Where(x => x.IsAdmin == 0).OrderBy(x => x.ID);
 
 					var UsersPagedList = Users.ToPagedList(8, page);
 
