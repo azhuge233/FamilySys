@@ -33,4 +33,8 @@
     <PackageReference Include="Sakura.AspNetCore.PagedList" Version="2.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+
 </Project>

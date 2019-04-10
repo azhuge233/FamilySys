@@ -1,11 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Http
 
 @{
-	ViewData["Title"] = "操作失败";
+	ViewData["Title"] = "访客";
 	Layout = "~/Views/Shared/_Layout.cshtml";
-	Context.Response.WriteAsync("<meta http-equiv='refresh' content='3; url=/Home' />");
 }
-
+<meta http-equiv='refresh' content='3; url=/Home' />
 <h2>操作失败</h2>
 @Html.Raw(TempData["ErrMsg"])
 <body>

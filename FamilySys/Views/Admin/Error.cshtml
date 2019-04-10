@@ -3,8 +3,8 @@
 @{
 	ViewData["Title"] = "管理员";
 	Layout = "~/Views/Shared/_AdminLayout.cshtml";
-	Context.Response.WriteAsync("<meta http-equiv='refresh' content='3; url=/Admin' />");
 }
+<meta http-equiv='refresh' content='3; url=/Admin' />
 <h2>操作失败</h2>
 @Html.Raw(TempData["ErrMsg"])
 <body>
