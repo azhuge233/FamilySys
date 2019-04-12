@@ -19,5 +19,6 @@ namespace FamilySys.Models {
 		public DbSet<Rate> Rates { get; set; }
 		public DbSet<ScoreRecord> ScoreRecords { get; set; }
 		public DbSet<MonthlyRank> MonthlyRanks { get; set; }
+		public DbSet<Bark> Barks { get; set; }
 	}
 }

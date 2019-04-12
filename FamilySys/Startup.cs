@@ -38,6 +38,7 @@ namespace FamilySys {
 
 			//个人模块注入
 			services.AddScoped<Encryption>();
+			services.AddScoped<Barker>();
 
 			//Session注入
 			services.AddDistributedMemoryCache();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -20,10 +21,12 @@ namespace FamilySys.Controllers {
 	public class MemberController : Controller {
 		private readonly Encryption encryption;
 		private readonly FamilySysDbContext db;
+		private readonly Barker barker;
 
-		public MemberController(FamilySysDbContext _db, Encryption _encryption) {
+		public MemberController(FamilySysDbContext _db, Encryption _encryption, Barker _barker) {
 			db = _db;
 			encryption = _encryption;
+			barker = _barker;
 		}
 
 		public JsonResult UsernameValidationJsonResult(string username) {
@@ -950,6 +953,82 @@ namespace FamilySys.Controllers {
 				return View();
 			} else {
 				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		public IActionResult EditBark() {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				return RedirectToAction("NoRecord", "Admin");
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				CommonWork();
+				var myID = HttpContext.Session.GetString("ID");
+				var barkViewModel = new BarkViewModel() {
+					Id = myID,
+					Username = db.Users.Single(x => x.ID == myID).Username
+				};
+
+				try {
+					if (db.Barks.Any(x => x.Id == myID)) {
+						var bark = db.Barks.Single(x => x.Id == myID);
+
+						barkViewModel.Address = bark.Address;
+						barkViewModel.Key = bark.Key;
+						barkViewModel.Is_https = bark.is_https;
+					}
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+					return RedirectToAction("Error");
+				}
+
+				return View(barkViewModel);
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		[HttpPost]
+		public IActionResult DoEditBark(BarkViewModel form) {
+			try {
+
+				if (db.Barks.Any(x => x.Id == form.Id)) {
+					var bark = db.Barks.Single(x => x.Id == form.Id);
+
+					bark.Address = form.Address;
+					bark.Key = form.Key;
+					bark.is_https = form.Is_https;
+				} else {
+					var bark = new Bark() {
+						Id = form.Id,
+						Address = form.Address,
+						Key = form.Key,
+						is_https = form.Is_https
+					};
+
+					db.Barks.Add(bark);
+				}
+
+				db.SaveChanges();
+
+				TempData["Success"] = "<script>alert(\'成功修改Bark推送设置\')</script>";
+				return RedirectToAction("EditBark");
+			} catch (Exception ex) {
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+				return RedirectToAction("Error");
+			}
+		}
+
+		[HttpPost]
+		public IActionResult BarkTest(BarkViewModel form, string message) {
+			try {
+
+				barker.SetAddress(form.Address, form.Key, message, form.Is_https);
+				barker.Bark();
+
+				TempData["Success"] = "<script>alert(\'成功推送测试信息，请检查设备通知\')</script>";
+				return RedirectToAction("EditBark");
+			} catch (Exception) {
+				TempData["ErrMsg"] = "<script>alert(\'推送失败，请检查设置\')</script>";
+				return RedirectToAction("EditBark");
 			}
 		}
 	}

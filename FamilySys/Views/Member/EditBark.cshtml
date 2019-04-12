@@ -1,0 +1,70 @@
+﻿@using System.Net.Http
+@model FamilySys.Models.ViewModels.BarkViewModel
+@{
+    ViewData["Title"] = "家庭成员";
+    Layout = "~/Views/Shared/_MemberLayout.cshtml";
+}
+
+@Html.Raw(TempData["Success"])
+@Html.Raw(TempData["ErrMsg"])
+<h2 align="center" >成员 @Model.Username - Bark 推送设置</h2>
+<div align="center" class="row">
+    <div class="col-md-6">
+	    <h3>说明</h3>
+	    <ul>
+		    <li></li>
+	    </ul>
+    </div>
+	<div class="col-md-6">
+		<h3>设置</h3>
+		@using (Html.BeginForm("DoEditBark", "Member", FormMethod.Post)) {
+			<table class="table" style="margin: auto; text-align: center; width: auto">
+				<tr>
+					<td>
+						@Html.LabelFor(Model => Model.Address)
+					</td>
+					<td style="width: 250px">
+						@Html.TextBoxFor(Model => Model.Address, new { @class = "form-control", @placeholder = "Bark服务器地址" })
+					</td>
+					<td>
+						@Html.ValidationMessageFor(Model => Model.Key)
+					</td>
+				</tr>
+				<tr>
+					<td>
+						@Html.LabelFor(Model => Model.Key)
+					</td>
+					<td>
+						@Html.TextBoxFor(Model => Model.Key, new { @class = "form-control", @placeholder = "设备Key" })
+					</td>
+					<td>
+						@Html.ValidationMessageFor(Model => Model.Key)
+					</td>
+				</tr>
+				<tr>
+					<td>
+						@Html.LabelFor(Model => Model.Is_https)
+					</td>
+					<td style="text-align: left">
+						@Html.CheckBoxFor(Model => Model.Is_https)
+					</td>
+					<td></td>
+				</tr>
+			</table>
+			<div align="center">
+				<input type="hidden" name="ID" value="@Model.Id" />
+				<input type="submit" name="SubBtn" class="btn btn-primary" />
+			</div>
+		}
+		@if (!string.IsNullOrEmpty(Model.Address) || !string.IsNullOrEmpty(Model.Key)) {
+			<br/>
+			@using (Html.BeginForm("BarkTest", "Member", FormMethod.Post)) {
+				 <input type="hidden" name="Address" value="@Model.Address"/>
+				 <input type="hidden" name="Key" value="@Model.Key"/>
+				 <input type="hidden" name="Is_https" value="@Model.Is_https"/>
+				 <input type="hidden" name="message" value="家庭事务管理系统测试推送"/>
+				 <input type="submit" name="TestBtn" value="测试推送" class="btn btn-default"/>
+			 }
+		}
+	</div>
+</div>
