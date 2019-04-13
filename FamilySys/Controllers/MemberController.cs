@@ -1018,11 +1018,9 @@ namespace FamilySys.Controllers {
 		}
 
 		[HttpPost]
-		public IActionResult BarkTest(BarkViewModel form, string message) {
+		public IActionResult Bark(string Url) {
 			try {
-
-				barker.SetAddress(form.Address, form.Key, message, form.Is_https);
-				barker.Bark();
+				barker.Bark(Url);
 
 				TempData["Success"] = "<script>alert(\'成功推送测试信息，请检查设备通知\')</script>";
 				return RedirectToAction("EditBark");

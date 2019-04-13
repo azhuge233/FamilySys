@@ -11,8 +11,30 @@
 <div align="center" class="row">
     <div class="col-md-6">
 	    <h3>说明</h3>
-	    <ul>
-		    <li></li>
+	    <ul style="text-align: left">
+		    <li>
+			    <a href="https://github.com/Finb/Bark" target="_blank">Bark</a> 是一款纯推送提醒服务，主要用来给自己的 iPhone 发送自定义内容的推送，可以是文字、链接，不提供历史记录功能，阅后即焚。
+		    </li>
+		    <li>
+			    本系统使用Bark向您的iOS设备推送事务接收情况、事务完成情况等信息。
+		    </li>
+		    <li style="list-style: none">
+				<br/>
+		    </li>
+		    <li>
+			    关于设置
+			    <ul>
+				    <li>
+					    Bark 推送地址 - 自建服务器则填写服务器地址，默认则填写 api.day.app
+				    </li>
+				    <li>
+					    设备Key - 填写Bark app URL中的设备Key
+				    </li>
+					<li>
+						使用https - 勾选后使用https
+					</li>
+			    </ul>
+		    </li>
 	    </ul>
     </div>
 	<div class="col-md-6">
@@ -24,7 +46,7 @@
 						@Html.LabelFor(Model => Model.Address)
 					</td>
 					<td style="width: 250px">
-						@Html.TextBoxFor(Model => Model.Address, new { @class = "form-control", @placeholder = "Bark服务器地址" })
+						@Html.TextBoxFor(Model => Model.Address, new { @class = "form-control", @placeholder = "Bark服务器地址", @oninput="changeUrl()" })
 					</td>
 					<td>
 						@Html.ValidationMessageFor(Model => Model.Key)
@@ -35,7 +57,7 @@
 						@Html.LabelFor(Model => Model.Key)
 					</td>
 					<td>
-						@Html.TextBoxFor(Model => Model.Key, new { @class = "form-control", @placeholder = "设备Key" })
+						@Html.TextBoxFor(Model => Model.Key, new { @class = "form-control", @placeholder = "设备Key", @oninput="changeUrl()" })
 					</td>
 					<td>
 						@Html.ValidationMessageFor(Model => Model.Key)
@@ -46,7 +68,7 @@
 						@Html.LabelFor(Model => Model.Is_https)
 					</td>
 					<td style="text-align: left">
-						@Html.CheckBoxFor(Model => Model.Is_https)
+						@Html.CheckBoxFor(Model => Model.Is_https, new {@oninput="changeUrl()"})
 					</td>
 					<td></td>
 				</tr>
@@ -56,15 +78,59 @@
 				<input type="submit" name="SubBtn" class="btn btn-primary" />
 			</div>
 		}
-		@if (!string.IsNullOrEmpty(Model.Address) || !string.IsNullOrEmpty(Model.Key)) {
-			<br/>
-			@using (Html.BeginForm("BarkTest", "Member", FormMethod.Post)) {
-				 <input type="hidden" name="Address" value="@Model.Address"/>
-				 <input type="hidden" name="Key" value="@Model.Key"/>
-				 <input type="hidden" name="Is_https" value="@Model.Is_https"/>
-				 <input type="hidden" name="message" value="家庭事务管理系统测试推送"/>
-				 <input type="submit" name="TestBtn" value="测试推送" class="btn btn-default"/>
-			 }
-		}
+		<br/>
+		<div>
+			@if (!string.IsNullOrEmpty(Model.Address) || !string.IsNullOrEmpty(Model.Key)) {
+				<table >
+					<tr>
+						<td>
+							<label id="url" style="font-size: small" ></label>
+						</td>
+						<td>&nbsp;&nbsp;</td>
+						<td>
+							@using (Html.BeginForm("Bark", "Member", FormMethod.Post)) {
+								<input id="testUrl" type="hidden" name="testUrl" value="" />
+								@*<input type="hidden" name="Address" value="@Model.Address"/>
+								<input type="hidden" name="Key" value="@Model.Key"/>
+								<input type="hidden" name="Is_https" value="@Model.Is_https"/>
+								<input type="hidden" name="message" value="家庭事务管理系统测试推送"/>*@
+								<input type="submit" name="TestBtn" value="测试推送" class="btn btn-sm btn-default"/>
+							}
+						</td>
+					</tr>
+				</table>
+			}
+		</div>
 	</div>
 </div>
+
+<script>
+
+	function changeUrl() {
+		var checkbox = document.getElementById("Is_https");
+		var key = document.getElementById("Key");
+		var address = document.getElementById("Address");
+		var label = document.getElementById("url");
+		var input = document.getElementById("testUrl");
+
+		if (label == null) return;
+		if (input == null) return;
+
+		label.innerHTML = "";
+		input.value = "";
+
+		if (checkbox.checked == true) {
+			label.innerHTML += "https://";
+			input.value += "https://";
+		} else {
+			label.innerHTML += "http://";
+			input.value += "http://";
+		}
+			
+		label.innerHTML += address.value + "/" + key.value + "/" + "家庭事务管理系统测试";
+		input.value += address.value + "/" + key.value + "/" + "家庭事务管理系统测试";
+	}
+
+	changeUrl();
+
+</script>
