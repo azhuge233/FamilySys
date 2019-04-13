@@ -133,12 +133,16 @@ namespace FamilySys.Controllers {
 		public string GetUserBarkUrl(string UserID) {
 			if (db.Barks.Any(x => x.Id == UserID)) {
 				var bark = db.Barks.Single(x => x.Id == UserID);
+
+				if (string.IsNullOrEmpty(bark.Address) || string.IsNullOrEmpty(bark.Key)) {
+					return string.Empty;
+				}
+
 				string url = bark.is_https ? "https://" : "http://";
 				url += bark.Address + "/" + bark.Key + "/";
 				return url;
-			} else {
-				return string.Empty;
 			}
+			return string.Empty;
 		}
 
 		public IActionResult Index() {
@@ -460,7 +464,7 @@ namespace FamilySys.Controllers {
 
 					string url = GetUserBarkUrl(housework.FromID);
 					if (url != string.Empty) {
-						url += "您的事务 " + housework.Title + " 已被成员 " + db.Users.Single(x => x.ID == myID).Username + "标记为完成" ;
+						url += "您的事务 " + housework.Title + " 已被成员 " + db.Users.Single(x => x.ID == myID).Username + " 标记为完成，请及时验收并评分" ;
 						barker.Bark(url.Replace(" ", "%20"));
 					}
 
@@ -850,6 +854,12 @@ namespace FamilySys.Controllers {
 				}
 
 				db.SaveChanges();
+
+				string url = GetUserBarkUrl(housework.ToID);
+				if (url != string.Empty) {
+					url += "您完成的事务 " + housework.Title + " 已被发布人评分，请及时查看";
+					barker.Bark(url.Replace(" ", "%20"));
+				}
 
 				return RedirectToAction("MyHouseworks");
 			} catch (Exception ex) {
