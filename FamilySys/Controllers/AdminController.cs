@@ -19,10 +19,12 @@ namespace FamilySys.Controllers
 	public class AdminController : Controller {
 		private readonly Encryption encryption;
 		private readonly FamilySysDbContext db;
+		private readonly Barker barker;
 
-		public AdminController(FamilySysDbContext _db, Encryption _encryption) {
+		public AdminController(FamilySysDbContext _db, Encryption _encryption, Barker _barker) {
 			db = _db;
 			encryption = _encryption;
+			barker = _barker;
 		}
 
 		public JsonResult UsernameValidationJsonResult(string id, string username) {
@@ -722,6 +724,108 @@ namespace FamilySys.Controllers
 				return RedirectToAction("NoRecord", "Member");
 			} else {
 				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		[HttpGet]
+		public IActionResult ShowBarks(int page = 1) {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				try {
+					var barks = db.Barks.Select(x => x);
+
+					var barksList = new List<BarkViewModel>();
+					foreach (var each in barks) {
+						barksList.Add(
+							new BarkViewModel() {
+								Id = each.Id,
+								Username = db.Users.Single(x => x.ID == each.Id).Username,
+								Address = each.Address,
+								Key = each.Key,
+								Is_https = each.is_https
+							}
+						);
+					}
+
+					var barksPageList = barksList.ToPagedList(8, page);
+
+					return View(barksPageList);
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+					return RedirectToAction("Error");
+				}
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				return RedirectToAction("ShowRecords", "Member");
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		[HttpGet]
+		public IActionResult EditBarks(string ID) {
+			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
+				try {
+					var bark = db.Barks.Single(x => x.Id == ID);
+					var barkViewModel = new BarkViewModel() {
+						Id = bark.Id,
+						Username = db.Users.Single(x => x.ID == ID).Username,
+						Address = bark.Address,
+						Key = bark.Key,
+						Is_https = bark.is_https
+					};
+
+					return View(barkViewModel);
+				} catch (Exception ex) {
+					TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+					return RedirectToAction("Error");
+				}
+			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
+				return RedirectToAction("Index", "Member");
+			} else {
+				return RedirectToAction("nonMemberAlarm", "Home");
+			}
+		}
+
+		[HttpPost]
+		public IActionResult DoEditBark(BarkViewModel form) {
+			try {
+
+				if (db.Barks.Any(x => x.Id == form.Id)) {
+					var bark = db.Barks.Single(x => x.Id == form.Id);
+
+					bark.Address = form.Address;
+					bark.Key = form.Key;
+					bark.is_https = form.Is_https;
+				} else {
+					var bark = new Bark() {
+						Id = form.Id,
+						Address = form.Address,
+						Key = form.Key,
+						is_https = form.Is_https
+					};
+
+					db.Barks.Add(bark);
+				}
+
+				db.SaveChanges();
+
+				TempData["Success"] = "<script>alert(\'成功修改Bark推送设置\')</script>";
+				return RedirectToAction("ShowBarks");
+			} catch (Exception ex) {
+				TempData["ErrMsg"] = "<script>alert(\'" + ex.Message.ToString() + "\')</script>";
+				return RedirectToAction("Error");
+			}
+		}
+
+		[HttpPost]
+		public IActionResult Bark(string Url, string ID) {
+			try {
+				barker.Bark(Url);
+
+				TempData["Success"] = "<script>alert(\'成功推送测试信息，请检查设备通知\')</script>";
+				return RedirectToAction("EditBarks", new {ID} );
+			} catch (Exception) {
+				TempData["ErrMsg"] = "<script>alert(\'推送失败，请检查设置\')</script>";
+				return RedirectToAction("EditBarks", new {ID});
 			}
 		}
 	}

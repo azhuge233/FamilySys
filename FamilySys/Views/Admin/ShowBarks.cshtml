@@ -1,0 +1,45 @@
+﻿@model Sakura.AspNetCore.IPagedList<FamilySys.Models.ViewModels.BarkViewModel>
+@{
+	ViewData["Title"] = "管理员";
+	Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@Html.Raw(TempData["Success"])
+@Html.Raw(TempData["ErrMsg"])
+<div align="center">
+	<h2>Bark推送地址管理</h2>
+	<table class="table" style="margin: auto; text-align: center">
+		<tr>
+			<th style="text-align: center">ID</th>
+			<th style="text-align: center">成员名</th>
+			<th style="text-align: center">地址</th>
+			<th style="text-align: center">设备Key</th>
+			<th style="text-align: center">是否使用https</th>
+			<th style="text-align: center">操作</th>
+		</tr>
+		@foreach (var each in Model) {
+			<tr>
+				<td>@each.Id</td>
+				<td>@each.Username</td>
+				<td>@each.Address</td>
+				<td>@each.Key</td>
+				@if (each.Is_https == true) {
+					<td>
+						是
+					</td>
+				} else {
+					<td>
+						否
+					</td>
+				}
+				<td>
+					@using (Html.BeginForm("EditBarks", "Admin", FormMethod.Get)) {
+						<input type="hidden" name="ID" value="@each.Id" />
+						<input type="submit" value="修改" class="btn btn-sm btn-primary" />
+					}
+				</td>
+			</tr>
+		}
+	</table>
+	<pager source="Model" />
+</div>
+

@@ -1000,7 +1000,7 @@ namespace FamilySys.Controllers {
 
 		public IActionResult EditBark() {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
-				return RedirectToAction("NoRecord", "Admin");
+				return RedirectToAction("Index", "Admin");
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				CommonWork();
 				var myID = HttpContext.Session.GetString("ID");
