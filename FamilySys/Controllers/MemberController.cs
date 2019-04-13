@@ -130,6 +130,17 @@ namespace FamilySys.Controllers {
 			return true;
 		}
 
+		public string GetUserBarkUrl(string UserID) {
+			if (db.Barks.Any(x => x.Id == UserID)) {
+				var bark = db.Barks.Single(x => x.Id == UserID);
+				string url = bark.is_https ? "https://" : "http://";
+				url += bark.Address + "/" + bark.Key + "/";
+				return url;
+			} else {
+				return string.Empty;
+			}
+		}
+
 		public IActionResult Index() {
 			if (HttpContext.Session.GetInt32("isAdmin") == 1) {
 				return RedirectToAction("Index", "Admin");
@@ -426,12 +437,33 @@ namespace FamilySys.Controllers {
 
 				if (action == "1") {
 					housework.ToID = myID;
-					TempData["Success"] = "<script>alert(\'已接受事务 #" + housework.ID + "\')</script>";
+
+					string url = GetUserBarkUrl(housework.FromID);
+					if (url != string.Empty) {
+						url += "您的事务 " + housework.Title + " 已被成员 " + db.Users.Single(x => x.ID == myID).Username + " 接收";
+						barker.Bark(url.Replace(" ", "%20"));
+					}
+
+					TempData["Success"] = "<script>alert(\'已接受事务 #" + housework.ID + "，将通知事务发布人\')</script>";
 				} else if (action == "2") {
 					housework.ToID = null;
-					TempData["Success"] = "<script>alert(\'已放弃事务 #" + housework.ID + "\')</script>";
+
+					string url = GetUserBarkUrl(housework.FromID);
+					if (url != string.Empty) {
+						url += "成员 " + db.Users.Single(x => x.ID == myID).Username + " 已放弃您的事务 " + housework.Title;
+						barker.Bark(url.Replace(" ", "%20"));
+					}
+
+					TempData["Success"] = "<script>alert(\'已放弃事务 #" + housework.ID + "，将通知事务发布人\')</script>";
 				} else if(action == "3") {
 					housework.IsDone = true;
+
+					string url = GetUserBarkUrl(housework.FromID);
+					if (url != string.Empty) {
+						url += "您的事务 " + housework.Title + " 已被成员 " + db.Users.Single(x => x.ID == myID).Username + "标记为完成" ;
+						barker.Bark(url.Replace(" ", "%20"));
+					}
+
 					TempData["Success"] = "<script>alert(\'事务 #" + housework.ID + " 已完成，将通知事务发布人\')</script>";
 				} else if(action == "4") {
 					if (housework.Type == 2) { //返还积分
