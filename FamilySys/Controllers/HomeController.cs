@@ -39,7 +39,7 @@ namespace FamilySys.Controllers {
 			return View();
 		}
 
-		public IActionResult nonMemberAlarm()
+		public IActionResult NonMemberAlarm()
 		{
 			return View();
 		}

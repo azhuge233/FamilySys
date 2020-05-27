@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Rewrite.Internal;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using Sakura.AspNetCore;
 
@@ -153,7 +152,7 @@ namespace FamilySys.Controllers {
 
 				return View();
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -165,7 +164,7 @@ namespace FamilySys.Controllers {
 
 				return View();
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -193,7 +192,7 @@ namespace FamilySys.Controllers {
 
 				return View(form);
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -258,7 +257,7 @@ namespace FamilySys.Controllers {
 					return RedirectToAction("Error");
 				}
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -280,7 +279,7 @@ namespace FamilySys.Controllers {
 					return RedirectToAction("Error");
 				}
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -301,7 +300,7 @@ namespace FamilySys.Controllers {
 					return RedirectToAction("Error");
 				}
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -344,7 +343,7 @@ namespace FamilySys.Controllers {
 					return RedirectToAction("Error");
 				}
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -360,7 +359,7 @@ namespace FamilySys.Controllers {
 
 				return View(newHousework);
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -429,7 +428,7 @@ namespace FamilySys.Controllers {
 
 				return View(houseworkShowcase);
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -527,7 +526,7 @@ namespace FamilySys.Controllers {
 					return RedirectToAction("Error");
 				}
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -556,7 +555,7 @@ namespace FamilySys.Controllers {
 					return RedirectToAction("Error");
 				}
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -626,7 +625,7 @@ namespace FamilySys.Controllers {
 					return RedirectToAction("Error");
 				}
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -711,7 +710,7 @@ namespace FamilySys.Controllers {
 					return RedirectToAction("Error");
 				}
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -803,7 +802,7 @@ namespace FamilySys.Controllers {
 					return RedirectToAction("Error");
 				}
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -893,7 +892,7 @@ namespace FamilySys.Controllers {
 					return RedirectToAction("Error");
 				}
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -928,7 +927,7 @@ namespace FamilySys.Controllers {
 					return RedirectToAction("Error");
 				}
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -982,7 +981,7 @@ namespace FamilySys.Controllers {
 					return RedirectToAction("Error");
 				}
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -994,7 +993,7 @@ namespace FamilySys.Controllers {
 
 				return View();
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -1024,7 +1023,7 @@ namespace FamilySys.Controllers {
 
 				return View(barkViewModel);
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 

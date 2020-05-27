@@ -9,7 +9,6 @@ using FamilySys.Models.ViewModels.AdminViewModel;
 using FamilySys.Models.ViewModels.MemberViewModel;
 using FamilySys.Modules;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.UI.Pages.Internal.Account.Manage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Sakura.AspNetCore;
@@ -83,7 +82,7 @@ namespace FamilySys.Controllers
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("Index", "Member");
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -93,7 +92,7 @@ namespace FamilySys.Controllers
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("Error", "Member");
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -120,7 +119,7 @@ namespace FamilySys.Controllers
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("MyInfo", "Member");
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -181,7 +180,7 @@ namespace FamilySys.Controllers
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("Members", "Member");
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -208,7 +207,7 @@ namespace FamilySys.Controllers
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("Index", "Member");
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -250,7 +249,7 @@ namespace FamilySys.Controllers
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("ShowAnnouncements", "Member");
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -260,7 +259,7 @@ namespace FamilySys.Controllers
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("Index", "Member");
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -296,7 +295,7 @@ namespace FamilySys.Controllers
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("ShowAnnoDetails", "Member");
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -331,7 +330,7 @@ namespace FamilySys.Controllers
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("Index", "Member");
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -415,7 +414,7 @@ namespace FamilySys.Controllers
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("ShowHouseworks", "Member");
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -485,7 +484,7 @@ namespace FamilySys.Controllers
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("ShowHouseworks", "Member");
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -583,7 +582,7 @@ namespace FamilySys.Controllers
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("MyDream", "Member");
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -607,7 +606,7 @@ namespace FamilySys.Controllers
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("MyDream", "Member");
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -661,7 +660,7 @@ namespace FamilySys.Controllers
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("ShowRecords", "Member");
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -713,7 +712,7 @@ namespace FamilySys.Controllers
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("ShowRanks", "Member");
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -723,7 +722,7 @@ namespace FamilySys.Controllers
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("NoRecord", "Member");
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -756,7 +755,7 @@ namespace FamilySys.Controllers
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("ShowRecords", "Member");
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
@@ -781,7 +780,7 @@ namespace FamilySys.Controllers
 			} else if (HttpContext.Session.GetInt32("isAdmin") == 0) {
 				return RedirectToAction("Index", "Member");
 			} else {
-				return RedirectToAction("nonMemberAlarm", "Home");
+				return RedirectToAction("NonMemberAlarm", "Home");
 			}
 		}
 
