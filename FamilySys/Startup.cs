@@ -61,7 +61,8 @@ namespace FamilySys {
 			services.AddHostedService<TimedTask>();
 			services.AddScoped<GenerateMonthlyRank.IMonthlyRank, GenerateMonthlyRank.MonthlyRank>();
 
-			services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+			//services.AddMvc(option => option.EnableEndpointRouting = false).SetCompatibilityVersion(version: CompatibilityVersion.Version_3_0);
+			services.AddMvc(option => option.EnableEndpointRouting = false);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
