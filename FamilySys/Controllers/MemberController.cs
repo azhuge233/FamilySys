@@ -43,7 +43,7 @@ namespace FamilySys.Controllers {
 		}
 
 		public string GetRandomNum() {
-			Random rd = new Random();
+			Random rd = new();
 			string ID = "";
 
 			do {
@@ -54,7 +54,7 @@ namespace FamilySys.Controllers {
 		}
 
 		public string GetRandomNum5() {
-			Random rd = new Random();
+			Random rd = new();
 			string ID = "";
 
 			do {
@@ -65,7 +65,7 @@ namespace FamilySys.Controllers {
 		}
 
 		public string GetRandomNum5Vote() {
-			Random rd = new Random();
+			Random rd = new();
 			string ID = "";
 
 			do {
@@ -76,7 +76,7 @@ namespace FamilySys.Controllers {
 		}
 
 		public string GetRandomNum5Rate() {
-			Random rd = new Random();
+			Random rd = new();
 			string ID = "";
 
 			do {
@@ -87,7 +87,7 @@ namespace FamilySys.Controllers {
 		}
 
 		public string GetRandomNum5ScoreRecord() {
-			Random rd = new Random();
+			Random rd = new();
 			string ID = "";
 
 			do {
