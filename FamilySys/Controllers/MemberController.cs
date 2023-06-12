@@ -433,7 +433,7 @@ namespace FamilySys.Controllers {
 		}
 
 		[HttpPost]
-		public IActionResult HouseworkOperation(string ID, string action, string FromPage) {
+		public async Task<IActionResult> HouseworkOperation(string ID, string action, string FromPage) {
 			try {
 				var housework = db.Houseworks.Single(x => x.ID == ID);
 				var myID = HttpContext.Session.GetString("ID");
@@ -444,7 +444,7 @@ namespace FamilySys.Controllers {
 					string url = GetUserBarkUrl(housework.FromID);
 					if (url != string.Empty) {
 						url += "您的事务 " + housework.Title + " 已被成员 " + db.Users.Single(x => x.ID == myID).Username + " 接收";
-						barker.Bark(url.Replace(" ", "%20"));
+						await barker.Bark(url.Replace(" ", "%20"));
 					}
 
 					TempData["Success"] = "<script>alert(\'已接受事务 #" + housework.ID + "，将通知事务发布人\')</script>";
@@ -454,7 +454,7 @@ namespace FamilySys.Controllers {
 					string url = GetUserBarkUrl(housework.FromID);
 					if (url != string.Empty) {
 						url += "成员 " + db.Users.Single(x => x.ID == myID).Username + " 已放弃您的事务 " + housework.Title;
-						barker.Bark(url.Replace(" ", "%20"));
+						await barker.Bark(url.Replace(" ", "%20"));
 					}
 
 					TempData["Success"] = "<script>alert(\'已放弃事务 #" + housework.ID + "，将通知事务发布人\')</script>";
@@ -464,7 +464,7 @@ namespace FamilySys.Controllers {
 					string url = GetUserBarkUrl(housework.FromID);
 					if (url != string.Empty) {
 						url += "您的事务 " + housework.Title + " 已被成员 " + db.Users.Single(x => x.ID == myID).Username + " 标记为完成，请及时验收并评分" ;
-						barker.Bark(url.Replace(" ", "%20"));
+						await barker.Bark(url.Replace(" ", "%20"));
 					}
 
 					TempData["Success"] = "<script>alert(\'事务 #" + housework.ID + " 已完成，将通知事务发布人\')</script>";
@@ -807,7 +807,7 @@ namespace FamilySys.Controllers {
 		}
 
 		[HttpPost]
-		public IActionResult DoRate(RateViewModel form) {
+		public async Task<IActionResult> DoRate(RateViewModel form) {
 			try {
 
 				var myID = HttpContext.Session.GetString("ID");
@@ -857,7 +857,7 @@ namespace FamilySys.Controllers {
 				string url = GetUserBarkUrl(housework.ToID);
 				if (url != string.Empty) {
 					url += "您完成的事务 " + housework.Title + " 已被发布人评分，请及时查看";
-					barker.Bark(url.Replace(" ", "%20"));
+					await barker.Bark(url.Replace(" ", "%20"));
 				}
 
 				return RedirectToAction("MyHouseworks");
@@ -1059,9 +1059,9 @@ namespace FamilySys.Controllers {
 		}
 
 		[HttpPost]
-		public IActionResult Bark(string Url) {
+		public async Task<IActionResult> Bark(string Url) {
 			try {
-				barker.Bark(Url);
+				await barker.Bark(Url);
 
 				TempData["Success"] = "<script>alert(\'成功推送测试信息，请检查设备通知\')</script>";
 				return RedirectToAction("EditBark");

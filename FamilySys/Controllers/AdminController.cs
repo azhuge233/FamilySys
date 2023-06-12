@@ -34,7 +34,7 @@ namespace FamilySys.Controllers
 		}
 
 		public string GetRandomNum() {
-			Random rd = new Random();
+			Random rd = new();
 			string ID = "";
 
 			do {
@@ -816,9 +816,9 @@ namespace FamilySys.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Bark(string Url, string ID) {
+		public async Task<IActionResult> Bark(string Url, string ID) {
 			try {
-				barker.Bark(Url);
+				await barker.Bark(Url);
 
 				TempData["Success"] = "<script>alert(\'成功推送测试信息，请检查设备通知\')</script>";
 				return RedirectToAction("EditBarks", new {ID} );
